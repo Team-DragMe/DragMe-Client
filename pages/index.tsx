@@ -8,5 +8,7 @@ function Home() {
 export default Home;
 
 const StyledRoot = styled.div`
+  width: 100%;
   color: ${theme.colors.main};
+  display: flex;
 `;
