@@ -1,7 +1,6 @@
 {
   "extends": [
     "stylelint-config-prettier",
-    "stylelint-config-concentric-order",
     "stylelint-config-styled-components",
     "postcss-syntax",
     "postcss-html"
