@@ -15,7 +15,6 @@ const CheckBox = forwardRef<HTMLInputElement, CheckBoxProps>(
     const [isChecked, setIsChecked] = useState(false);
     const handleChange = () => {
       setIsChecked((prev) => !prev);
-      console.log(isChecked);
     };
     return (
       <>

@@ -4,7 +4,7 @@ import React from 'react';
 import { theme } from 'src/styles/theme';
 import styled, { css } from 'styled-components';
 
-import Addon from './Addon';
+import AddonBtn from './AddonBtn';
 import CheckBox from './CheckBox';
 import CollapseArrow from './CollapseArrow';
 
@@ -31,7 +31,7 @@ function CommonDayPlanChip({
   color = 'none',
   shape = 'rectangle',
   arrow = false,
-  addon = false,
+  addon = true,
   children,
   ...props
 }: CommonDayPlanChipProps) {
@@ -42,7 +42,7 @@ function CommonDayPlanChip({
         <CheckBox id="dayCheck" />
         <Styled.Contents>{children}</Styled.Contents>
         {arrow && <CollapseArrow />}
-        {addon && <Addon />}
+        {addon && <AddonBtn />}
         <div className="semiArrowWrapper">
           <SemiArrow />
         </div>
