@@ -26,14 +26,14 @@ export default AddonBtn;
 
 const Styled = {
   Button: styled.button`
+    width: 2rem;
+    height: 2rem;
+    /* remove default styles */
     outline: inherit;
     border: none;
-    /* remove default styles */
     background: none;
     cursor: pointer;
     padding: 0;
-    width: 2rem;
-    height: 2rem;
     color: inherit;
     font: inherit;
   `,

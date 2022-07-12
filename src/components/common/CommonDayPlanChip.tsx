@@ -15,8 +15,11 @@ interface CommonDayPlanChipProps {
   color?: string;
   children: string;
   shape?: shapeType;
-  arrow?: boolean;
   addon?: boolean;
+  onAddonClick?: () => void;
+  haveChild?: boolean;
+  isOpened?: boolean;
+  onArrowBtnClick?: () => void;
 }
 
 interface ColorChipStyleProps {
@@ -30,8 +33,11 @@ interface BoxStyleProps {
 function CommonDayPlanChip({
   color = 'none',
   shape = 'rectangle',
-  arrow = false,
+  haveChild = true,
   addon = true,
+  isOpened = false,
+  onAddonClick,
+  onArrowBtnClick,
   children,
   ...props
 }: CommonDayPlanChipProps) {
@@ -41,8 +47,8 @@ function CommonDayPlanChip({
       <Styled.Box shape={shape}>
         <CheckBox id="dayCheck" />
         <Styled.Contents>{children}</Styled.Contents>
-        {arrow && <CollapseArrow />}
-        {addon && <AddonBtn />}
+        {addon && <AddonBtn onClick={onAddonClick} />}
+        {haveChild && <CollapseArrow isOpened={isOpened} onClick={onArrowBtnClick} />}
         <div className="semiArrowWrapper">
           <SemiArrow />
         </div>
@@ -74,10 +80,11 @@ const Styled = {
     padding-left: 0.8rem;
     width: 100%;
     height: 100%;
+    position: relative;
     .semiArrowWrapper {
       display: flex;
-      position: relative;
-      left: 15.8rem;
+      position: absolute;
+      left: 98.3%;
       align-items: center;
       justify-content: center;
       transform: rotate(1deg);
