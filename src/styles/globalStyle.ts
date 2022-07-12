@@ -12,6 +12,7 @@ const GlobalStyles = createGlobalStyle`
     width: 100%;
     height: 100%;
     font-size: 62.5%;
+    background-color: #F5F5F5;
   }
   body > div {
     height: 100%;
