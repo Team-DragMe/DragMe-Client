@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import CheckBox from 'src/components/common/CheckBox';
+import MainDayPlan from 'src/components/Day/MainDayPlan';
 import styled from 'styled-components';
 
 function Day() {
   return (
     <Styled.Root>
       데이페이지입니다.
-      <CheckBox id="dayCheck" />
+      <MainDayPlan />
     </Styled.Root>
   );
 }
