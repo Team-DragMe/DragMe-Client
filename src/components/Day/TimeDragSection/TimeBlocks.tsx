@@ -1,3 +1,4 @@
+import { theme } from 'src/styles/theme';
 import { getTimeArray } from 'src/utils/timeArray';
 import styled from 'styled-components';
 
@@ -31,7 +32,7 @@ const Styled = {
     display: flex;
     flex-shrink: 0;
     margin-right: ${({ min }) => (min === LAST_MINIT_OF_HOUR ? '0.7rem' : '0.4rem')};
-    border: 1px solid #e3e6ea;
+    border: 1px solid ${theme.colors.hour_line};
     border-radius: 0.5px;
     cursor: pointer;
     width: 1.8rem;

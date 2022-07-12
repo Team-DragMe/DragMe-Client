@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
 
 import TimeBlockSection from './TimeBlockSection';
@@ -6,21 +7,20 @@ import TimeBlockSection from './TimeBlockSection';
 interface LineWrapperStyledProps {
   idx: number;
   nowHour: number;
-  planNum: number;
 }
 
 const ONE_HOUR_WIDTH = 91;
 const SCROLL_END_VAL = 1200;
 
 function TimeLine() {
-  const [plans] = useState(['tempId1', 'tempId2', 'tempId3', 'tempId4']);
+  const [plans] = useState(['tempId1', 'tempId2', 'tempId3']);
   const ref = useRef<HTMLDivElement>(null);
   const nowHour = new Date().getHours();
 
   useEffect(() => {
     if (ref.current) {
       if (nowHour < 5) {
-        ref.current.scrollTo(0, 0);
+        ref.current.scrollTo(10, 0);
       } else if (nowHour < 17 && nowHour >= 4) {
         ref.current.scrollTo(ONE_HOUR_WIDTH * (nowHour - 4), 0);
       } else {
@@ -41,7 +41,7 @@ function TimeLine() {
 
   return (
     <Styled.Wrapper>
-      <Styled.Shadow direction="left" planNum={plans.length} />
+      <Styled.Shadow direction="left" />
       <Styled.Root ref={ref}>
         <Styled.TimeLineWrapper>
           {hours.map((el) => (
@@ -49,13 +49,13 @@ function TimeLine() {
               <Styled.Hour idx={el} nowHour={nowHour}>
                 {el}
               </Styled.Hour>
-              <Styled.Line planNum={plans.length} idx={el} nowHour={nowHour} />
+              <Styled.Line idx={el} nowHour={nowHour} />
             </Styled.LineWrapper>
           ))}
         </Styled.TimeLineWrapper>
         <TimeBlockSection plans={plans} />
       </Styled.Root>
-      <Styled.Shadow direction="right" planNum={plans.length} />
+      <Styled.Shadow direction="right" />
     </Styled.Wrapper>
   );
 }
@@ -68,16 +68,17 @@ const Styled = {
     position: relative;
     padding-bottom: 4rem;
     width: 109.8rem;
+    overflow-y: hidden;
     overflow-x: scroll;
     ::-webkit-scrollbar {
       appearance: none;
       height: 0.6rem;
     }
     ::-webkit-scrollbar-thumb {
-      background-color: #0a42df;
+      background-color: ${theme.colors.main_color};
     }
     ::-webkit-scrollbar-track {
-      background-color: #f8f9fb;
+      background-color: ${theme.colors.scroll_grey};
     }
   `,
 
@@ -87,7 +88,6 @@ const Styled = {
 
   TimeLineWrapper: styled.div`
     display: flex;
-    margin-left: -1.2rem;
   `,
 
   LineWrapper: styled.div`
@@ -97,9 +97,10 @@ const Styled = {
     margin-right: 5.9rem;
   `,
 
-  Hour: styled.div<Omit<LineWrapperStyledProps, 'planNum'>>`
+  Hour: styled.div<LineWrapperStyledProps>`
     display: flex;
-    color: ${({ idx, nowHour }) => (nowHour === idx ? '#ffffff' : '#b8b8b8')};
+    color: ${({ idx, nowHour }) =>
+      nowHour === idx ? theme.category.cate_white : theme.colors.plan_grey};
     font-size: 1.4rem;
     font-weight: 700;
     width: ${({ idx, nowHour }) => (nowHour === idx ? '2.7rem' : '3.2rem')};
@@ -109,22 +110,22 @@ const Styled = {
     align-items: center;
     ${({ idx, nowHour }) =>
       nowHour === idx &&
-      'background-color:#0A42DF; border-radius:50%; margin:0.25rem; border:2px solid #ffffff; box-shadow: 0 0 0 2px #0A42DF; transform:'}
+      `background-color:${theme.colors.main_color}; border-radius:50%; margin:0.25rem; border:2px solid ${theme.category.cate_white};; box-shadow: 0 0 0 2px ${theme.colors.main_color};`}
   `,
 
   Line: styled.div<LineWrapperStyledProps>`
-    margin-top: ${({ idx, nowHour }) => (nowHour === idx ? '-0.1rem' : '1rem')};
-    background-color: ${({ idx, nowHour }) => (nowHour === idx ? '#0A42DF' : '#e3e6ea')};
+    margin-top: ${({ idx, nowHour }) => nowHour !== idx && '1rem'};
+    background-color: ${({ idx, nowHour }) =>
+      nowHour === idx ? theme.colors.main_color : theme.colors.hour_line};
     width: 0.1rem;
-    height: ${({ planNum, idx, nowHour }) =>
-      `${nowHour === idx ? 4.1 + 4.4 * planNum : 1.6 + 4.4 * planNum}rem`};
+    height: ${({ idx, nowHour }) => (nowHour === idx ? '46.5rem' : '44.6rem')};
   `,
 
-  Shadow: styled.div<{ planNum: number; direction: string }>`
+  Shadow: styled.div<{ direction: string }>`
     margin-top: 4.2rem;
     box-shadow: ${({ direction }) => (direction === 'left' ? '10px' : '-10px')} 0px 23px
       rgb(0, 0, 0);
     width: 0.01rem;
-    height: ${({ planNum }) => `${1.6 + 4.4 * planNum}rem`};
+    height: 44.6rem;
   `,
 };
