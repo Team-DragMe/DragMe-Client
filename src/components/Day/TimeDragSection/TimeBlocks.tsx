@@ -6,6 +6,8 @@ interface timeType {
   min: number;
 }
 
+const LAST_MINIT_OF_HOUR = 45;
+
 function TimeBlocks() {
   const { timeArr } = getTimeArray();
 
@@ -24,13 +26,11 @@ const Styled = {
   Root: styled.div`
     display: flex;
     width: fit-content;
-    /* margin-bottom: 1.2rem; */
   `,
   Block: styled.div<{ min: number }>`
     display: flex;
     flex-shrink: 0;
-    margin-right: ${({ min }) => (min === 45 ? '0.7rem' : '0.4rem')};
-    /* 아직 컬러 코드가 나오지 않아 나오면 pr수정하겠습니다. */
+    margin-right: ${({ min }) => (min === LAST_MINIT_OF_HOUR ? '0.7rem' : '0.4rem')};
     border: 1px solid #e3e6ea;
     border-radius: 0.5px;
     cursor: pointer;

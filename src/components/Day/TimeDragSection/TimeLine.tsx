@@ -9,8 +9,11 @@ interface LineWrapperStyledProps {
   planNum: number;
 }
 
+const ONE_HOUR_WIDTH = 91;
+const SCROLL_END_VAL = 1200;
+
 function TimeLine() {
-  const [plans] = useState(['tempId1', 'tempId2', 'tempId3', 'tempId1']);
+  const [plans] = useState(['tempId1', 'tempId2', 'tempId3', 'tempId4']);
   const ref = useRef<HTMLDivElement>(null);
   const nowHour = new Date().getHours();
 
@@ -19,10 +22,9 @@ function TimeLine() {
       if (nowHour < 5) {
         ref.current.scrollTo(0, 0);
       } else if (nowHour < 17 && nowHour >= 4) {
-        ref.current.scrollTo(91 * (nowHour - 4), 0);
+        ref.current.scrollTo(ONE_HOUR_WIDTH * (nowHour - 4), 0);
       } else {
-        console.log(91 * (nowHour - 4));
-        ref.current.scrollTo(1200, 0);
+        ref.current.scrollTo(SCROLL_END_VAL, 0);
       }
     }
   }, []);
