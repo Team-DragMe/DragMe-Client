@@ -1,21 +1,19 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import Logo from 'public/assets/Logo.png';
 import MenuBar from 'public/assets/MenuBar.png';
 import React, { useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { dayInfo, weekInfo } from 'src/states';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 interface LinkStyle {
   isToday: boolean;
 }
 
 function NavBar() {
-  const router = useRouter();
-  const [dayPeriod, setDayPeriod] = useRecoilState(dayInfo);
-  const [weekPeriod, setWeekPeriod] = useRecoilState(weekInfo);
+  const [dayPeriod] = useRecoilState(dayInfo);
+  const [weekPeriod] = useRecoilState(weekInfo);
   const [isToday, setIsToday] = useState(true);
 
   const periodData = [
@@ -45,7 +43,7 @@ function NavBar() {
           {periodData.map((period) => (
             <li key={period.id}>
               <Link href={`${period.path}${encodeURIComponent(period.term)}`}>
-                <Styled.Link id={period.id} onClick={handleSelectPeriod}>
+                <Styled.Link isToday id={period.id} onClick={handleSelectPeriod}>
                   {period.name}
                 </Styled.Link>
               </Link>
@@ -55,7 +53,7 @@ function NavBar() {
         <Link href="/mypage">
           <Styled.MyPage>MYPAGE</Styled.MyPage>
         </Link>
-        <Styled.MenuWrapper>
+        <Styled.MenuWrapper isToday>
           <Image src={MenuBar} alt="로고이미지" width={'24'} height={'18'} />
         </Styled.MenuWrapper>
       </Styled.Contents>
