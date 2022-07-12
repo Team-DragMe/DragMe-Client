@@ -1,4 +1,4 @@
-import React, { InputHTMLAttributes, useState } from 'react';
+import React, { forwardRef, InputHTMLAttributes, useState } from 'react';
 import styled, { css } from 'styled-components';
 
 interface CheckBoxProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -9,22 +9,26 @@ interface CheckBoxProps extends InputHTMLAttributes<HTMLInputElement> {
 interface LabelProps {
   isChecked: boolean;
 }
-function CheckBox({ id, ...props }: CheckBoxProps) {
-  const [isChecked, setIsChecked] = useState(false);
-  const handleChange = () => {
-    setIsChecked((prev) => !prev);
-    console.log(isChecked);
-  };
-  return (
-    <>
-      <Styled.Input {...props} type="checkbox" id={id} onChange={handleChange} />
-      <Styled.Label htmlFor={id} isChecked={isChecked} />
-    </>
-  );
-}
+
+const CheckBox = forwardRef<HTMLInputElement, CheckBoxProps>(
+  ({ id, ...props }: CheckBoxProps, ref) => {
+    const [isChecked, setIsChecked] = useState(false);
+    const handleChange = () => {
+      setIsChecked((prev) => !prev);
+      console.log(isChecked);
+    };
+    return (
+      <>
+        <Styled.Input {...props} type="checkbox" id={id} ref={ref} onChange={handleChange} />
+        <Styled.Label htmlFor={id} isChecked={isChecked} />
+      </>
+    );
+  },
+);
+
+CheckBox.displayName = 'CheckBox';
 
 export default CheckBox;
-
 const Styled = {
   Input: styled.input`
     display: none;
