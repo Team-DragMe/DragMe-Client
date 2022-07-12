@@ -33,8 +33,8 @@ interface BoxStyleProps {
 function CommonDayPlanChip({
   color = 'none',
   shape = 'rectangle',
-  haveChild = true,
-  addon = true,
+  haveChild = false,
+  addon = false,
   isOpened = false,
   onAddonClick,
   onArrowBtnClick,
@@ -47,7 +47,7 @@ function CommonDayPlanChip({
       <Styled.Box shape={shape}>
         <CheckBox id="dayCheck" />
         <Styled.Contents>{children}</Styled.Contents>
-        {addon && <AddonBtn onClick={onAddonClick} />}
+        {(addon || haveChild) && <AddonBtn onClick={onAddonClick} />}
         {haveChild && <CollapseArrow isOpened={isOpened} onClick={onArrowBtnClick} />}
         <div className="semiArrowWrapper">
           <SemiArrow />
@@ -100,7 +100,7 @@ const Styled = {
       shape === 'rectangle'
         ? css`
             border: 1px solid ${theme.colors.plan_grey01};
-            & > svg {
+            .semiArrowWrapper {
               display: none;
             }
           `
@@ -153,5 +153,6 @@ const Styled = {
     display: flex;
     align-items: center;
     margin-left: 0.8rem;
+    width: 65%;
   `,
 };
