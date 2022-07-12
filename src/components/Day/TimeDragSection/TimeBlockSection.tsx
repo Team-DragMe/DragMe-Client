@@ -23,9 +23,11 @@ const Styled = {
   Root: styled.div`
     display: flex;
     position: absolute;
-    bottom: 4rem;
+    top: 7rem;
     flex-direction: column;
     gap: 1.2rem;
-    margin-left: 0.75rem;
+    margin-left: 1.95rem;
+    height: 42.8rem;
+    overflow-y: scroll;
   `,
 };
