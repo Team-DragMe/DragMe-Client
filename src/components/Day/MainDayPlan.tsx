@@ -83,6 +83,19 @@ const Styled = {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
+    @keyframes SubUlAnimation {
+      from {
+        max-height: 1.2rem;
+      }
+      to {
+        max-height: fit-content;
+      }
+    }
+    & ul {
+      animation: SubUlAnimation 1s forwards;
+      overflow: hidden;
+      /* background: black; */
+    }
   `,
   AddDayPlanChipWrapper: styled.div`
     margin-top: 0.8rem;

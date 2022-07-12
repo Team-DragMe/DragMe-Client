@@ -1,9 +1,11 @@
-import React, { forwardRef, InputHTMLAttributes, useState } from 'react';
+import React, { forwardRef, InputHTMLAttributes, useRef } from 'react';
 import styled, { css } from 'styled-components';
 
-interface CheckBoxProps extends InputHTMLAttributes<HTMLInputElement> {
+interface CheckBoxProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
   className?: string;
   id: string;
+  isChecked: boolean;
+  onChange: () => void;
 }
 
 interface LabelProps {
@@ -11,24 +13,27 @@ interface LabelProps {
 }
 
 const CheckBox = forwardRef<HTMLInputElement, CheckBoxProps>(
-  ({ id, ...props }: CheckBoxProps, ref) => {
-    const [isChecked, setIsChecked] = useState(false);
-    const handleChange = () => {
-      setIsChecked((prev) => !prev);
-    };
-    return (
-      <>
-        <Styled.Input {...props} type="checkbox" id={id} ref={ref} onChange={handleChange} />
-        <Styled.Label htmlFor={id} isChecked={isChecked} />
-      </>
-    );
-  },
+  ({ onChange, isChecked, id, ...props }: CheckBoxProps, ref) => (
+    <Styled.Root onClick={onChange}>
+      <Styled.Input {...props} type="checkbox" id={id} ref={ref} onChange={onChange} />
+      <Styled.Label htmlFor={id} isChecked={isChecked} />
+    </Styled.Root>
+  ),
 );
 
 CheckBox.displayName = 'CheckBox';
 
 export default CheckBox;
 const Styled = {
+  Root: styled.button`
+    /* remove default styles */
+    outline: inherit;
+    border: none;
+    background: none;
+    padding: 0;
+    color: inherit;
+    font: inherit;
+  `,
   Input: styled.input`
     display: none;
     & + label {
@@ -41,14 +46,15 @@ const Styled = {
     }
   `,
   Label: styled.label<LabelProps>`
-    &::after {
-      ${({ isChecked }) =>
-        isChecked &&
-        css`
-          position: absolute;
-          top: 0.1rem;
-          content: url('/assets/icons/checkIcon.svg');
-        `}
-    }
+    cursor: pointer;
+    /* &:after { */
+    ${({ isChecked }) =>
+      isChecked &&
+      css`
+        position: absolute;
+        top: 0.1rem;
+        content: url('/assets/icons/checkIconActive.svg');
+        transition: all 0.3s ease;
+      `}/* } */
   `,
 };

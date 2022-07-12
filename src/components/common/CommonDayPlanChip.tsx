@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import SemiArrow from 'public/assets/icons/SemiArrow.svg';
-import React from 'react';
+import React, { useState } from 'react';
 import { theme } from 'src/styles/theme';
 import styled, { css } from 'styled-components';
 
@@ -9,7 +9,6 @@ import CheckBox from './CheckBox';
 import CollapseArrow from './CollapseArrow';
 
 type shapeType = 'rectangle' | 'triangle';
-
 interface CommonDayPlanChipProps {
   //@TODO color code값 타입으로 한정하기
   color?: string;
@@ -30,6 +29,10 @@ interface BoxStyleProps {
   shape: shapeType;
 }
 
+interface ContentsStyleProps {
+  isChecked: boolean;
+}
+
 function CommonDayPlanChip({
   color = 'none',
   shape = 'rectangle',
@@ -41,12 +44,16 @@ function CommonDayPlanChip({
   children,
   ...props
 }: CommonDayPlanChipProps) {
+  const [isChecked, setIsChecked] = useState(false);
+  const handleChange = () => {
+    setIsChecked((prev) => !prev);
+  };
   return (
     <Styled.Container {...props}>
       {color !== 'none' && <Styled.ColorChip color={color} />}
       <Styled.Box shape={shape}>
-        <CheckBox id="dayCheck" />
-        <Styled.Contents>{children}</Styled.Contents>
+        <CheckBox id="dayCheck" isChecked={isChecked} onChange={handleChange} />
+        <Styled.Contents isChecked={isChecked}>{children}</Styled.Contents>
         {(addon || haveChild) && <AddonBtn onClick={onAddonClick} />}
         {haveChild && <CollapseArrow isOpened={isOpened} onClick={onArrowBtnClick} />}
         <div className="semiArrowWrapper">
@@ -149,10 +156,11 @@ const Styled = {
       }
     }
   `,
-  Contents: styled.span`
+  Contents: styled.span<ContentsStyleProps>`
     display: flex;
     align-items: center;
     margin-left: 0.8rem;
     width: 65%;
+    color: ${({ isChecked }) => isChecked && theme.colors.plan_grey01};
   `,
 };
