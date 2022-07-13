@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 import NavBar from '../components/common/NavBar';
+import DayChange from '../components/Day/DayInfoSection/DayChange';
 import DayInfo from '../components/Day/DayInfoSection/DayInfo';
 
 function Home() {
@@ -8,6 +9,7 @@ function Home() {
     <Styled.Root>
       <NavBar />
       <DayInfo />
+      <DayChange />
     </Styled.Root>
   );
 }

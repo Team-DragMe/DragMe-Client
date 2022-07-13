@@ -7,15 +7,12 @@ import { dayInfo } from '../../../states';
 
 function DayInfo() {
   const dayData = useRecoilValue(dayInfo);
-
-  const now = new Date();
-  const week = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-  const dayOfWeek = week[now.getDay()];
+  console.log(dayData);
   return (
     <Styled.Root>
       <Styled.HeaderBox>
         <Styled.Month>{dayData.slice(4, 6)}</Styled.Month>
-        <Styled.DayOfTheWeek>{dayOfWeek}</Styled.DayOfTheWeek>
+        <Styled.DayOfTheWeek>{dayData.slice(8, 11)}</Styled.DayOfTheWeek>
       </Styled.HeaderBox>
       <Styled.Day>{dayData.slice(6, 8)}.</Styled.Day>
     </Styled.Root>
