@@ -1,46 +1,35 @@
-import { useState } from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 
 function useDragBlockTest(
   isDragging: boolean,
-  isPlus: boolean,
-  isEstimated: boolean,
-  handleDragState: (isDragging: boolean, isPlus: boolean) => void,
+  handleDragState: (isDragging: boolean) => void,
+  setStart: Dispatch<SetStateAction<string>>,
+  setEnd: Dispatch<SetStateAction<string>>,
 ) {
-  //서버처리도 해주고
-  //클라 색칠도 해주고
-  const [draged, setDraged] = useState('');
-
-  const onMouseDown = () => {
-    console.log('drag');
-    if (draged === '') {
-      handleDragState(true, true);
-    } else {
-      handleDragState(true, false);
+  const onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target instanceof HTMLDivElement) {
+      setStart(e.target.id);
     }
+    handleDragState(true);
   };
 
-  const onMouseMove = () => {
-    // element?.setAttribute('style', 'background-color:black');
-    // console.log(element);
+  const onMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
     if (isDragging) {
-      if (isPlus) {
-        console.log('dragging');
-        isEstimated ? setDraged('done') : setDraged('plan');
-      } else {
-        setDraged('');
+      if (e.target instanceof HTMLElement) {
+        setEnd(e.target.id);
       }
     }
   };
 
   const onMouseUp = () => {
-    handleDragState(false, true);
+    handleDragState(false);
+    //서버처리
   };
 
   return {
     onMouseDown,
-    onMouseMove,
+    onMouseEnter,
     onMouseUp,
-    draged,
   };
 }
 
