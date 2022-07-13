@@ -22,8 +22,12 @@ function MainDayPlan({ schedules, ...props }: MainDayPlanProps) {
   const onArrowBtnClick = () => {
     setIsOpen((prev) => !prev);
   };
+
   // 아이가 있으면 무조건 -> addon, arrow 알아서 잘 됐으면 좋겠음
   // 아이가 없으면 그냥 기본만 알아서 나왔으면 좋겠음
+
+  // 부모가 IsCompleted이면 자식도 IsCompleted
+  // 자식이 IsCompleTed
   return (
     <Styled.Root>
       <Styled.Ul>
@@ -36,6 +40,7 @@ function MainDayPlan({ schedules, ...props }: MainDayPlanProps) {
               addon
               isOpened={isOpen}
               onArrowBtnClick={onArrowBtnClick}
+              isCompleted={item.isCompleted}
             >
               {item.title}
             </CommonDayPlanChip>
@@ -43,7 +48,8 @@ function MainDayPlan({ schedules, ...props }: MainDayPlanProps) {
               <Styled.SubDayPlanWrapper>
                 <SubDayPlan
                   subschedules={item.subSchedules}
-                  categoryColorCode={item.categoryColorCode}
+                  categoryColorCode={item.isCompleted ? '#B6BEC9' : item.categoryColorCode}
+                  isCompleted={item.isCompleted}
                 />
               </Styled.SubDayPlanWrapper>
             )}

@@ -42,7 +42,7 @@ function Day() {
       ],
       categoryColorCode: '#EAC96E',
       userId: 'sampleUserId',
-      isCompleted: false,
+      isCompleted: true,
       isReschedule: false,
       isRoutine: false,
       orderIndex: 1,

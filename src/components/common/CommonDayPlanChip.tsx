@@ -19,6 +19,8 @@ interface CommonDayPlanChipProps {
   haveChild?: boolean;
   isOpened?: boolean;
   onArrowBtnClick?: () => void;
+  isCompleted?: boolean;
+  id?: string;
 }
 
 interface ColorChipStyleProps {
@@ -42,20 +44,29 @@ function CommonDayPlanChip({
   onAddonClick,
   onArrowBtnClick,
   children,
+  isCompleted = false,
+  id,
   ...props
 }: CommonDayPlanChipProps) {
-  const [isChecked, setIsChecked] = useState(false);
+  const [isChecked, setIsChecked] = useState(isCompleted);
   const handleChange = () => {
     setIsChecked((prev) => !prev);
+    // id값으로 포스트하고 react query hook의 인자값 업데이트해서 업데이트 되도록..
   };
   return (
     <Styled.Container {...props}>
       {color !== 'none' && <Styled.ColorChip color={color} />}
       <Styled.Box shape={shape}>
         <CheckBox id="dayCheck" isChecked={isChecked} onChange={handleChange} />
-        <Styled.Contents isChecked={isChecked}>{children}</Styled.Contents>
-        {(addon || haveChild) && <AddonBtn onClick={onAddonClick} />}
-        {haveChild && <CollapseArrow isOpened={isOpened} onClick={onArrowBtnClick} />}
+        <Styled.ContentsWrapper>
+          <div>
+            <Styled.Contents isChecked={isChecked}>{children}</Styled.Contents>
+          </div>
+          <Styled.BtnWrapper>
+            {(addon || haveChild) && <AddonBtn onClick={onAddonClick} />}
+            {haveChild && <CollapseArrow isOpened={isOpened} onClick={onArrowBtnClick} />}
+          </Styled.BtnWrapper>
+        </Styled.ContentsWrapper>
         <div className="semiArrowWrapper">
           <SemiArrow />
         </div>
@@ -117,6 +128,24 @@ const Styled = {
             border-left: 1px solid ${theme.colors.plan_grey01};
           `}
   `,
+  ContentsWrapper: styled.div`
+    display: flex;
+    width: 17rem;
+    justify-content: space-between;
+    align-items: center;
+  `,
+  BtnWrapper: styled.div`
+    display: flex;
+    /* width: 100%; */
+    justify-content: space-between;
+    align-items: center;
+    max-width: 4.7rem;
+    button {
+      &:last-child {
+        margin-left: 0.3rem;
+      }
+    }
+  `,
   RectangleBox: styled.div`
     display: flex;
     align-items: center;
@@ -160,6 +189,7 @@ const Styled = {
     display: flex;
     align-items: center;
     margin-left: 0.8rem;
+    min-width: 11.3rem;
     width: 65%;
     color: ${({ isChecked }) => isChecked && theme.colors.plan_grey01};
   `,
