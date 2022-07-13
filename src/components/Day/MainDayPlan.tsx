@@ -25,7 +25,7 @@ function MainDayPlan({ item }: MainDayPlanProps) {
   return (
     <Styled.Li key={item._id} haveChild={item.subSchedules.length > 0}>
       <CommonDayPlanChip
-        color={item.isCompleted ? '#B6BEC9' : item.categoryColorCode}
+        color={item.categoryColorCode}
         shape={item.subSchedules.length > 0 ? 'rectangle' : 'triangle'}
         haveChild={item.subSchedules.length > 0}
         addon
@@ -37,11 +37,7 @@ function MainDayPlan({ item }: MainDayPlanProps) {
       </CommonDayPlanChip>
       {item.subSchedules.length > 0 && (
         <Styled.SubDayPlanWrapper isOpen={isOpen}>
-          <SubDayPlan
-            subschedules={item.subSchedules}
-            categoryColorCode={item.isCompleted ? '#B6BEC9' : item.categoryColorCode}
-            isCompleted={item.isCompleted}
-          />
+          <SubDayPlan subschedules={item.subSchedules} categoryColorCode={item.categoryColorCode} />
         </Styled.SubDayPlanWrapper>
       )}
     </Styled.Li>

@@ -7,7 +7,6 @@ interface SubDayPlanListProps {
   // @TODO 실제 데이터 타입에 맞춰서 타이핑 수정
   subschedules: any;
   categoryColorCode: string;
-  isCompleted: boolean;
 }
 
 interface liStyleProps {
@@ -15,18 +14,13 @@ interface liStyleProps {
   categoryColorCode: string;
 }
 
-function SubDayPlanList({
-  subschedules,
-  categoryColorCode,
-  isCompleted,
-  ...props
-}: SubDayPlanListProps) {
+function SubDayPlanList({ subschedules, categoryColorCode, ...props }: SubDayPlanListProps) {
   return (
     <Styled.SubUl>
       {subschedules.map((item) => (
         <Styled.SubLi key={item._id} categoryColorCode={categoryColorCode}>
           {/* @TODO 하위 아이템 데이터 오면 넘길 인자 정하기 */}
-          <CommonDayPlanChip isCompleted={isCompleted}>서브 메뉴</CommonDayPlanChip>
+          <CommonDayPlanChip>서브 메뉴</CommonDayPlanChip>
         </Styled.SubLi>
       ))}
     </Styled.SubUl>

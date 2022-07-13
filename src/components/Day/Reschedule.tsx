@@ -35,11 +35,12 @@ const Styled = {
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
-    width: 21.5rem;
+    width: 23rem;
   `,
   TitleArea: styled.div`
     display: flex;
     margin-bottom: 1.2rem;
+    margin-left: 1rem;
   `,
   Title: styled.h2`
     font-weight: 700;
