@@ -35,7 +35,6 @@ function NavBar() {
     { id: '1', name: 'TODAY PLAN', path: '/day/', term: dayPeriod, symbol: 'Today' },
     { id: '2', name: 'WEEK PLAN', path: '/week/', term: weekPeriod, symbol: 'Week' },
     { id: '3', name: 'MY PLAN', path: '/mypage', term: '', symbol: 'Mypage' },
-    //{id: '3', name: 'MONTH', path: '/month'}
   ];
 
   return (
