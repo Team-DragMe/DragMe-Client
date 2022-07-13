@@ -1,6 +1,6 @@
 import React from 'react';
 import { theme } from 'src/styles/theme';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import AddDayPlanChip from '../common/AddDayPlanChip';
 import CommonDayPlanChip from '../common/CommonDayPlanChip';
@@ -23,18 +23,13 @@ function MainDayPlan({ schedules, ...props }: MainDayPlanProps) {
     setIsOpen((prev) => !prev);
   };
 
-  // 아이가 있으면 무조건 -> addon, arrow 알아서 잘 됐으면 좋겠음
-  // 아이가 없으면 그냥 기본만 알아서 나왔으면 좋겠음
-
-  // 부모가 IsCompleted이면 자식도 IsCompleted
-  // 자식이 IsCompleTed
   return (
     <Styled.Root>
       <Styled.Ul>
         {schedules.map((item) => (
           <Styled.Li key={item._id} isOpen={isOpen}>
             <CommonDayPlanChip
-              color={item.categoryColorCode}
+              color={item.isCompleted ? '#B6BEC9' : item.categoryColorCode}
               shape={item.subSchedules.length > 0 ? 'rectangle' : 'triangle'}
               haveChild={item.subSchedules.length > 0}
               addon
@@ -44,8 +39,8 @@ function MainDayPlan({ schedules, ...props }: MainDayPlanProps) {
             >
               {item.title}
             </CommonDayPlanChip>
-            {item.subSchedules.length > 0 && isOpen && (
-              <Styled.SubDayPlanWrapper>
+            {item.subSchedules.length > 0 && (
+              <Styled.SubDayPlanWrapper isOpen={isOpen}>
                 <SubDayPlan
                   subschedules={item.subSchedules}
                   categoryColorCode={item.isCompleted ? '#B6BEC9' : item.categoryColorCode}
@@ -83,25 +78,24 @@ const Styled = {
     width: 210px;
     height: fit-content;
     list-style-type: none;
-    margin-bottom: ${({ isOpen }) => !isOpen && '1.2rem'};
+    /*  */
   `,
-  SubDayPlanWrapper: styled.div`
+  SubDayPlanWrapper: styled.div<liStyleProps>`
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    @keyframes SubUlAnimation {
-      from {
-        max-height: 1.2rem;
-      }
-      to {
-        max-height: fit-content;
-      }
-    }
-    & ul {
-      animation: SubUlAnimation 1s forwards;
-      overflow: hidden;
-      /* background: black; */
-    }
+    overflow: hidden;
+    ${({ isOpen }) =>
+      isOpen
+        ? css`
+            transition: max-height 0.2s ease-in;
+            max-height: 10rem;
+          `
+        : css`
+            /* transform: scaleY(0); */
+            transition: max-height 0.15s ease-out;
+            max-height: 1.2rem;
+          `}
   `,
   AddDayPlanChipWrapper: styled.div`
     margin-top: 0.8rem;

@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import SemiArrow from 'public/assets/icons/SemiArrow.svg';
 import React, { useState } from 'react';
 import { theme } from 'src/styles/theme';

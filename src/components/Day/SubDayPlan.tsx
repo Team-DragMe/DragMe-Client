@@ -10,11 +10,16 @@ interface SubDayPlanProps {
   isCompleted: boolean;
 }
 
+interface liStyleProps {
+  // @TODO 컬러코드값 타입으로 수정하기
+  categoryColorCode: string;
+}
+
 function SubDayPlan({ subschedules, categoryColorCode, isCompleted, ...props }: SubDayPlanProps) {
   return (
     <Styled.SubUl>
       {subschedules.map((item) => (
-        <Styled.SubLi key={item.id} categoryColorCode={categoryColorCode}>
+        <Styled.SubLi key={item._id} categoryColorCode={categoryColorCode}>
           {/* @TODO 하위 아이템 데이터 오면 넘길 인자 정하기 */}
           <CommonDayPlanChip isCompleted={isCompleted}>서브 메뉴</CommonDayPlanChip>
         </Styled.SubLi>

@@ -5,7 +5,7 @@ import styled from 'styled-components';
 function Day() {
   const schedules = [
     {
-      _id: 'sampleScheduleId',
+      _id: 'sampleScheduleId1',
       date: '2022-08-08',
       timeSets: [
         {
@@ -48,7 +48,7 @@ function Day() {
       orderIndex: 1,
     },
     {
-      _id: 'sampleScheduleId',
+      _id: 'sampleScheduleId2',
       date: '2022-08-08',
       timeSets: [
         {
