@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import CommonDayPlanChip from '../common/CommonDayPlanChip';
 
-interface SubDayPlanProps {
+interface SubDayPlanListProps {
   // @TODO 실제 데이터 타입에 맞춰서 타이핑 수정
   subschedules: any;
   categoryColorCode: string;
@@ -15,7 +15,12 @@ interface liStyleProps {
   categoryColorCode: string;
 }
 
-function SubDayPlan({ subschedules, categoryColorCode, isCompleted, ...props }: SubDayPlanProps) {
+function SubDayPlanList({
+  subschedules,
+  categoryColorCode,
+  isCompleted,
+  ...props
+}: SubDayPlanListProps) {
   return (
     <Styled.SubUl>
       {subschedules.map((item) => (
@@ -28,7 +33,7 @@ function SubDayPlan({ subschedules, categoryColorCode, isCompleted, ...props }: 
   );
 }
 
-export default SubDayPlan;
+export default SubDayPlanList;
 
 const Styled = {
   SubUl: styled.ul`
