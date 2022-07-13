@@ -1,12 +1,13 @@
-import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
 
 import NavBar from '../components/common/NavBar';
+import DayInfo from '../components/Day/DayInfoSection/DayInfo';
 
 function Home() {
   return (
     <Styled.Root>
       <NavBar />
+      <DayInfo />
     </Styled.Root>
   );
 }
@@ -14,7 +15,5 @@ function Home() {
 export default Home;
 
 const Styled = {
-  Root: styled.div`
-    color: ${theme.colors.main};
-  `,
+  Root: styled.div``,
 };

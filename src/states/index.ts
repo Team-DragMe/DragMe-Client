@@ -1,8 +1,10 @@
 import { atom } from 'recoil';
 
+import { todayTime } from '../utils/getToday';
+
 export const dayInfo = atom({
   key: 'dayInfo',
-  default: '2022-07-20',
+  default: todayTime(),
 });
 
 export const weekInfo = atom({
