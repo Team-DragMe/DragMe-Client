@@ -10,7 +10,7 @@ function useDragBlock(
     }
   };
 
-  const onMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
+  const onMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (isDragging) {
       if (e.target instanceof HTMLElement) {
         handleDragState(true, '', e.target.id);
@@ -25,7 +25,7 @@ function useDragBlock(
 
   return {
     onMouseDown,
-    onMouseEnter,
+    onMouseMove,
     onMouseUp,
   };
 }

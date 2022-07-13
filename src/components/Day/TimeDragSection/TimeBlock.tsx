@@ -1,24 +1,20 @@
 import { useEffect, useState } from 'react';
-import useDragBlockTest from 'src/hooks/useDragBlock';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
 
-const LAST_MINIT_OF_HOUR = 45;
+const LAST_MINIT_OF_HOUR = '45';
 
 interface timeType {
   id: number;
-  hour: number;
-  min: number;
-  isDragging: boolean;
+  hour: string;
+  min: string;
   isExpected: boolean;
-  handleDragState: (isDragging: boolean, startBlock: string, endBlock: string) => void;
   startBlock: string;
   endBlock: string;
 }
 
 function TimeBlock(props: timeType) {
-  const { id, hour, min, isDragging, isExpected, handleDragState, startBlock, endBlock } = props;
-  const { ...dragInfo } = useDragBlockTest(isDragging, handleDragState);
+  const { id, hour, min, isExpected, startBlock, endBlock } = props;
 
   const [draged, setDraged] = useState('');
 
@@ -30,15 +26,13 @@ function TimeBlock(props: timeType) {
     }
   }, [endBlock]);
 
-  return (
-    <Styled.Block id={`${id}`} key={`${hour}:${min}`} min={min} draged={draged} {...dragInfo} />
-  );
+  return <Styled.Block id={`${id}`} key={`${hour}:${min}`} min={min} draged={draged} />;
 }
 
 export default TimeBlock;
 
 const Styled = {
-  Block: styled.div<{ min: number; draged: string }>`
+  Block: styled.div<{ min: string; draged: string }>`
     display: flex;
     flex-shrink: 0;
     margin-right: ${({ min }) => (min === LAST_MINIT_OF_HOUR ? '0.7rem' : '0.4rem')};

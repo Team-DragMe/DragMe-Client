@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import useDragBlock from 'src/hooks/useDragBlock';
 import { theme } from 'src/styles/theme';
 import { getTimeArray } from 'src/utils/timeArray';
 import styled from 'styled-components';
@@ -6,8 +7,8 @@ import styled from 'styled-components';
 import TimeBlock from './TimeBlock';
 
 interface timeType {
-  hour: number;
-  min: number;
+  hour: string;
+  min: string;
 }
 
 const LAST_MINIT_OF_HOUR = 45;
@@ -29,17 +30,16 @@ function TimeBlocks() {
       setEndBlock(endBlock);
     }
   };
+  const { ...dragInfo } = useDragBlock(isDragging, handleDragState);
 
   return (
-    <Styled.Root>
+    <Styled.Root {...dragInfo}>
       {timeArr.map((el: timeType, idx: number) => (
         <TimeBlock
           id={idx}
           key={`${el.hour}:${el.min}`}
           hour={el.hour}
           min={el.min}
-          isDragging={isDragging}
-          handleDragState={handleDragState}
           isExpected={isExpected}
           startBlock={startBlock}
           endBlock={endBlock}
