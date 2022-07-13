@@ -16,17 +16,14 @@ function TimeBlocks() {
   const { timeArr } = getTimeArray();
   const [isDragging, setIsDragging] = useState(false);
   // const [isPlus, setIsPlus] = useState(true);
-  const [isEstimated] = useState(false);
+  const [isExpected] = useState(false);
   const [start, setStart] = useState('');
   const [end, setEnd] = useState('');
 
   const handleDragState = (isDragging: boolean) => {
     setIsDragging(isDragging);
-    // setIsPlus(isPlus);
   };
 
-  // const { ...dragInfo } = useDragBlockTest(isDragging, isPlus, isEstimated, handleDragState);
-  console.log(start, end);
   return (
     <Styled.Root>
       {timeArr.map((el: timeType, idx: number) => (
@@ -37,7 +34,7 @@ function TimeBlocks() {
           min={el.min}
           isDragging={isDragging}
           handleDragState={handleDragState}
-          isEstimated={isEstimated}
+          isExpected={isExpected}
           start={start}
           setStart={setStart}
           end={end}

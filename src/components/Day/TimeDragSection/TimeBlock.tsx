@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import useDragBlockTest from 'src/hooks/useTest';
+import useDragBlockTest from 'src/hooks/useDragBlock';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
 
@@ -10,7 +10,7 @@ interface timeType {
   hour: number;
   min: number;
   isDragging: boolean;
-  isEstimated: boolean;
+  isExpected: boolean;
   handleDragState: (isDragging: boolean) => void;
   start: string;
   end: string;
@@ -19,7 +19,7 @@ interface timeType {
 }
 
 function TimeBlock(props: timeType) {
-  const { id, hour, min, isDragging, isEstimated, handleDragState, setStart, setEnd, start, end } =
+  const { id, hour, min, isDragging, isExpected, handleDragState, setStart, setEnd, start, end } =
     props;
   const { ...dragInfo } = useDragBlockTest(isDragging, handleDragState, setStart, setEnd);
 
@@ -27,7 +27,7 @@ function TimeBlock(props: timeType) {
 
   useEffect(() => {
     if (parseInt(start) <= id && id <= parseInt(end)) {
-      isEstimated ? setDraged('done') : setDraged('plan');
+      isExpected ? setDraged('done') : setDraged('plan');
     } else if (parseInt(start) >= id && id >= parseInt(end)) {
       setDraged('');
     }

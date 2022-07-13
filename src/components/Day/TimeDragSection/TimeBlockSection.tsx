@@ -8,6 +8,7 @@ interface TimeBlockSectionProps {
 
 function TimeBlockSection(props: TimeBlockSectionProps) {
   const { plans } = props;
+
   return (
     <Styled.Root>
       {plans.map((el) => (
