@@ -1,35 +1,42 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import Logo from 'public/assets/Logo.png';
 import MenuBar from 'public/assets/MenuBar.png';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { dayInfo, weekInfo } from 'src/states';
 import styled from 'styled-components';
 
-interface LinkStyle {
-  isToday: boolean;
+type isMenuType = 'Today' | 'Week' | 'Mypage';
+
+interface LiStyle {
+  pickedMenu: isMenuType;
+  symbol: string;
 }
 
 function NavBar() {
+  const router = useRouter();
   const [dayPeriod] = useRecoilState(dayInfo);
   const [weekPeriod] = useRecoilState(weekInfo);
-  const [isToday, setIsToday] = useState(true);
+  const [pickedMenu, setPickedMenu] = useState<isMenuType>('Today');
+
+  useEffect(() => {
+    if (router.pathname === '/mypage') {
+      setPickedMenu('Mypage');
+    } else if (router.pathname === '/day/[data]') {
+      setPickedMenu('Today');
+    } else if (router.pathname === '/week/[week]') {
+      setPickedMenu('Week');
+    }
+  }, [router.pathname]);
 
   const periodData = [
-    { id: '1', name: 'TODAY PLAN', path: '/day/', term: dayPeriod },
-    { id: '2', name: 'WEEK PLAN', path: '/week/', term: weekPeriod },
+    { id: '1', name: 'TODAY PLAN', path: '/day/', term: dayPeriod, symbol: 'Today' },
+    { id: '2', name: 'WEEK PLAN', path: '/week/', term: weekPeriod, symbol: 'Week' },
+    { id: '3', name: 'MY PLAN', path: '/mypage', term: '', symbol: 'Mypage' },
     //{id: '3', name: 'MONTH', path: '/month'}
   ];
-
-  const handleSelectPeriod = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-    console.log((e.target as HTMLButtonElement).id);
-    if ((e.target as HTMLButtonElement).id === '1') {
-      setIsToday(true);
-    } else {
-      setIsToday(false);
-    }
-  };
 
   return (
     <Styled.Root>
@@ -39,22 +46,17 @@ function NavBar() {
         </Styled.LogoWrapper>
       </Link>
       <Styled.Contents>
-        <Styled.Period isToday={isToday}>
+        <Styled.MenuList>
           {periodData.map((period) => (
-            <li key={period.id}>
+            <Styled.List key={period.id} symbol={period.symbol} pickedMenu={pickedMenu}>
               <Link href={`${period.path}${encodeURIComponent(period.term)}`}>
-                <Styled.Link isToday id={period.id} onClick={handleSelectPeriod}>
-                  {period.name}
-                </Styled.Link>
+                <Styled.Link id={period.id}>{period.name}</Styled.Link>
               </Link>
-            </li>
+            </Styled.List>
           ))}
-        </Styled.Period>
-        <Link href="/mypage">
-          <Styled.MyPage>MYPAGE</Styled.MyPage>
-        </Link>
-        <Styled.MenuWrapper isToday>
-          <Image src={MenuBar} alt="로고이미지" width={'24'} height={'18'} />
+        </Styled.MenuList>
+        <Styled.MenuWrapper>
+          <Image src={MenuBar} alt="로고" width={'24'} height={'18'} />
         </Styled.MenuWrapper>
       </Styled.Contents>
     </Styled.Root>
@@ -82,69 +84,42 @@ const Styled = {
     height: 2rem;
     cursor: pointer;
   `,
-  MenuWrapper: styled.div<LinkStyle>`
+  MenuWrapper: styled.div`
     display: flex;
     justify-self: end;
     width: 2.4rem;
     height: 1.8rem;
     margin-top: 0.7rem;
   `,
-  Period: styled.ul<LinkStyle>`
+  MenuList: styled.ul`
     margin-top: 1.4rem;
     height: 6rem;
     display: flex;
     align-items: center;
-    ${({ isToday }) =>
-      isToday
-        ? `
-            li {
-              &:first-child {
-                & a {
-                  color: black;
-                }
-              }
-              &:nth-child(2) {
-                & a {
-                  color: #b6bec9;
-                }
-              }
-            }
-          `
-        : `
-            li {
-              &:first-child {
-                & a {
-                  color: #b6bec9;
-                }
-              }
-              &:nth-child(2) {
-                & a {
-                  color: black;
-                }
-              }
-            }
-          `}
-  `,
-
-  MyPage: styled.a`
-    margin-top: 1.4rem;
-    margin-right: 4rem;
-    margin-left: 1.8rem;
-    font-weight: bold;
-    cursor: pointer;
-    &:active {
-      text-decoration: underline;
+    &:first-child {
+      margin-right: 0.2rem;
     }
   `,
-  Link: styled.a<LinkStyle>`
-    text-decoration: none;
-    cursor: pointer;
+  List: styled.li<LiStyle>`
+    &:nth-child(2) {
+      margin-right: 1.8rem;
+    }
+    & a {
+      color: #b6bec9;
+      ${({ symbol, pickedMenu }) =>
+        pickedMenu === symbol &&
+        `
+          color: black;
+          padding-bottom: 0.1rem;
+          border-bottom: 1px solid black;
+        `}
+    }
+  `,
+  Link: styled.a`
     color: #b6bec9;
     font-weight: bold;
     margin-right: 3.8rem;
-    &:active {
-      text-decoration: underline;
-    }
+    cursor: pointer;
   `,
   Contents: styled.div`
     display: flex;
