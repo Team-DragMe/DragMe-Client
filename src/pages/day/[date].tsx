@@ -1,12 +1,12 @@
 import React from 'react';
-import styled from 'styled-components';
+import TodayPlan from 'src/components/Day/TodayPlan/index';
 
 function Day() {
-  return <Styled.Root>데이페이지입니다.</Styled.Root>;
+  return <TodayPlan />;
 }
 
 export default Day;
 
-const Styled = {
-  Root: styled.div``,
-};
+// const Styled = {
+//   Root: styled.div``,
+// };
