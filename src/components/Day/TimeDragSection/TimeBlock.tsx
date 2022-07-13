@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import useDragBlockTest from 'src/hooks/useTest';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
@@ -5,19 +6,36 @@ import styled from 'styled-components';
 const LAST_MINIT_OF_HOUR = 45;
 
 interface timeType {
+  id: number;
   hour: number;
   min: number;
   isDragging: boolean;
-  isPlus: boolean;
   isEstimated: boolean;
-  handleDragState: (isDragging: boolean, isPlus: boolean) => void;
+  handleDragState: (isDragging: boolean) => void;
+  start: string;
+  end: string;
+  setStart: Dispatch<SetStateAction<string>>;
+  setEnd: Dispatch<SetStateAction<string>>;
 }
 
 function TimeBlock(props: timeType) {
-  const { hour, min, isPlus, isDragging, isEstimated, handleDragState } = props;
-  const { ...dragInfo } = useDragBlockTest(isDragging, isPlus, isEstimated, handleDragState);
+  const { id, hour, min, isDragging, isEstimated, handleDragState, setStart, setEnd, start, end } =
+    props;
+  const { ...dragInfo } = useDragBlockTest(isDragging, handleDragState, setStart, setEnd);
 
-  return <Styled.Block key={`${hour}:${min}`} min={min} {...dragInfo} />;
+  const [draged, setDraged] = useState('');
+
+  useEffect(() => {
+    if (parseInt(start) <= id && id <= parseInt(end)) {
+      isEstimated ? setDraged('done') : setDraged('plan');
+    } else if (parseInt(start) >= id && id >= parseInt(end)) {
+      setDraged('');
+    }
+  }, [end]);
+
+  return (
+    <Styled.Block id={`${id}`} key={`${hour}:${min}`} min={min} draged={draged} {...dragInfo} />
+  );
 }
 
 export default TimeBlock;

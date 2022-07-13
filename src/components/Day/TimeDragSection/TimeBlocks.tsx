@@ -15,26 +15,33 @@ const LAST_MINIT_OF_HOUR = 45;
 function TimeBlocks() {
   const { timeArr } = getTimeArray();
   const [isDragging, setIsDragging] = useState(false);
-  const [isPlus, setIsPlus] = useState(true);
+  // const [isPlus, setIsPlus] = useState(true);
   const [isEstimated] = useState(false);
+  const [start, setStart] = useState('');
+  const [end, setEnd] = useState('');
 
-  const handleDragState = (isDragging: boolean, isPlus: boolean) => {
+  const handleDragState = (isDragging: boolean) => {
     setIsDragging(isDragging);
-    setIsPlus(isPlus);
+    // setIsPlus(isPlus);
   };
-  // const { ...dragInfo } = useDragBlockTest(isDragging, isPlus, isEstimated, handleDragState);
 
+  // const { ...dragInfo } = useDragBlockTest(isDragging, isPlus, isEstimated, handleDragState);
+  console.log(start, end);
   return (
     <Styled.Root>
-      {timeArr.map((el: timeType) => (
+      {timeArr.map((el: timeType, idx: number) => (
         <TimeBlock
+          id={idx}
           key={`${el.hour}:${el.min}`}
           hour={el.hour}
           min={el.min}
           isDragging={isDragging}
-          isPlus={isPlus}
           handleDragState={handleDragState}
           isEstimated={isEstimated}
+          start={start}
+          setStart={setStart}
+          end={end}
+          setEnd={setEnd}
         />
       ))}
     </Styled.Root>
