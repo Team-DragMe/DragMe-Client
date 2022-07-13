@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import CommonDayPlanChip from '../common/CommonDayPlanChip';
+import CommonDayPlanChip from '../DayPlanChip/CommonDayPlanChip';
 
 interface SubDayPlanListProps {
   // @TODO 실제 데이터 타입에 맞춰서 타이핑 수정

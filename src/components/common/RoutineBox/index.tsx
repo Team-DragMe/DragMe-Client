@@ -1,7 +1,8 @@
 import React from 'react';
+import { schedules } from 'src/mock-data/schedules';
 import styled from 'styled-components';
 
-import MainDayPlanList from '../Day/MainDayPlanList';
+import DayPlanList from '../DayPlanList/DayPlanList';
 
 const ROUTINE_BOX = {
   EN: 'ROUTINE BOX',
@@ -16,7 +17,7 @@ function RoutineBox() {
           <Styled.Title>{ROUTINE_BOX.EN}</Styled.Title>
           <Styled.SubTitle>{ROUTINE_BOX.KO}</Styled.SubTitle>
         </Styled.TitleArea>
-        <MainDayPlanList />
+        <DayPlanList schedules={schedules} className="routine-plan-list" />
       </Styled.ContentsWrapper>
       <Styled.Footer>
         <button>DRAG.ME</button>
@@ -40,6 +41,10 @@ const Styled = {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    .routine-plan-list {
+      position: relative;
+      right: 1rem;
+    }
   `,
   ContentsWrapper: styled.article`
     width: 21rem;

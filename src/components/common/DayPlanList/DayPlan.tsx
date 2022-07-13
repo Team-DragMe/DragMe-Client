@@ -1,10 +1,10 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 
-import CommonDayPlanChip from '../common/CommonDayPlanChip';
 import SubDayPlan from './SubDayPlanList';
+import CommonDayPlanChip from '../DayPlanChip/CommonDayPlanChip';
 
-interface MainDayPlanProps {
+interface DayPlanProps {
   // @TODO 실제 데이터 타입에 맞춰서 타이핑 수정
   item: any;
 }
@@ -16,7 +16,7 @@ interface liStyleProps {
 interface subDayPlanStyleProps {
   isOpen: boolean;
 }
-function MainDayPlan({ item }: MainDayPlanProps) {
+function DayPlan({ item }: DayPlanProps) {
   const [isOpen, setIsOpen] = React.useState(false);
   const onArrowBtnClick = () => {
     setIsOpen((prev) => !prev);
@@ -44,7 +44,7 @@ function MainDayPlan({ item }: MainDayPlanProps) {
   );
 }
 
-export default MainDayPlan;
+export default DayPlan;
 
 const Styled = {
   Li: styled.li<liStyleProps>`

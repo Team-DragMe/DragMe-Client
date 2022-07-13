@@ -3,9 +3,9 @@ import React, { useState } from 'react';
 import { theme } from 'src/styles/theme';
 import styled, { css } from 'styled-components';
 
-import AddonBtn from './AddonBtn';
-import CheckBox from './CheckBox';
-import CollapseArrow from './CollapseArrow';
+import AddonBtn from '../AddonBtn';
+import CheckBox from '../CheckBox';
+import CollapseArrow from '../CollapseArrow';
 
 type shapeType = 'rectangle' | 'triangle';
 interface CommonDayPlanChipProps {

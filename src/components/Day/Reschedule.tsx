@@ -2,7 +2,7 @@ import React from 'react';
 import { schedules } from 'src/mock-data/schedules';
 import styled from 'styled-components';
 
-import MainDayPlan from './MainDayPlan';
+import MainDayPlan from '../common/DayPlanList/DayPlan';
 
 const RESCHEDULE = {
   EN: 'RESCHEDULE',
@@ -48,7 +48,6 @@ const Styled = {
     line-height: 25px;
   `,
   SubTitle: styled.h2`
-    font-family: 'Pretendard';
     font-style: normal;
     font-weight: 500;
     font-size: 16px;
