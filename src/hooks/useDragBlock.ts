@@ -1,28 +1,25 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 
 function useDragBlock(
   isDragging: boolean,
-  handleDragState: (isDragging: boolean) => void,
-  setStart: Dispatch<SetStateAction<string>>,
-  setEnd: Dispatch<SetStateAction<string>>,
+  handleDragState: (isDragging: boolean, startBlock: string, endBlock: string) => void,
 ) {
   const onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target instanceof HTMLDivElement) {
-      setStart(e.target.id);
+      handleDragState(true, e.target.id, '');
     }
-    handleDragState(true);
   };
 
   const onMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
     if (isDragging) {
       if (e.target instanceof HTMLElement) {
-        setEnd(e.target.id);
+        handleDragState(true, '', e.target.id);
       }
     }
   };
 
   const onMouseUp = () => {
-    handleDragState(false);
+    handleDragState(false, '', '');
     //서버처리
   };
 

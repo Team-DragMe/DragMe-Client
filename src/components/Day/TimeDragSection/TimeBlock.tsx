@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import useDragBlockTest from 'src/hooks/useDragBlock';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
@@ -11,27 +11,24 @@ interface timeType {
   min: number;
   isDragging: boolean;
   isExpected: boolean;
-  handleDragState: (isDragging: boolean) => void;
-  start: string;
-  end: string;
-  setStart: Dispatch<SetStateAction<string>>;
-  setEnd: Dispatch<SetStateAction<string>>;
+  handleDragState: (isDragging: boolean, startBlock: string, endBlock: string) => void;
+  startBlock: string;
+  endBlock: string;
 }
 
 function TimeBlock(props: timeType) {
-  const { id, hour, min, isDragging, isExpected, handleDragState, setStart, setEnd, start, end } =
-    props;
-  const { ...dragInfo } = useDragBlockTest(isDragging, handleDragState, setStart, setEnd);
+  const { id, hour, min, isDragging, isExpected, handleDragState, startBlock, endBlock } = props;
+  const { ...dragInfo } = useDragBlockTest(isDragging, handleDragState);
 
   const [draged, setDraged] = useState('');
 
   useEffect(() => {
-    if (parseInt(start) <= id && id <= parseInt(end)) {
+    if (parseInt(startBlock) <= id && id <= parseInt(endBlock)) {
       isExpected ? setDraged('done') : setDraged('plan');
-    } else if (parseInt(start) >= id && id >= parseInt(end)) {
+    } else if (parseInt(startBlock) >= id && id >= parseInt(endBlock)) {
       setDraged('');
     }
-  }, [end]);
+  }, [endBlock]);
 
   return (
     <Styled.Block id={`${id}`} key={`${hour}:${min}`} min={min} draged={draged} {...dragInfo} />

@@ -17,11 +17,17 @@ function TimeBlocks() {
   const [isDragging, setIsDragging] = useState(false);
   // const [isPlus, setIsPlus] = useState(true);
   const [isExpected] = useState(false);
-  const [start, setStart] = useState('');
-  const [end, setEnd] = useState('');
+  const [startBlock, setStartBlock] = useState('');
+  const [endBlock, setEndBlock] = useState('');
 
-  const handleDragState = (isDragging: boolean) => {
+  const handleDragState = (isDragging: boolean, startBlock: string, endBlock: string) => {
     setIsDragging(isDragging);
+    if (startBlock !== '') {
+      setStartBlock(startBlock);
+    }
+    if (endBlock !== '') {
+      setEndBlock(endBlock);
+    }
   };
 
   return (
@@ -35,10 +41,8 @@ function TimeBlocks() {
           isDragging={isDragging}
           handleDragState={handleDragState}
           isExpected={isExpected}
-          start={start}
-          setStart={setStart}
-          end={end}
-          setEnd={setEnd}
+          startBlock={startBlock}
+          endBlock={endBlock}
         />
       ))}
     </Styled.Root>
