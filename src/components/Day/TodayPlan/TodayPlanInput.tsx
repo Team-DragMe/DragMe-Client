@@ -6,8 +6,7 @@ function TodayPlanInput() {
   const [timer, setTimer] = useState<NodeJS.Timeout | number>(0);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value);
-    setTodayPlan(todayPlan);
+    setTodayPlan(e.target.value);
     if (timer) {
       clearTimeout(timer);
     }
