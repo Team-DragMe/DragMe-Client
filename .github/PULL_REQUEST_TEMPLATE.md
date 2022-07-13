@@ -1,3 +1,8 @@
+---
+title: "[#이슈번호][FEATURE] #0-0 Feature 상세"
+
+---
+
 ## ✅ PR check list
 
 - [x] PR 제목: "[#이슈번호] 작업 내용" 
