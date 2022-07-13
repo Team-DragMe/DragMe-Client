@@ -60,14 +60,14 @@ const Styled = {
     }
   `,
   UlWrapper: styled.article`
-    max-height: 11rem;
+    max-height: 12rem;
     overflow-y: scroll;
     width: 100%;
     display: flex;
     justify-content: center;
   `,
   Ul: styled.ul`
-    min-height: 11rem;
+    min-height: 12rem;
     width: 21rem;
   `,
 };
