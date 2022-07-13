@@ -33,7 +33,6 @@ export default SubDayPlan;
 const Styled = {
   SubUl: styled.ul`
     width: 17.9rem;
-    /* animation: SubUlAnimation 1s forwards; */
     li {
       &:first-child {
         margin-top: 1.2rem;

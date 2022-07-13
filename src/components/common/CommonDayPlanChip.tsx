@@ -49,7 +49,7 @@ function CommonDayPlanChip({
   const [isChecked, setIsChecked] = useState(isCompleted);
   const handleChange = () => {
     setIsChecked((prev) => !prev);
-    // id값으로 포스트하고 react query hook의 인자값 업데이트해서 업데이트 되도록..
+    // @TODO React query optimistic update로 완료된 계획 post
   };
   return (
     <Styled.Container {...props}>

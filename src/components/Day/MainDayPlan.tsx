@@ -18,7 +18,6 @@ interface liStyleProps {
 }
 function MainDayPlan({ schedules, ...props }: MainDayPlanProps) {
   const [isOpen, setIsOpen] = React.useState(false);
-  console.log(schedules);
   const onArrowBtnClick = () => {
     setIsOpen((prev) => !prev);
   };
@@ -78,7 +77,6 @@ const Styled = {
     width: 210px;
     height: fit-content;
     list-style-type: none;
-    /*  */
   `,
   SubDayPlanWrapper: styled.div<liStyleProps>`
     display: flex;
@@ -92,7 +90,6 @@ const Styled = {
             max-height: 10rem;
           `
         : css`
-            /* transform: scaleY(0); */
             transition: max-height 0.15s ease-out;
             max-height: 1.2rem;
           `}

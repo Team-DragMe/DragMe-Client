@@ -47,7 +47,6 @@ const Styled = {
   `,
   Label: styled.label<LabelProps>`
     cursor: pointer;
-    /* &:after { */
     ${({ isChecked }) =>
       isChecked &&
       css`
@@ -55,6 +54,6 @@ const Styled = {
         top: 0.1rem;
         content: url('/assets/icons/checkIconActive.svg');
         transition: all 0.3s ease;
-      `}/* } */
+      `}
   `,
 };
