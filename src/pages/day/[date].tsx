@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import MainDayPlan from 'src/components/Day/MainDayPlan';
 import styled from 'styled-components';
 

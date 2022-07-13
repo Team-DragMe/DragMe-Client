@@ -44,7 +44,6 @@ function CommonDayPlanChip({
   onArrowBtnClick,
   children,
   isCompleted = false,
-  id,
   ...props
 }: CommonDayPlanChipProps) {
   const [isChecked, setIsChecked] = useState(isCompleted);

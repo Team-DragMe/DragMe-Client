@@ -1,4 +1,4 @@
-import React, { forwardRef, InputHTMLAttributes, useRef } from 'react';
+import React, { forwardRef, InputHTMLAttributes } from 'react';
 import styled, { css } from 'styled-components';
 
 interface CheckBoxProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
