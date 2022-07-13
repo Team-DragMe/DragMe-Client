@@ -52,7 +52,7 @@ function CommonDayPlanChip({
     // @TODO React query optimistic update로 완료된 계획 post
   };
   return (
-    <Styled.Container {...props}>
+    <Styled.Container {...props} shape={shape}>
       {color !== 'none' && <Styled.ColorChip color={color} />}
       <Styled.Box shape={shape}>
         <CheckBox id="dayCheck" isChecked={isChecked} onChange={handleChange} />
@@ -76,11 +76,16 @@ function CommonDayPlanChip({
 export default CommonDayPlanChip;
 
 const Styled = {
-  Container: styled.section`
+  Container: styled.section<BoxStyleProps>`
     display: flex;
     align-items: center;
     width: 100%;
     height: 3.2rem;
+    ${({ shape }) =>
+      shape === 'triangle' &&
+      css`
+        width: 98%;
+      `}
   `,
   ColorChip: styled.div<ColorChipStyleProps>`
     border-top: 1px solid ${theme.colors.plan_grey01};
