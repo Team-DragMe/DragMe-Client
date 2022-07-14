@@ -17,6 +17,7 @@
     "next": "12.2.1",
     "react": "18.2.0",
     "react-dnd": "^16.0.1",
+    "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "18.2.0",
     "react-query": "^3.39.1",
     "recoil": "^0.7.4",
