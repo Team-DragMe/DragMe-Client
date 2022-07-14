@@ -50,7 +50,7 @@ const Styled = {
   `,
   AddDayPlanChipWrapper: styled.div`
     padding-top: 0.8rem;
-    border-top: 1px solid ${theme.colors.plan_grey01};
+    border-top: 1px solid ${theme.colors.plan_grey};
     width: 21rem;
   `,
 };

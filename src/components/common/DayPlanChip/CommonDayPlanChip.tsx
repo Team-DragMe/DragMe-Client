@@ -88,9 +88,9 @@ const Styled = {
       `}
   `,
   ColorChip: styled.div<ColorChipStyleProps>`
-    border-top: 1px solid ${theme.colors.plan_grey01};
-    border-bottom: 1px solid ${theme.colors.plan_grey01};
-    border-left: 1px solid ${theme.colors.plan_grey01};
+    border-top: 1px solid ${theme.colors.plan_grey};
+    border-bottom: 1px solid ${theme.colors.plan_grey};
+    border-left: 1px solid ${theme.colors.plan_grey};
     background: ${({ color }) => color};
     width: 1rem;
     height: 100%;
@@ -120,15 +120,15 @@ const Styled = {
     ${({ shape }) =>
       shape === 'rectangle'
         ? css`
-            border: 1px solid ${theme.colors.plan_grey01};
+            border: 1px solid ${theme.colors.plan_grey};
             .semiArrowWrapper {
               display: none;
             }
           `
         : css`
-            border-top: 1px solid ${theme.colors.plan_grey01};
-            border-bottom: 1px solid ${theme.colors.plan_grey01};
-            border-left: 1px solid ${theme.colors.plan_grey01};
+            border-top: 1px solid ${theme.colors.plan_grey};
+            border-bottom: 1px solid ${theme.colors.plan_grey};
+            border-left: 1px solid ${theme.colors.plan_grey};
           `}
   `,
   ContentsWrapper: styled.div`
@@ -152,7 +152,7 @@ const Styled = {
   RectangleBox: styled.div`
     display: flex;
     align-items: center;
-    border: 1px solid ${theme.colors.plan_grey01};
+    border: 1px solid ${theme.colors.plan_grey};
     padding-left: 0.8rem;
     width: 100%;
     height: 100%;
@@ -160,9 +160,9 @@ const Styled = {
   TriangleBox: styled.div`
     display: flex;
     align-items: center;
-    border-top: 1px solid ${theme.colors.plan_grey01};
-    border-bottom: 1px solid ${theme.colors.plan_grey01};
-    border-left: 1px solid ${theme.colors.plan_grey01};
+    border-top: 1px solid ${theme.colors.plan_grey};
+    border-bottom: 1px solid ${theme.colors.plan_grey};
+    border-left: 1px solid ${theme.colors.plan_grey};
     padding-left: 0.8rem;
     width: 100%;
     height: 100%;
@@ -173,7 +173,7 @@ const Styled = {
     left: 16.6rem;
     height: 3.2rem;
     & div {
-      background: ${theme.colors.plan_grey01};
+      background: ${theme.colors.plan_grey};
       width: 0.1rem;
       height: 2rem;
     }
@@ -194,6 +194,6 @@ const Styled = {
     margin-left: 0.8rem;
     min-width: 11.3rem;
     width: 65%;
-    color: ${({ isChecked }) => isChecked && theme.colors.plan_grey01};
+    color: ${({ isChecked }) => isChecked && theme.colors.plan_grey};
   `,
 };

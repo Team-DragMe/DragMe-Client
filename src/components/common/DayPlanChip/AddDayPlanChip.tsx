@@ -17,7 +17,7 @@ const Styled = {
   Root: styled.div`
     width: 100%;
     height: 3.2rem;
-    border: 1px solid ${theme.colors.plan_grey01};
+    border: 1px solid ${theme.colors.plan_grey};
     display: flex;
     justify-content: center;
     align-items: center;
