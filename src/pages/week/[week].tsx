@@ -3,16 +3,16 @@ import styled from 'styled-components';
 
 import NavBar from '../../components/common/NavBar';
 
-function Day() {
+function Week() {
   return (
     <Styled.Root>
       <NavBar />
-      데이페이지입니다.
+      마이페이지입니다.
     </Styled.Root>
   );
 }
 
-export default Day;
+export default Week;
 
 const Styled = {
   Root: styled.div``,
