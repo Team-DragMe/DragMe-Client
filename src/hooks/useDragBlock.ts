@@ -1,25 +1,33 @@
 import React from 'react';
 
-function useDragBlock(
-  isDragging: boolean,
-  handleDragState: (isDragging: boolean, startBlock: string, endBlock: string) => void,
-) {
+interface DragStateArg {
+  isDragging: boolean;
+  startBlock: string;
+  endBlock: string;
+}
+
+interface DragBlockHookArg {
+  isDragging: boolean;
+  handleDragState: ({ isDragging, startBlock, endBlock }: DragStateArg) => void;
+}
+
+function useDragBlock({ isDragging, handleDragState }: DragBlockHookArg) {
   const onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target instanceof HTMLDivElement) {
-      handleDragState(true, e.target.id, '');
+      handleDragState({ isDragging: true, startBlock: e.target.id, endBlock: '' });
     }
   };
 
   const onMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (isDragging) {
       if (e.target instanceof HTMLElement) {
-        handleDragState(true, '', e.target.id);
+        handleDragState({ isDragging: true, startBlock: '', endBlock: e.target.id });
       }
     }
   };
 
   const onMouseUp = () => {
-    handleDragState(false, '', '');
+    handleDragState({ isDragging: false, startBlock: '', endBlock: '' });
     //서버처리
   };
 

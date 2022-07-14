@@ -13,6 +13,12 @@ interface timeType {
 
 const LAST_MINIT_OF_HOUR = 45;
 
+interface DragStateArg {
+  isDragging: boolean;
+  startBlock: string;
+  endBlock: string;
+}
+
 function TimeBlocks() {
   const { timeArr } = getTimeArray();
   const [isDragging, setIsDragging] = useState(false);
@@ -21,7 +27,7 @@ function TimeBlocks() {
   const [startBlock, setStartBlock] = useState('');
   const [endBlock, setEndBlock] = useState('');
 
-  const handleDragState = (isDragging: boolean, startBlock: string, endBlock: string) => {
+  const handleDragState = ({ isDragging, startBlock, endBlock }: DragStateArg) => {
     setIsDragging(isDragging);
     if (startBlock !== '') {
       setStartBlock(startBlock);
@@ -30,7 +36,7 @@ function TimeBlocks() {
       setEndBlock(endBlock);
     }
   };
-  const { ...dragInfo } = useDragBlock(isDragging, handleDragState);
+  const { ...dragInfo } = useDragBlock({ isDragging, handleDragState });
 
   return (
     <Styled.Root {...dragInfo}>
