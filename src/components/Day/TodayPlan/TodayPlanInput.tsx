@@ -1,30 +1,15 @@
-import { useState } from 'react';
+import useDebouncing from 'src/hooks/useDebouncing';
+import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
 
 function TodayPlanInput() {
-  const [todayPlan, setTodayPlan] = useState<string>();
-  const [timer, setTimer] = useState<NodeJS.Timeout | number>(0);
+  const { onChange } = useDebouncing();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTodayPlan(e.target.value);
-    if (timer) {
-      clearTimeout(timer);
-    }
-    const newTimer = setTimeout(async () => {
-      try {
-        //서버와 api 통신
-        console.log('저장');
-      } catch (e) {
-        console.error('error', e);
-      }
-    }, 2500);
-    setTimer(newTimer);
-  };
   return (
     <StyledTodayPlanInput.Root>
       <StyledTodayPlanInput.Input
         placeholder="오늘 하루 계획 및 다짐을 입력해주세요."
-        onChange={handleChange}
+        onChange={onChange}
       />
       <StyledTodayPlanInput.Hr />
     </StyledTodayPlanInput.Root>
@@ -46,7 +31,11 @@ const StyledTodayPlanInput = {
     padding: 0;
     font-size: 1.2rem;
     &::placeholder {
-      color: #d8dbde;
+      color: ${theme.colors.letter_grey};
+    }
+    &:focus {
+      color: ${theme.colors.letter_black};
+      outline: 0;
     }
   `,
   Hr: styled.hr`
@@ -54,6 +43,6 @@ const StyledTodayPlanInput = {
     border: 0.1rem solid;
     padding: 0;
     width: 47.3rem;
-    color: #d8dbde;
+    color: ${theme.colors.letter_grey};
   `,
 };
