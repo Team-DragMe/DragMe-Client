@@ -2,7 +2,7 @@ import { IEmojiData, IEmojiPickerProps } from 'emoji-picker-react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import SmileEmoticon from 'public/assets/SmileEmoticon.png';
-import React, { SetStateAction, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 const Picker = dynamic(async () => import('emoji-picker-react'), {
@@ -13,11 +13,11 @@ type EmojiPickerElement = HTMLDivElement;
 
 interface EmojiPickerProps extends Omit<IEmojiPickerProps, 'onEmojiClick'> {
   click: boolean;
-  setClick: React.Dispatch<SetStateAction<boolean>>;
+  setClick: (value: boolean) => void;
 }
 
 function EmojiPicker(
-  { click, setClick, ...props }: EmojiPickerProps,
+  { click, setClick }: EmojiPickerProps,
   ref: React.ForwardedRef<EmojiPickerElement>,
 ) {
   const [chosenEmoji, setChosenEmoji] = useState<IEmojiData>();

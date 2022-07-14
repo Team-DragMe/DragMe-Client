@@ -1,18 +1,14 @@
 import React from 'react';
-import TodayNote from 'src/components/Day/TodayNote/index';
-import TodayPlan from 'src/components/Day/TodayPlan/index';
+import TodayNote from 'src/components/Day/TodayNote';
+import TodayPlan from 'src/components/Day/TodayPlan';
+import styled from 'styled-components';
 
 function Day() {
-  return (
-    <>
-      <TodayPlan />
-      <TodayNote />
-    </>
-  );
+  return <Styled.Root />;
 }
 
 export default Day;
 
-// const Styled = {
-//   Root: styled.div``,
-// };
+const Styled = {
+  Root: styled.div``,
+};
