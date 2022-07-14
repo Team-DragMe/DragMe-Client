@@ -1,10 +1,10 @@
 import { atom } from 'recoil';
 
-import { todayTime } from '../utils/getToday';
+import { getToday } from '../utils/getDate';
 
 export const dayInfo = atom({
   key: 'dayInfo',
-  default: todayTime(),
+  default: getToday(0),
 });
 
 export const weekInfo = atom({
