@@ -1,5 +1,6 @@
 import React from 'react';
 import { schedules } from 'src/mock-data/schedules';
+import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
 
 import DayPlanList from '../DayPlanList/DayPlanList';
@@ -33,8 +34,8 @@ const Styled = {
   Root: styled.section`
     width: 32.5rem;
     height: 100%;
-    background: #f8f9fb;
-    border: 1px solid #ffffff;
+    background: ${theme.colors.scroll_grey};
+    border: 1px solid ${theme.category.cate_white};
     box-shadow: 0px 0px 10px #d2d9e8;
     border-radius: 7rem 0rem 0rem 2rem;
     display: flex;
@@ -62,7 +63,7 @@ const Styled = {
     line-height: 150%;
 
     /* Drag.me_blue */
-    color: #0a42df;
+    color: ${theme.colors.main_color};
   `,
   SubTitle: styled.h3`
     font-style: normal;
