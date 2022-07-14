@@ -5,27 +5,11 @@ import Reschedule from 'src/components/Day/Reschedule';
 import styled from 'styled-components';
 
 function Day() {
-  return (
-    <Styled.Root>
-      <div>
-        <MainDayPlan />
-        <Reschedule />
-      </div>
-      <div>
-        <RoutineBox />
-      </div>
-    </Styled.Root>
-  );
+  return <Styled.Root>데이페이지 입니다</Styled.Root>;
 }
 
 export default Day;
 
 const Styled = {
-  Root: styled.div`
-    margin-left: 1rem;
-    display: flex;
-    & > section {
-      margin-bottom: 6.1rem;
-    }
-  `,
+  Root: styled.div``,
 };

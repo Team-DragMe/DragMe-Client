@@ -1,4 +1,5 @@
 import React, { ButtonHTMLAttributes } from 'react';
+import { ArrowDownAnimation, ArrowRightAnimation } from 'src/lib/style/animation';
 import styled from 'styled-components';
 
 interface CollapseArrowProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -30,24 +31,8 @@ const ArrowBtn = styled.button`
 `;
 const Styled = {
   Root: styled.div`
-    @keyframes ArrowDown {
-      from {
-        transform: rotate(0deg);
-      }
-
-      to {
-        transform: rotate(90deg);
-      }
-    }
-    @keyframes ArrowRight {
-      from {
-        transform: rotate(0deg);
-      }
-
-      to {
-        transform: rotate(-90deg);
-      }
-    }
+    ${ArrowRightAnimation}
+    ${ArrowDownAnimation}
   `,
   DownArrow: styled(ArrowBtn)`
     animation: ArrowDown 0.3s forwards;

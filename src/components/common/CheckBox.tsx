@@ -40,7 +40,7 @@ const Styled = {
       display: inline-block;
       position: relative;
       border: 1px solid #d0d4da;
-      border-radius: 0.1rem;
+      /* border-radius: 0.1rem; */
       width: 1.2rem;
       height: 1.2rem;
     }
