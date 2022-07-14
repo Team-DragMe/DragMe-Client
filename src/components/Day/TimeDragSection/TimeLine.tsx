@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { theme } from 'src/styles/theme';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import TimeBlockSection from './TimeBlockSection';
 
@@ -110,7 +110,13 @@ const Styled = {
     align-items: center;
     ${({ idx, nowHour }) =>
       nowHour === idx &&
-      `background-color:${theme.colors.main_color}; border-radius:50%; margin:0.25rem; border:2px solid ${theme.category.cate_white};; box-shadow: 0 0 0 2px ${theme.colors.main_color};`}
+      css`
+        background-color: ${theme.colors.main_color};
+        border-radius: 50%;
+        margin: 0.25rem;
+        border: 2px solid ${theme.category.cate_white};
+        box-shadow: 0 0 0 2px ${theme.colors.main_color};
+      `}
   `,
 
   Line: styled.div<LineWrapperStyledProps>`
