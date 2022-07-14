@@ -1,4 +1,4 @@
-export const getToday = (days: number) => {
+export const getTodayDate = (days: number) => {
   const getDayInfo = new Date();
   const changedDate = new Date(getDayInfo.setDate(getDayInfo.getDate() + days));
   const todayYear = changedDate.getFullYear();

@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { dayInfo } from 'src/states';
 import { theme } from 'src/styles/theme';
-import { getToday } from 'src/utils/getDate';
+import { getTodayDate } from 'src/utils/getDate';
 import styled from 'styled-components';
 
 import PrevArrow from '/public/assets/PrevArrow.png';
@@ -14,7 +14,7 @@ function DayChange() {
   const router = useRouter();
   const [dayDate, setDayData] = useRecoilState(dayInfo);
   const [dayChange, setDayChange] = useState(0);
-  setDayData(getToday(dayChange));
+  setDayData(getTodayDate(dayChange));
   useEffect(() => {
     router.push(`${dayDate}`);
   }, [dayChange]);
