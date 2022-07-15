@@ -1,5 +1,5 @@
 import SemiArrow from 'public/assets/icons/SemiArrow.svg';
-import React, { useState } from 'react';
+import React, { forwardRef, useState } from 'react';
 import { theme } from 'src/styles/theme';
 import styled, { css } from 'styled-components';
 
@@ -34,45 +34,51 @@ interface ContentsStyleProps {
   isChecked: boolean;
 }
 
-function CommonDayPlanChip({
-  color = 'none',
-  shape = 'rectangle',
-  haveChild = false,
-  addon = false,
-  isOpened = false,
-  onAddonClick,
-  onArrowBtnClick,
-  children,
-  isCompleted = false,
-  ...props
-}: CommonDayPlanChipProps) {
-  const [isChecked, setIsChecked] = useState(isCompleted);
-  const handleChange = () => {
-    setIsChecked((prev) => !prev);
-    // @TODO React query optimistic update로 완료된 계획 post
-  };
-  return (
-    <Styled.Container {...props} shape={shape}>
-      {color !== 'none' && <Styled.ColorChip color={color} />}
-      <Styled.Box shape={shape}>
-        <CheckBox id="dayCheck" isChecked={isChecked} onChange={handleChange} />
-        <Styled.ContentsWrapper>
-          <div>
-            <Styled.Contents isChecked={isChecked}>{children}</Styled.Contents>
+const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
+  (
+    {
+      color = 'none',
+      shape = 'rectangle',
+      haveChild = false,
+      addon = false,
+      isOpened = false,
+      onAddonClick,
+      onArrowBtnClick,
+      children,
+      isCompleted = false,
+      ...props
+    }: CommonDayPlanChipProps,
+    ref,
+  ) => {
+    const [isChecked, setIsChecked] = useState(isCompleted);
+    const handleChange = () => {
+      setIsChecked((prev) => !prev);
+      // @TODO React query optimistic update로 완료된 계획 post
+    };
+    return (
+      <Styled.Container {...props} shape={shape} ref={ref}>
+        {color !== 'none' && <Styled.ColorChip color={color} />}
+        <Styled.Box shape={shape}>
+          <CheckBox id="dayCheck" isChecked={isChecked} onChange={handleChange} />
+          <Styled.ContentsWrapper>
+            <div>
+              <Styled.Contents isChecked={isChecked}>{children}</Styled.Contents>
+            </div>
+            <Styled.BtnWrapper>
+              {(addon || haveChild) && <AddonBtn onClick={onAddonClick} />}
+              {haveChild && <CollapseArrow isOpened={isOpened} onClick={onArrowBtnClick} />}
+            </Styled.BtnWrapper>
+          </Styled.ContentsWrapper>
+          <div className="semiArrowWrapper">
+            <SemiArrow />
           </div>
-          <Styled.BtnWrapper>
-            {(addon || haveChild) && <AddonBtn onClick={onAddonClick} />}
-            {haveChild && <CollapseArrow isOpened={isOpened} onClick={onArrowBtnClick} />}
-          </Styled.BtnWrapper>
-        </Styled.ContentsWrapper>
-        <div className="semiArrowWrapper">
-          <SemiArrow />
-        </div>
-      </Styled.Box>
-    </Styled.Container>
-  );
-}
+        </Styled.Box>
+      </Styled.Container>
+    );
+  },
+);
 
+CommonDayPlanChip.displayName = 'CommonDayPlanChip';
 export default CommonDayPlanChip;
 
 const Styled = {
