@@ -20,6 +20,7 @@ function NavBar() {
   const [dayPeriod] = useRecoilState(dayInfo);
   const [weekPeriod] = useRecoilState(weekInfo);
   const [pickedMenu, setPickedMenu] = useState<isMenuType>('Today');
+  const periodOfDay = dayPeriod.dateString;
 
   useEffect(() => {
     if (router.pathname === '/mypage') {
@@ -32,7 +33,7 @@ function NavBar() {
   }, [router.pathname]);
 
   const periodData = [
-    { id: '1', name: 'TODAY PLAN', path: '/day/', term: dayPeriod, symbol: 'Today' },
+    { id: '1', name: 'TODAY PLAN', path: '/day/', term: periodOfDay, symbol: 'Today' },
     { id: '2', name: 'WEEK PLAN', path: '/week/', term: weekPeriod, symbol: 'Week' },
     { id: '3', name: 'MY PLAN', path: '/mypage', term: '', symbol: 'Mypage' },
   ];

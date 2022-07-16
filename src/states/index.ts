@@ -3,7 +3,7 @@ import { atom } from 'recoil';
 import { getTodayDate } from '../utils/getDate';
 
 export const dayInfo = atom({
-  key: 'dayInfo',
+  key: 'dateString',
   default: getTodayDate(0),
 });
 

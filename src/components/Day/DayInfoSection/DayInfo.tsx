@@ -6,13 +6,16 @@ import styled from 'styled-components';
 
 function DayInfo() {
   const dayData = useRecoilValue(dayInfo);
+  const dayOfWeek = dayData.dayOfWeek;
+  const date = dayData.dateString;
+
   return (
     <Styled.Root>
       <Styled.HeaderBox>
-        <Styled.Month>{dayData.slice(4, 6)}</Styled.Month>
-        <Styled.DayOfTheWeek>{dayData.slice(8, 11)}</Styled.DayOfTheWeek>
+        <Styled.Month>{date.slice(5, 7)}</Styled.Month>
+        <Styled.DayOfTheWeek>{dayOfWeek}</Styled.DayOfTheWeek>
       </Styled.HeaderBox>
-      <Styled.Day>{dayData.slice(6, 8)}.</Styled.Day>
+      <Styled.Day>{date.slice(8, 10)}.</Styled.Day>
     </Styled.Root>
   );
 }

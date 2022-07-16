@@ -12,20 +12,36 @@ import PrevArrow from '/public/assets/PrevArrow.png';
 
 function DayChange() {
   const router = useRouter();
-  const [dayDate, setDayData] = useRecoilState(dayInfo);
+  const [dayDate, setDayDate] = useRecoilState(dayInfo);
   const [dayChange, setDayChange] = useState(0);
-  setDayData(getTodayDate(dayChange));
+  const pickedDate = dayDate.dateString;
+  const day = getTodayDate(dayChange);
+  const goToYesterday = () => {
+    setDayChange(dayChange - 1);
+    setDayDate({ ...day });
+  };
+  const goToTomorrow = () => {
+    setDayChange(dayChange + 1);
+    setDayDate({ ...day });
+  };
+
+  const goToday = () => {
+    setDayChange(0);
+    setDayDate({ ...day });
+  };
+
   useEffect(() => {
-    router.push(`${dayDate}`);
-  }, [dayChange]);
+    console.log(dayDate);
+    router.push(`/day/${pickedDate}`);
+  }, [dayDate]);
 
   return (
     <Styled.Root>
-      <Styled.Button onClick={() => setDayChange(dayChange - 1)}>
+      <Styled.Button onClick={goToYesterday}>
         <Image src={PrevArrow} alt="이전날짜" width={'5'} height={'12'} />
       </Styled.Button>
-      <Styled.GoToday onClick={() => setDayChange(0)}>TODAY</Styled.GoToday>
-      <Styled.Button onClick={() => setDayChange(dayChange + 1)}>
+      <Styled.GoToday onClick={goToday}>TODAY</Styled.GoToday>
+      <Styled.Button onClick={goToTomorrow}>
         <Image src={NextArrow} alt="다음날짜" width={'5'} height={'12'} />
       </Styled.Button>
     </Styled.Root>
