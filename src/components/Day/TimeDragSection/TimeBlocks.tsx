@@ -1,5 +1,5 @@
 import { theme } from 'src/styles/theme';
-import { getTimeArray } from 'src/utils/timeArray';
+import { getTimeArray } from 'src/utils/dateUtil';
 import styled from 'styled-components';
 
 interface timeType {
