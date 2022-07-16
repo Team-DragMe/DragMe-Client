@@ -48,6 +48,7 @@
     "react-hooks/exhaustive-deps": "warn", // useEffect dependencies 확인
 		"import/no-unresolved": "error", // import 제대로 됐는지 확인
 		"import/no-duplicates": "error", // 중복 import 제거
+    "import/no-named-as-default" :"off",
 		"default-case": "error", // switch에 default 없으면 에러
 		"eqeqeq": "error", // == 및 != 사용 금지 -> === 및 !== 사용
 		"no-alert": "error", // alert, prompt, confirm 사용 금지
