@@ -8,8 +8,6 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { dayInfo, weekInfo } from 'src/states';
 import styled from 'styled-components';
 
-import { getTodayDate } from '../../utils/getDate';
-
 type isMenuType = 'Today' | 'Week' | 'Mypage';
 
 interface LiStyle {
@@ -39,7 +37,6 @@ function NavBar() {
     { id: '3', name: 'MY PLAN', path: '/mypage', term: '', symbol: 'Mypage' },
   ];
 
-  console.log(dayPeriod);
   return (
     <Styled.Root>
       <Link href={`${periodData[0].path}${encodeURIComponent(dayPeriod)}`}>

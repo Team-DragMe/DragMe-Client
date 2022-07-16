@@ -2,17 +2,18 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import NextArrow from 'public/assets/NextArrow.png';
 import React, { useEffect, useState } from 'react';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { dayInfo } from 'src/states';
 import { theme } from 'src/styles/theme';
 import { getTodayDate } from 'src/utils/getDate';
+import { ValidURL } from 'src/utils/urlChecker';
 import styled from 'styled-components';
 
 import PrevArrow from '/public/assets/PrevArrow.png';
 
 function DayChange() {
   const router = useRouter();
-  const [dayDate, setDayDate] = useRecoilState(dayInfo);
+  const setDayDate = useSetRecoilState(dayInfo);
   const [dayChange, setDayChange] = useState(0);
   const day = getTodayDate(dayChange);
   const dayPlanURL = router.query.date?.toString();
@@ -28,24 +29,29 @@ function DayChange() {
     setDayChange(0);
     if (dayPlanURL !== undefined) {
       router.push(`/day/${day}`);
-      setDayDate(getTodayDate(dayChange));
+      setDayDate(day);
     }
   };
 
   useEffect(() => {
     if (dayPlanURL !== undefined) {
       router.push(`/day/${day}`);
-      setDayDate(getTodayDate(dayChange));
+      setDayDate(day);
     }
   }, [dayChange]);
 
   useEffect(() => {
     if (dayPlanURL !== undefined) {
       setDayDate(dayPlanURL);
+      if (dayPlanURL !== undefined) {
+        const regex =
+          /^(19|20)\d{2}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[0-1])-(MON|TUE|WED|THU|FRI|SAT|SUN)$/g;
+        if (!regex.test(dayPlanURL)) {
+          router.push('/404');
+        }
+      }
     }
   }, [router.asPath]);
-
-  console.log(dayDate);
 
   return (
     <Styled.Root>
