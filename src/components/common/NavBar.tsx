@@ -4,9 +4,11 @@ import { useRouter } from 'next/router';
 import Logo from 'public/assets/Logo.png';
 import MenuBar from 'public/assets/MenuBar.png';
 import React, { useEffect, useState } from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { dayInfo, weekInfo } from 'src/states';
 import styled from 'styled-components';
+
+import { getTodayDate } from '../../utils/getDate';
 
 type isMenuType = 'Today' | 'Week' | 'Mypage';
 
@@ -18,9 +20,8 @@ interface LiStyle {
 function NavBar() {
   const router = useRouter();
   const [dayPeriod] = useRecoilState(dayInfo);
-  const [weekPeriod] = useRecoilState(weekInfo);
+  const weekPeriod = useRecoilValue(weekInfo);
   const [pickedMenu, setPickedMenu] = useState<isMenuType>('Today');
-  const periodOfDay = dayPeriod.dateString;
 
   useEffect(() => {
     if (router.pathname === '/mypage') {
@@ -33,14 +34,15 @@ function NavBar() {
   }, [router.pathname]);
 
   const periodData = [
-    { id: '1', name: 'TODAY PLAN', path: '/day/', term: periodOfDay, symbol: 'Today' },
+    { id: '1', name: 'TODAY PLAN', path: '/day/', term: dayPeriod, symbol: 'Today' },
     { id: '2', name: 'WEEK PLAN', path: '/week/', term: weekPeriod, symbol: 'Week' },
     { id: '3', name: 'MY PLAN', path: '/mypage', term: '', symbol: 'Mypage' },
   ];
 
+  console.log(dayPeriod);
   return (
     <Styled.Root>
-      <Link href={`${periodData[0].path}${encodeURIComponent(periodData[0].term)}`}>
+      <Link href={`${periodData[0].path}${encodeURIComponent(dayPeriod)}`}>
         <Styled.LogoWrapper>
           <Image src={Logo} alt="로고이미지" width={'108.8'} height={'24'} />
         </Styled.LogoWrapper>

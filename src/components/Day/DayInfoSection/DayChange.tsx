@@ -14,26 +14,38 @@ function DayChange() {
   const router = useRouter();
   const [dayDate, setDayDate] = useRecoilState(dayInfo);
   const [dayChange, setDayChange] = useState(0);
-  const pickedDate = dayDate.dateString;
   const day = getTodayDate(dayChange);
+  const dayPlanURL = router.query.date?.toString();
+
   const goToYesterday = () => {
     setDayChange(dayChange - 1);
-    setDayDate({ ...day });
   };
   const goToTomorrow = () => {
     setDayChange(dayChange + 1);
-    setDayDate({ ...day });
   };
 
   const goToday = () => {
     setDayChange(0);
-    setDayDate({ ...day });
+    if (dayPlanURL !== undefined) {
+      router.push(`/day/${day}`);
+      setDayDate(getTodayDate(dayChange));
+    }
   };
 
   useEffect(() => {
-    console.log(dayDate);
-    router.push(`/day/${pickedDate}`);
-  }, [dayDate]);
+    if (dayPlanURL !== undefined) {
+      router.push(`/day/${day}`);
+      setDayDate(getTodayDate(dayChange));
+    }
+  }, [dayChange]);
+
+  useEffect(() => {
+    if (dayPlanURL !== undefined) {
+      setDayDate(dayPlanURL);
+    }
+  }, [router.asPath]);
+
+  console.log(dayDate);
 
   return (
     <Styled.Root>

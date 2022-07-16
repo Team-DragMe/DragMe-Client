@@ -5,17 +5,15 @@ import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
 
 function DayInfo() {
-  const dayData = useRecoilValue(dayInfo);
-  const dayOfWeek = dayData.dayOfWeek;
-  const date = dayData.dateString;
+  const today = useRecoilValue(dayInfo);
 
   return (
     <Styled.Root>
       <Styled.HeaderBox>
-        <Styled.Month>{date.slice(5, 7)}</Styled.Month>
-        <Styled.DayOfTheWeek>{dayOfWeek}</Styled.DayOfTheWeek>
+        <Styled.Month>{today.slice(5, 7)}</Styled.Month>
+        <Styled.DayOfTheWeek>{today.slice(11, 14)}</Styled.DayOfTheWeek>
       </Styled.HeaderBox>
-      <Styled.Day>{date.slice(8, 10)}.</Styled.Day>
+      <Styled.Day>{today.slice(8, 10)}.</Styled.Day>
     </Styled.Root>
   );
 }

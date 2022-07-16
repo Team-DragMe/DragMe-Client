@@ -6,8 +6,6 @@ export const getTodayDate = (days: number) => {
   const day = ('0' + changedDate.getDate()).slice(-2);
   const week = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
   const dayOfWeek = week[changedDate.getDay()];
-  const dateString = year + '-' + month + '-' + day;
-  const DayData = { dateString, dayOfWeek };
-
-  return DayData;
+  const dateString = year + '-' + month + '-' + day + '-' + dayOfWeek;
+  return dateString;
 };
