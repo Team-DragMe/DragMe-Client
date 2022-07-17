@@ -1,5 +1,5 @@
-import SemiArrow from 'public/assets/icons/SemiArrow.svg';
-import React, { forwardRef, useState } from 'react';
+import SemiArrow from 'public/assets/icons/SemiArrow8.svg';
+import React, { forwardRef, useEffect, useRef, useState } from 'react';
 import { theme } from 'src/styles/theme';
 import styled, { css } from 'styled-components';
 
@@ -51,10 +51,33 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
     ref,
   ) => {
     const [isChecked, setIsChecked] = useState(isCompleted);
+    const inputValue = useRef<HTMLInputElement>(null);
+    const [dayPlan, setDayPlan] = useState<string | undefined>(children);
+    const [isModify, setIsModify] = useState(false);
+
     const handleChange = () => {
       setIsChecked((prev) => !prev);
       // @TODO React query optimistic update로 완료된 계획 post
     };
+
+    const handleDbClick = () => {
+      inputValue.current?.focus();
+      setIsModify(true);
+    };
+
+    const handleBlur = () => {
+      console.log('>>포커싱 풀림');
+      setIsModify(false);
+    };
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      // @TODO inputValue.current?.value 를 post
+      console.log(inputValue.current?.value);
+      setDayPlan(inputValue.current?.value);
+      setIsModify(false);
+    };
+
     return (
       <Styled.Container {...props} shape={shape} ref={ref}>
         {color !== 'none' && <Styled.ColorChip color={color} />}
@@ -62,7 +85,16 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
           <CheckBox id="dayCheck" isChecked={isChecked} onChange={handleChange} />
           <Styled.ContentsWrapper>
             <div>
-              <Styled.Contents isChecked={isChecked}>{children}</Styled.Contents>
+              {/* 이쪽 Input이거나 콘텐츠이거나 분기처리 - 더블클릭 이벤트허면 Input나오도록 */}
+              {!isModify && dayPlan ? (
+                <Styled.Contents isChecked={isChecked} onDoubleClick={handleDbClick}>
+                  {children}
+                </Styled.Contents>
+              ) : (
+                <Styled.Form onSubmit={handleSubmit}>
+                  <Styled.Input type="text" ref={inputValue} onBlur={handleBlur} />
+                </Styled.Form>
+              )}
             </div>
             <Styled.BtnWrapper>
               {(addon || haveChild) && <AddonBtn onClick={onAddonClick} />}
@@ -87,6 +119,7 @@ const Styled = {
     align-items: center;
     width: 100%;
     height: 3.2rem;
+    background: ${theme.category.cate_white};
     ${({ shape }) =>
       shape === 'triangle' &&
       css`
@@ -117,7 +150,7 @@ const Styled = {
       transform: rotate(1deg);
       width: fit-content;
       height: 3.14rem;
-      overflow: hidden;
+      /* overflow: hidden; */
     }
     & > svg {
       width: fit-content;
@@ -135,6 +168,7 @@ const Styled = {
             border-top: 1px solid ${theme.colors.plan_grey};
             border-bottom: 1px solid ${theme.colors.plan_grey};
             border-left: 1px solid ${theme.colors.plan_grey};
+            /* background: url(/assets/icons/ArrowSection.svg); */
           `}
   `,
   ContentsWrapper: styled.div`
@@ -142,6 +176,22 @@ const Styled = {
     width: 17rem;
     justify-content: space-between;
     align-items: center;
+  `,
+  Form: styled.form`
+    min-width: 11.3rem;
+    width: 65%;
+    appearance: none;
+    outline: none;
+    margin-left: 0.8rem;
+    /* font-size: 1.2rem; */
+  `,
+  Input: styled.input`
+    width: 100%;
+    appearance: none;
+    outline: none;
+    border: none;
+    /* font-size: 1.2rem; */
+    font: inherit;
   `,
   BtnWrapper: styled.div`
     display: flex;

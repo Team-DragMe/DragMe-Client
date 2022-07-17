@@ -1,8 +1,9 @@
 import React from 'react';
+import { useDrag } from 'react-dnd';
 import styled, { css } from 'styled-components';
 
-import SubDayPlan from './SubDayPlanList';
 import CommonDayPlanChip from '../DayPlanChip/CommonDayPlanChip';
+import SubDayPlan from './SubDayPlanList';
 
 interface DayPlanProps {
   // @TODO 실제 데이터 타입에 맞춰서 타이핑 수정
@@ -11,6 +12,7 @@ interface DayPlanProps {
 
 interface liStyleProps {
   haveChild: boolean;
+  isDragging: boolean;
 }
 
 interface subDayPlanStyleProps {
@@ -22,8 +24,20 @@ function DayPlan({ item }: DayPlanProps) {
     setIsOpen((prev) => !prev);
   };
 
+  const [{ isDragging }, drag] = useDrag(() => ({
+    type: 'draggablePlanChip',
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+  }));
+
   return (
-    <Styled.Li key={item._id} haveChild={item.subSchedules.length > 0}>
+    <Styled.Li
+      key={item._id}
+      haveChild={item.subSchedules.length > 0}
+      ref={isOpen ? drag : null}
+      isDragging={isDragging}
+    >
       <CommonDayPlanChip
         color={item.categoryColorCode}
         shape={item.subSchedules.length > 0 ? 'rectangle' : 'triangle'}
@@ -32,6 +46,7 @@ function DayPlan({ item }: DayPlanProps) {
         isOpened={isOpen}
         onArrowBtnClick={onArrowBtnClick}
         isCompleted={item.isCompleted}
+        ref={isOpen ? null : drag}
       >
         {item.title}
       </CommonDayPlanChip>
@@ -58,6 +73,22 @@ const Styled = {
       css`
         margin-bottom: 1.2rem;
       `}
+    ${({ isDragging }) =>
+      isDragging
+        ? css`
+            opacity: 0;
+            position: absolute;
+            /* transition: max-height 0.2s ease-in; */
+            /* opacity: 0;
+            position: absolute; */
+            /* max-height: 0rem; */
+          `
+        : css`
+            opacity: 0.999;
+            /* transition: max-height 0.15s ease-out; */
+            /* opacity: 1; */
+            /* max-height: fit-content; */
+          `}
   `,
   SubDayPlanWrapper: styled.div<subDayPlanStyleProps>`
     display: flex;
