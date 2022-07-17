@@ -1,15 +1,12 @@
 import React from 'react';
+import TodayNote from 'src/components/Day/TodayNote';
+import TodayPlan from 'src/components/Day/TodayPlan';
 import styled from 'styled-components';
 
 import NavBar from '../../components/common/NavBar';
 
 function Day() {
-  return (
-    <Styled.Root>
-      <NavBar />
-      데이페이지입니다.
-    </Styled.Root>
-  );
+  return <Styled.Root />;
 }
 
 export default Day;
