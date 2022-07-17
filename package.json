@@ -6,8 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "lint:css": "stylelint --ignore-path .gitignore '**/*.(css|tsx)'",
+    "lint": "next lint --fix",
+    "lint:css": "stylelint --ignore-path .gitignore '**/*.(css|tsx)' --fix",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -30,6 +30,7 @@
     "@types/react-dom": "18.0.6",
     "@typescript-eslint/eslint-plugin": "^5.30.5",
     "@typescript-eslint/parser": "^5.30.5",
+    "babel-plugin-module-resolver": "^4.1.0",
     "eslint": "^7.11.0",
     "eslint-config-next": "12.2.1",
     "eslint-config-prettier": "^8.5.0",
