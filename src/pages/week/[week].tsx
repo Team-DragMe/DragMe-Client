@@ -2,12 +2,15 @@ import React from 'react';
 import styled from 'styled-components';
 
 import NavBar from '../../components/common/NavBar';
+import WeekChange from '../../components/Week/WeekChange';
+import WeekInfo from '../../components/Week/WeekInfo';
 
 function Week() {
   return (
     <Styled.Root>
       <NavBar />
-      마이페이지입니다.
+      <WeekInfo />
+      <WeekChange />
     </Styled.Root>
   );
 }

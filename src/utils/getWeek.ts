@@ -1,3 +1,3 @@
-export const getWeekdata = () => {
+export const getWeekData = () => {
   console.log();
 };
