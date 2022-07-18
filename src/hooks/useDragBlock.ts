@@ -9,28 +9,32 @@ interface DragStateArg {
 interface DragBlockHookArg {
   isDragging: boolean;
   handleDragState: ({ isDragging, startBlock, endBlock }: DragStateArg) => void;
+  handleSubmit: () => void;
 }
 
-function useDragBlock({ isDragging, handleDragState }: DragBlockHookArg) {
+function useDragBlock({ isDragging, handleDragState, handleSubmit }: DragBlockHookArg) {
   const onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target instanceof HTMLDivElement) {
-      handleDragState({ isDragging: true, startBlock: e.target.id, endBlock: '' });
+      handleDragState({ isDragging: true, startBlock: e.target.id, endBlock: e.target.id });
     }
   };
 
   const onMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (isDragging) {
       if (e.target instanceof HTMLElement) {
-        handleDragState({ isDragging: true, startBlock: '', endBlock: e.target.id });
+        !isNaN(parseInt(e.target.id)) &&
+          handleDragState({ isDragging: true, startBlock: '', endBlock: e.target.id });
       }
     }
   };
 
-  const onMouseUp = () => {
-    handleDragState({ isDragging: false, startBlock: '', endBlock: '' });
+  const onMouseUp = (e: React.MouseEvent<HTMLDivElement>) => {
     //서버처리
+    handleSubmit();
+    if (e.target instanceof HTMLElement) {
+      handleDragState({ isDragging: false, startBlock: '-1', endBlock: '-1' });
+    }
   };
-
   return {
     onMouseDown,
     onMouseMove,
