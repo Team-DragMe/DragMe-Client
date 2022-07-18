@@ -6,6 +6,7 @@ import MenuBar from 'public/assets/MenuBar.png';
 import React, { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { dayInfo, weekInfo } from 'src/states';
+import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
 
 type isMenuType = 'Today' | 'Week' | 'Mypage';
@@ -73,8 +74,8 @@ const Styled = {
     align-items: center;
     justify-content: space-between;
     font-size: 1.2rem;
-    box-shadow: #d0d4da 0px 10px 10px -10px;
-    background-color: #fff;
+    box-shadow: ${theme.colors.plan_check} 0px 10px 10px -10px;
+    background-color: ${theme.category.cate_white};
   `,
   LogoWrapper: styled.div`
     display: flex;
@@ -104,18 +105,18 @@ const Styled = {
       margin-right: 1.8rem;
     }
     & a {
-      color: #b6bec9;
+      color: ${theme.colors.plan_grey};
       ${({ symbol, pickedMenu }) =>
         pickedMenu === symbol &&
         `
-          color: black;
+          color: ${theme.colors.letter_black};
           padding-bottom: 0.1rem;
-          border-bottom: 1px solid black;
+          border-bottom: 1px solid ${theme.colors.letter_black};
         `}
     }
   `,
   Link: styled.a`
-    color: #b6bec9;
+    color: ${theme.colors.plan_grey};
     font-weight: bold;
     margin-right: 3.8rem;
     cursor: pointer;
