@@ -2,40 +2,43 @@ import { useEffect, useState } from 'react';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
 
-const LAST_MINIT_OF_HOUR = '45';
-
 interface timeType {
   id: number;
-  hour: string;
-  min: string;
-  isExpected: boolean;
+  isUsed: boolean;
   startBlock: string;
   endBlock: string;
+  isDraged: string;
 }
 
 function TimeBlock(props: timeType) {
-  const { id, hour, min, isExpected, startBlock, endBlock } = props;
+  const { id, isUsed, startBlock, endBlock, isDraged } = props;
 
-  const [draged, setDraged] = useState('');
+  const [draged, setDraged] = useState(isDraged);
 
   useEffect(() => {
-    if (parseInt(startBlock) <= id && id <= parseInt(endBlock)) {
-      isExpected ? setDraged('done') : setDraged('plan');
+    if (parseInt(startBlock) === id && parseInt(endBlock) === id) {
+      if (draged === '') {
+        isUsed ? setDraged('done') : setDraged('plan');
+      } else {
+        setDraged('');
+      }
+    } else if (parseInt(startBlock) <= id && id <= parseInt(endBlock)) {
+      isUsed ? setDraged('done') : setDraged('plan');
     } else if (parseInt(startBlock) >= id && id >= parseInt(endBlock)) {
       setDraged('');
     }
   }, [endBlock]);
 
-  return <Styled.Block id={`${id}`} key={`${hour}:${min}`} min={min} draged={draged} />;
+  return <Styled.Block id={`${id}`} hourEnd={id % 4 === 3} draged={draged} />;
 }
 
 export default TimeBlock;
 
 const Styled = {
-  Block: styled.div<{ min: string; draged: string }>`
+  Block: styled.div<{ hourEnd: boolean; draged: string }>`
     display: flex;
     flex-shrink: 0;
-    margin-right: ${({ min }) => (min === LAST_MINIT_OF_HOUR ? '0.7rem' : '0.4rem')};
+    margin-right: ${({ hourEnd }) => (hourEnd ? '0.7rem' : '0.4rem')};
     border: 1px solid ${theme.colors.hour_line};
     cursor: pointer;
     width: 1.8rem;
