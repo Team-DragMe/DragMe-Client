@@ -82,6 +82,7 @@ export const CalendarStyle = {
     }
     .react-calendar__tile.today-date {
       background-color: ${theme.colors.main_color};
+      color: ${theme.category.cate_white};
     }
     .dot-wrapper {
       position: absolute;
