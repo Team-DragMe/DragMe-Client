@@ -17,11 +17,12 @@ function DayChange() {
   const day = getTodayDate(dayChange);
   const dayPlanURL = router.query.date?.toString();
 
-  const goToYesterday = () => {
-    setDayChange(dayChange - 1);
-  };
-  const goToTomorrow = () => {
-    setDayChange(dayChange + 1);
+  const goToAnotherDay = (clickEvent: number) => {
+    if (clickEvent === -1) {
+      setDayChange(dayChange - 1);
+    } else if (clickEvent === 1) {
+      setDayChange(dayChange + 1);
+    }
   };
 
   const goToday = () => {
@@ -50,11 +51,11 @@ function DayChange() {
 
   return (
     <Styled.Root>
-      <Styled.Button onClick={goToYesterday}>
+      <Styled.Button onClick={() => goToAnotherDay(-1)}>
         <Image src={PrevArrow} alt="이전날짜" width={'5'} height={'12'} />
       </Styled.Button>
       <Styled.GoToday onClick={goToday}>TODAY</Styled.GoToday>
-      <Styled.Button onClick={goToTomorrow}>
+      <Styled.Button onClick={() => goToAnotherDay(1)}>
         <Image src={NextArrow} alt="다음날짜" width={'5'} height={'12'} />
       </Styled.Button>
     </Styled.Root>
