@@ -12,7 +12,7 @@ function TimeBlockSection(props: TimeBlockSectionProps) {
   return (
     <Styled.Root>
       {plans.map((el) => (
-        <TimeBlocks key={el} />
+        <TimeBlocks key={el} blocksId={el} />
       ))}
     </Styled.Root>
   );
