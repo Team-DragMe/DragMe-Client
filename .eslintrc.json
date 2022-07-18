@@ -53,14 +53,15 @@
     "react/boolean-prop-naming": ["error", { "rule": "^(is|has)[A-Z]([A-Za-z0-9]?)+" }], // boolean에 is 또는 has 사용
     "react-hooks/rules-of-hooks": "error", // hook 위치 확인
     "react-hooks/exhaustive-deps": "warn", // useEffect dependencies 확인
-    "import/no-unresolved": "error", // import 제대로 됐는지 확인
-    "import/no-duplicates": "error", // 중복 import 제거
-    "default-case": "error", // switch에 default 없으면 에러
-    "eqeqeq": "error", // == 및 != 사용 금지 -> === 및 !== 사용
-    "no-alert": "error", // alert, prompt, confirm 사용 금지
-    "no-delete-var": "error", // delete 및 var 사용 금지
-    "no-useless-return": "error", // 쓸데없는 return 사용 금지
-    "prefer-const": "error", // 가능한 모든 경우에 const 사용
+		"import/no-unresolved": "error", // import 제대로 됐는지 확인
+		"import/no-duplicates": "error", // 중복 import 제거
+    "import/no-named-as-default" :"off",
+		"default-case": "error", // switch에 default 없으면 에러
+		"eqeqeq": "error", // == 및 != 사용 금지 -> === 및 !== 사용
+		"no-alert": "error", // alert, prompt, confirm 사용 금지
+		"no-delete-var": "error", // delete 및 var 사용 금지
+		"no-useless-return": "error", // 쓸데없는 return 사용 금지
+		"prefer-const": "error", // 가능한 모든 경우에 const 사용
     "@typescript-eslint/no-unused-vars": ["error"],
     /* 포맷팅 */
     "simple-import-sort/imports": "error", // import 정렬

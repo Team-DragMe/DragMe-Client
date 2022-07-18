@@ -1,6 +1,5 @@
-import { useState } from 'react';
-import useDragBlock from 'src/hooks/useDragBlock';
-import { getTimeArray } from 'src/utils/timeArray';
+import { theme } from 'src/styles/theme';
+import { getTimeArray } from 'src/utils/dateUtil';
 import styled from 'styled-components';
 
 import TimeBlock from './TimeBlock';
