@@ -1,26 +1,37 @@
 import DotIcon from 'public/assets/ic_dot.svg';
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
 
 interface WeeklyGoalInputProps {
   idx: number;
+  content: string;
 }
 
 function WeeklyGoalInput(props: WeeklyGoalInputProps) {
-  const { idx } = props;
+  const { idx, content } = props;
+  const [value, setValue] = useState(content);
   const inputRef = useRef<HTMLInputElement>(null);
+  const goalType = `weeklyGoal${idx + 1}`;
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    //@TODO inputRef.current?.value 서버에 전송.....이아니라 서버랑 이야기....
-    console.log(inputRef.current?.value);
+    //@TODO goalType, inputRef.current?.value
+    console.log(goalType, inputRef.current?.value);
   };
 
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.value);
+  };
   return (
     <Styled.Root onSubmit={handleSubmit}>
       <DotIcon />
-      <input ref={inputRef} placeholder={idx === 0 ? '이번 주 목표를 세워보세요' : ''} />
+      <input
+        ref={inputRef}
+        placeholder={idx === 0 ? '이번 주 목표를 세워보세요' : ''}
+        value={value}
+        onChange={onChange}
+      />
     </Styled.Root>
   );
 }

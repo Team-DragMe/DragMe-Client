@@ -5,12 +5,21 @@ import styled from 'styled-components';
 import WeeklyGoalInput from './WeeklyGoalInput';
 
 function WeeklyGoalBox() {
+  const testData = [
+    { type: 'weeklyGoal1', value: '' },
+    { type: 'weeklyGoal2', value: '' },
+    { type: 'weeklyGoal3', value: '' },
+    { type: 'weeklyGoal4', value: '' },
+    { type: 'weeklyGoal5', value: '' },
+    { type: 'weeklyGoal6', value: '' },
+    { type: 'weeklyGoal7', value: '' },
+  ];
   return (
     <Styled.Root>
       <span>WEEKLY GOAL</span>
       <Styled.Wrapper>
-        {new Array(7).fill(1).map((el, idx) => (
-          <WeeklyGoalInput key={el * 2} idx={idx} />
+        {testData?.map((el, idx) => (
+          <WeeklyGoalInput key={el.type} idx={idx} content={el.value} />
         ))}
       </Styled.Wrapper>
     </Styled.Root>
