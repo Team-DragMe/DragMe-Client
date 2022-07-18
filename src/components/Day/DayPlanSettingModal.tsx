@@ -52,8 +52,6 @@ const Styled = {
     width: 10.2rem;
     height: 12rem;
     background-color: ${theme.category.cate_white};
-    margin-top: 10rem;
-    margin-left: 10rem;
     display: flex;
     flex-direction: column;
 
