@@ -1,8 +1,10 @@
 import React from 'react';
-import { schedules } from 'src/mock-data/schedules';
+import { FLAG } from 'src/constants';
+import { reschedules } from 'src/mock-data/schedules';
 import styled from 'styled-components';
 
 import MainDayPlan from '../common/DayPlanList/DayPlan';
+import DayPlanList from '../common/DayPlanList/DayPlanList';
 
 const RESCHEDULE = {
   EN: 'RESCHEDULE',
@@ -16,13 +18,7 @@ function Reschedule() {
         <Styled.Title>{RESCHEDULE.EN}</Styled.Title>
         <Styled.SubTitle>{RESCHEDULE.KO}</Styled.SubTitle>
       </Styled.TitleArea>
-      <Styled.UlWrapper>
-        <Styled.Ul>
-          {schedules.map((item) => (
-            <MainDayPlan item={item} key={item._id} />
-          ))}
-        </Styled.Ul>
-      </Styled.UlWrapper>
+      <DayPlanList maxHeight="12rem" flag={FLAG.RECHEDULE} schedules={reschedules} />
     </Styled.Root>
   );
 }
@@ -57,16 +53,5 @@ const Styled = {
       margin-left: 0.8rem;
       margin-right: 0.8rem;
     }
-  `,
-  UlWrapper: styled.article`
-    max-height: 12rem;
-    overflow-y: scroll;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-  `,
-  Ul: styled.ul`
-    min-height: 12rem;
-    width: 21rem;
   `,
 };

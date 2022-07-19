@@ -1,5 +1,8 @@
 import React from 'react';
-import { schedules } from 'src/mock-data/schedules';
+import { useSetRecoilState } from 'recoil';
+import { FLAG } from 'src/constants';
+import { routineSchedules } from 'src/mock-data/schedules';
+import { routinePlanList } from 'src/states';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
 
@@ -11,6 +14,8 @@ const ROUTINE_BOX = {
 };
 
 function RoutineBox() {
+  const routinePlanData = useSetRecoilState(routinePlanList);
+  routinePlanData(routineSchedules);
   return (
     <Styled.Root>
       <Styled.ContentsWrapper>
@@ -18,7 +23,11 @@ function RoutineBox() {
           <Styled.Title>{ROUTINE_BOX.EN}</Styled.Title>
           <Styled.SubTitle>{ROUTINE_BOX.KO}</Styled.SubTitle>
         </Styled.TitleArea>
-        <DayPlanList schedules={schedules} className="routine-plan-list" />
+        <DayPlanList
+          schedules={routinePlanData}
+          className="routine-plan-list"
+          flag={FLAG.ROUTINE}
+        />
       </Styled.ContentsWrapper>
       <Styled.Footer>
         <button>DRAG.ME</button>
