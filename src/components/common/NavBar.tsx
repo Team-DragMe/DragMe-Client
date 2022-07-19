@@ -79,7 +79,6 @@ const Styled = {
   `,
   LogoWrapper: styled.div`
     display: flex;
-
     width: 10.88rem;
     height: 2rem;
     cursor: pointer;
