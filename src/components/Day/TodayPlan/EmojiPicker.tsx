@@ -14,10 +14,11 @@ type EmojiPickerElement = HTMLDivElement;
 interface EmojiPickerProps extends Omit<IEmojiPickerProps, 'onEmojiClick'> {
   click: boolean;
   setClick: (value: boolean) => void;
+  emoji: string;
 }
 
 function EmojiPicker(
-  { click, setClick }: EmojiPickerProps,
+  { click, setClick, emoji }: EmojiPickerProps,
   ref: React.ForwardedRef<EmojiPickerElement>,
 ) {
   const [chosenEmoji, setChosenEmoji] = useState<IEmojiData>();
@@ -40,7 +41,11 @@ function EmojiPicker(
           <StyledEmojiPicker.Emoji>{chosenEmoji.emoji}</StyledEmojiPicker.Emoji>
         ) : (
           <StyledEmojiPicker.DefaultEmoji>
-            <Image src={SmileEmoticon} alt="" />
+            {emoji === '' ? (
+              <Image src={SmileEmoticon} alt="" />
+            ) : (
+              <StyledEmojiPicker.Emoji>{emoji}</StyledEmojiPicker.Emoji>
+            )}
           </StyledEmojiPicker.DefaultEmoji>
         )}
       </StyledEmojiPicker.Root>
