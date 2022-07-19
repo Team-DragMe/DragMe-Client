@@ -1,4 +1,6 @@
 import React from 'react';
+import TodayNote from 'src/components/Day/TodayNote';
+import TodayPlan from 'src/components/Day/TodayPlan';
 import styled from 'styled-components';
 
 import NavBar from '../../components/common/NavBar';
