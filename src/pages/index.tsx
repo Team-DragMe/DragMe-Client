@@ -15,6 +15,6 @@ export default Home;
 
 const Styled = {
   Root: styled.div`
-    color: ${theme.colors.main};
+    color: ${theme.colors.main_color};
   `,
 };

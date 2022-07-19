@@ -1,6 +1,9 @@
 import SemiArrow from 'public/assets/icons/SemiArrow8.svg';
 import React, { forwardRef, useEffect, useRef, useState } from 'react';
+import { useRecoilState } from 'recoil';
+import { currentModifyDayPlan } from 'src/states';
 import { theme } from 'src/styles/theme';
+import { dailyPlanFlag } from 'src/types';
 import styled, { css } from 'styled-components';
 
 import AddonBtn from '../AddonBtn';
@@ -20,6 +23,7 @@ interface CommonDayPlanChipProps {
   onArrowBtnClick?: () => void;
   isCompleted?: boolean;
   id?: string;
+  flag: dailyPlanFlag;
 }
 
 interface ColorChipStyleProps {
@@ -46,6 +50,7 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
       onArrowBtnClick,
       children,
       isCompleted = false,
+      id = '',
       ...props
     }: CommonDayPlanChipProps,
     ref,
@@ -53,7 +58,7 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
     const [isChecked, setIsChecked] = useState(isCompleted);
     const inputValue = useRef<HTMLInputElement>(null);
     const [dayPlan, setDayPlan] = useState<string | undefined>(children);
-    const [isModify, setIsModify] = useState(false);
+    const [currentTargetPlan, setCurrentTargetPlan] = useRecoilState(currentModifyDayPlan);
 
     const handleChange = () => {
       setIsChecked((prev) => !prev);
@@ -61,13 +66,15 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
     };
 
     const handleDbClick = () => {
-      inputValue.current?.focus();
-      setIsModify(true);
+      // recoil 상태 업데이트 이후 UI 렌더된 이후 focusing되어야 함
+      setTimeout(() => {
+        inputValue.current?.focus();
+      }, 50);
+      setCurrentTargetPlan(id);
     };
 
     const handleBlur = () => {
-      console.log('>>포커싱 풀림');
-      setIsModify(false);
+      setCurrentTargetPlan('');
     };
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -75,7 +82,8 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
       // @TODO inputValue.current?.value 를 post
       console.log(inputValue.current?.value);
       setDayPlan(inputValue.current?.value);
-      setIsModify(false);
+      setCurrentTargetPlan(null);
+      // @TODO 서버로 계획 생성 POST
     };
 
     return (
@@ -83,13 +91,11 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
         {color !== 'none' && <Styled.ColorChip color={color} />}
         <Styled.Box shape={shape}>
           <CheckBox id="dayCheck" isChecked={isChecked} onChange={handleChange} />
-          <Styled.ContentsWrapper>
+          <Styled.ContentsWrapper onDoubleClick={handleDbClick}>
             <div>
               {/* 이쪽 Input이거나 콘텐츠이거나 분기처리 - 더블클릭 이벤트허면 Input나오도록 */}
-              {!isModify && dayPlan ? (
-                <Styled.Contents isChecked={isChecked} onDoubleClick={handleDbClick}>
-                  {children}
-                </Styled.Contents>
+              {currentTargetPlan !== id && dayPlan ? (
+                <Styled.Contents isChecked={isChecked}>{children}</Styled.Contents>
               ) : (
                 <Styled.Form onSubmit={handleSubmit}>
                   <Styled.Input type="text" ref={inputValue} onBlur={handleBlur} />
@@ -190,6 +196,7 @@ const Styled = {
     appearance: none;
     outline: none;
     border: none;
+    padding: 0px 0px;
     /* font-size: 1.2rem; */
     font: inherit;
   `,

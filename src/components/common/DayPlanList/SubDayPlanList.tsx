@@ -1,4 +1,6 @@
 import React from 'react';
+import { useDrag } from 'react-dnd';
+import { PLAN_CHIP } from 'src/constants';
 import styled from 'styled-components';
 
 import CommonDayPlanChip from '../DayPlanChip/CommonDayPlanChip';
@@ -15,12 +17,20 @@ interface liStyleProps {
 }
 
 function SubDayPlanList({ subschedules, categoryColorCode, ...props }: SubDayPlanListProps) {
+  const [{ isDragging }, dragRef] = useDrag(() => ({
+    type: PLAN_CHIP.CHILD,
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+  }));
   return (
     <Styled.SubUl>
       {subschedules.map((item) => (
         <Styled.SubLi key={item._id} categoryColorCode={categoryColorCode}>
           {/* @TODO 하위 아이템 데이터 오면 넘길 인자 정하기 */}
-          <CommonDayPlanChip>서브 메뉴</CommonDayPlanChip>
+          <CommonDayPlanChip id={item._id} ref={dragRef}>
+            서브 메뉴
+          </CommonDayPlanChip>
         </Styled.SubLi>
       ))}
     </Styled.SubUl>

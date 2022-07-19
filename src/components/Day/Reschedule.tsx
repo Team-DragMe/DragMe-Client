@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useSetRecoilState } from 'recoil';
 import { FLAG } from 'src/constants';
 import { reschedules } from 'src/mock-data/schedules';
+import { reschedulePlanList } from 'src/states';
 import styled from 'styled-components';
 
 import MainDayPlan from '../common/DayPlanList/DayPlan';
@@ -12,13 +14,17 @@ const RESCHEDULE = {
 };
 
 function Reschedule() {
+  const reschedulePlanData = useSetRecoilState(reschedulePlanList);
+  useEffect(() => {
+    reschedulePlanData(reschedules);
+  }, []);
   return (
     <Styled.Root>
       <Styled.TitleArea>
         <Styled.Title>{RESCHEDULE.EN}</Styled.Title>
         <Styled.SubTitle>{RESCHEDULE.KO}</Styled.SubTitle>
       </Styled.TitleArea>
-      <DayPlanList maxHeight="12rem" flag={FLAG.RECHEDULE} schedules={reschedules} />
+      <DayPlanList maxHeight="12rem" flag={FLAG.RECHEDULE} />
     </Styled.Root>
   );
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { FLAG } from 'src/constants';
 import { routineSchedules } from 'src/mock-data/schedules';
@@ -15,7 +15,9 @@ const ROUTINE_BOX = {
 
 function RoutineBox() {
   const routinePlanData = useSetRecoilState(routinePlanList);
-  routinePlanData(routineSchedules);
+  useEffect(() => {
+    routinePlanData(routineSchedules);
+  }, []);
   return (
     <Styled.Root>
       <Styled.ContentsWrapper>
@@ -23,11 +25,7 @@ function RoutineBox() {
           <Styled.Title>{ROUTINE_BOX.EN}</Styled.Title>
           <Styled.SubTitle>{ROUTINE_BOX.KO}</Styled.SubTitle>
         </Styled.TitleArea>
-        <DayPlanList
-          schedules={routinePlanData}
-          className="routine-plan-list"
-          flag={FLAG.ROUTINE}
-        />
+        <DayPlanList className="routine-plan-list" flag={FLAG.ROUTINE} />
       </Styled.ContentsWrapper>
       <Styled.Footer>
         <button>DRAG.ME</button>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { FLAG } from 'src/constants';
 import { schedules } from 'src/mock-data/schedules';
@@ -14,9 +14,11 @@ function MainDayPlanList() {
   const dailyPlanData = useSetRecoilState(dailyPlanList);
 
   // useQuery로 가져온 schedules를 리코일 값에 set했다고 가정
-  dailyPlanData(schedules);
+  useEffect(() => {
+    dailyPlanData(schedules);
+  }, []);
 
-  return <DayPlanList schedules={schedules} flag={FLAG.DAILY} />;
+  return <DayPlanList flag={FLAG.DAILY} />;
 }
 
 export default MainDayPlanList;
