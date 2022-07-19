@@ -20,6 +20,7 @@
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "18.2.0",
+    "react-merge-refs": "^2.0.1",
     "react-query": "^3.39.1",
     "recoil": "^0.7.4",
     "styled-components": "^5.3.5",
