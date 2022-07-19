@@ -11,16 +11,17 @@ interface SubPlan {
 
 interface SubPlanTitleProps {
   subPlan: SubPlan;
-  handleSubmit: (title: string) => void;
+  handleChangeSubPlan: (changeSubPlan: SubPlan) => void;
 }
 
 function SubPlanTitle(props: SubPlanTitleProps) {
-  const { subPlan } = props;
+  const { subPlan, handleChangeSubPlan } = props;
   const [title, setTitle] = useState(subPlan.title);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target instanceof HTMLInputElement) {
       setTitle(e.target.value);
       subPlan.title = title;
+      handleChangeSubPlan(subPlan);
     }
   };
 
@@ -44,17 +45,20 @@ const Styled = {
     justify-content: space-between;
   `,
   Input: styled.input`
-      font-size: 1.2rem;
-      border: none;
-      padding: 0;
-      &::placeholder {
-        font-size: 1rem;
-        line-height: 1.5rem;
-        color: ${theme.colors.letter_grey};
-      }
-      line-height: 150%;
-      font-style: normal;
-      font-weight: 500;
+    width: 19.2rem;
+    border: none;
+    font-size: 1.2rem;
+    padding: 0;
+    &::placeholder {
+      font-size: 1rem;
+      line-height: 1.5rem;
+      color: ${theme.colors.letter_grey};
     }
+    &:focus {
+      outline: none;
+    }
+    line-height: 150%;
+    font-style: normal;
+    font-weight: 500;
   `,
 };

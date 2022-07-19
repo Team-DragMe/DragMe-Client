@@ -1,7 +1,5 @@
 import DeleteButton from 'public/assets/DeleteButton.svg';
-import { useState } from 'react';
-import { useRecoilValue } from 'recoil';
-import { subPlanClientData } from 'src/states';
+import { useEffect, useRef } from 'react';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
 
@@ -13,21 +11,28 @@ interface SubPlan {
 }
 
 interface SubPlanBoxProps {
-  subPlanList: SubPlan[];
-  // handleSubPlan: (newSubPlan: SubPlan) => void;
+  subPlan: SubPlan[];
+  handleAddSubPlan: (newSubPlan: SubPlan[]) => void;
+  handleChangeSubPlan: (changeSubPlan: SubPlan) => void;
+  handleDeleteSubPlan: (deleteSubPlan: SubPlan) => void;
 }
 
 function SubPlanBox(props: SubPlanBoxProps) {
-  const { subPlanList } = props;
+  const subPlanRef = useRef<HTMLDivElement>(null);
+  const { subPlan, handleChangeSubPlan, handleDeleteSubPlan } = props;
+  useEffect(() => {
+    subPlanRef.current!.scrollTop = subPlanRef.current!.scrollHeight;
+  }, [subPlan]);
   return (
-    <Styled.Root>
-      {subPlanList.map((subPlan: SubPlan) => (
+    <Styled.Root ref={subPlanRef}>
+      {subPlan.map((subPlan: SubPlan) => (
         <Styled.InputSubPlan key={subPlan.id}>
-          <Styled.Button key={subPlan.id}>
-            <SubPlanTitle subPlan={subPlan} />
-            <hr />
+          <Styled.Button>
+            <SubPlanTitle subPlan={subPlan} handleChangeSubPlan={handleChangeSubPlan} />
           </Styled.Button>
-          <DeleteButton />
+          <Styled.DeleteButtonWrapper onClick={() => handleDeleteSubPlan(subPlan)}>
+            <DeleteButton />
+          </Styled.DeleteButtonWrapper>
         </Styled.InputSubPlan>
       ))}
     </Styled.Root>
@@ -42,11 +47,18 @@ const Styled = {
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
+    max-height: 8rem;
+    overflow: scroll;
+    &::-webkit-scrollbar {
+      display: none;
+    }
   `,
   InputSubPlan: styled.div`
+    height: 2.4rem;
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
+    border-bottom: 0.05rem solid ${theme.colors.letter_grey};
     &:hover svg {
       opacity: 1;
     }
@@ -84,4 +96,5 @@ const Styled = {
       margin: 0rem;
     }
   `,
+  DeleteButtonWrapper: styled.div``,
 };

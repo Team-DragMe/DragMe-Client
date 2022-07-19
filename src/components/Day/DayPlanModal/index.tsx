@@ -1,3 +1,4 @@
+import { useRef, useState } from 'react';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
 
@@ -6,34 +7,91 @@ import DayPlanTitle from './DayPlanTitle';
 import SubPlanBox from './SubPlanBox';
 import SubPlanTitleButton from './SubPlanTitleButton';
 
+interface Plan {
+  parentId: string;
+  // parentDate: string;
+  title: string;
+  parentCategoryColor: string;
+  subPlan: SubPlan[];
+}
 interface SubPlan {
   id: number;
   title: string;
 }
 
 function DayPlanModal() {
-  const subPlanList: SubPlan[] = [
-    { id: 1, title: '드래그미 팀원과 밥 먹기' },
-    { id: 2, title: '팀원들과 놀기' },
-  ]; //TODO: 서버로부터 SubPlan[] get해오기
+  //TODO: 서버로부터 SubPlan[] 따로 가져오기
+  const subPlanList: SubPlan[] = [{ id: 1, title: '드래그미 팀원과 밥 먹기' }];
+
+  //TODO: 서버로부터 Plan GET 가져오기(plan은 임시데이터임)
+  const plan: Plan = {
+    parentId: '1',
+    title: '드래그미 팀원 만나서 행복해요',
+    parentCategoryColor: '#FFFFFF',
+    subPlan: subPlanList,
+  };
+
+  const [color, setColor] = useState(plan.parentCategoryColor);
+  const handleChangeColor = (newColor: string) => {
+    setColor(newColor);
+  };
+
+  const [title, setTitle] = useState(plan.title);
+  const handleChangeTitle = (newTitle: string) => {
+    setTitle(newTitle);
+  };
+
+  const [subPlan, setSubPlan] = useState(plan.subPlan);
+  const handleAddSubPlan = (newSubPlan: SubPlan[]) => {
+    const newSetSubPlan = [...newSubPlan];
+    setSubPlan(newSetSubPlan);
+  };
+
+  const handleChangeSubPlan = (changeSubPlan: SubPlan) => {
+    subPlan.map((plan) => {
+      if (plan.id === changeSubPlan.id) {
+        plan.title = changeSubPlan.title;
+      }
+    });
+    const changedSubPlan = [...subPlan];
+    setSubPlan(changedSubPlan);
+  };
+
+  const handleDeleteSubPlan = (deleteSubPlan: SubPlan) => {
+    const deletedSubPlan = subPlan.filter((plan) => plan.id !== deleteSubPlan.id);
+    setSubPlan(deletedSubPlan);
+    //TODO: delete api 붙여서 해당 하위목록 삭제기능
+  };
+
+  const handleSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const newPlan: Plan = {
+      parentId: plan.parentId,
+      title,
+      parentCategoryColor: color,
+      subPlan,
+    };
+    //TODO: 서버로 newPlan POST 하기
+  };
 
   return (
     <Styled.Root>
       <Styled.Head />
-
-      <Styled.Content>
-        <form onSubmit={handleSubmitForm}>
-          <Styled.Input>
-            <ColorPicker onChange={handleChangeColor} />
-            <DayPlanTitle onChange={handleChangeTitle} />
-          </Styled.Input>
-          <Styled.Highlight />
-          <Styled.SubPlan>
-            <SubPlanBox subPlanList={subPlanList} onChange={handleChangeSubplan} />
-            <SubPlanTitleButton />
-          </Styled.SubPlan>
-        </form>
-      </Styled.Content>
+      <form onSubmit={handleSubmitForm}>
+        <Styled.Input>
+          <ColorPicker newColor={color} handleChangeColor={handleChangeColor} />
+          <DayPlanTitle title={title} handleChangeTitle={handleChangeTitle} />
+        </Styled.Input>
+        <Styled.SubPlan>
+          <SubPlanBox
+            subPlan={subPlan}
+            handleAddSubPlan={handleAddSubPlan}
+            handleChangeSubPlan={handleChangeSubPlan}
+            handleDeleteSubPlan={handleDeleteSubPlan}
+          />
+          <SubPlanTitleButton subPlan={subPlan} handleAddSubPlan={handleAddSubPlan} />
+        </Styled.SubPlan>
+      </form>
 
       <Styled.SubmitForm>
         <Styled.Cancel>취소</Styled.Cancel>
@@ -47,6 +105,7 @@ export default DayPlanModal;
 
 const Styled = {
   Root: styled.section`
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -63,23 +122,14 @@ const Styled = {
     border: 0.1rem solid ${theme.category.cate_white};
     border-radius: 0.2rem;
   `,
-  Content: styled.div`
-    padding-left: 2.2rem;
-    padding-right: 2.2rem;
-    padding-top: 4rem;
-    padding-bottom: 6rem;
-  `,
   Input: styled.div`
     display: flex;
+    align-items: flex-start;
     gap: 0.8rem;
-    margin-bottom: 0.2rem;
+    padding-top: 4rem;
+    padding-bottom: 0.2rem;
+    border-bottom: 0.5px solid ${theme.colors.letter_grey};
     position: relative;
-  `,
-  Highlight: styled.hr`
-    width: 21.6rem;
-    margin: 0;
-    border: 0.05rem solid ${theme.colors.plan_grey};
-    z-index: 1;
   `,
   SubPlan: styled.section`
     display: flex;
@@ -92,15 +142,16 @@ const Styled = {
   `,
   SubmitForm: styled.div`
     width: 26rem;
-    padding-left: 14.8rem;
-    padding-right: 2.2rem;
     display: flex;
     margin: 0;
     gap: 2.8rem;
-    position: relative;
+    position: absolute;
+    left: 14.8rem;
+    top: 27.2rem;
     bottom: 0.2rem;
   `,
   Cancel: styled.a`
+    cursor: pointer;
     color: ${theme.colors.letter_grey};
     border: 0;
     padding: 0;
