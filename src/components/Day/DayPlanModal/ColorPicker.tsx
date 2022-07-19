@@ -1,27 +1,57 @@
 import ToggleButton from 'public/assets/ToggleButton.svg';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
 
-import ColorListModal from './ColorListModal';
+import ForwardColorListModal from './ColorListModal';
 
-function ColorPicker() {
+interface ColorPickerProps {
+  newColor: string;
+  handleChangeColor: (newColor: string) => void;
+}
+
+function ColorPicker(props: ColorPickerProps) {
+  const { handleChangeColor, newColor } = props;
   const [isOpened, setisOpened] = useState(false);
-  const [color, setColor] = useState('#FFFFFF');
-
+  const colorModalRef = useRef<HTMLDivElement>(null);
+  const [color, setColor] = useState(newColor);
   const handleClickColor = (value: string) => {
     setColor(value);
+    handleChangeColor(value);
+    setisOpened && setisOpened(false);
   };
 
+  const useOutsideAlert = (ref: React.RefObject<HTMLDivElement>) => {
+    useEffect(() => {
+      function handleClickOutside(event: MouseEvent) {
+        if (event.target instanceof HTMLElement) {
+          if (ref.current && !ref.current.contains(event.target)) {
+            setisOpened(false);
+          }
+        }
+      }
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+      };
+    }, [ref]);
+  };
+  useOutsideAlert(colorModalRef);
   return (
     <Styled.Root>
-      <Styled.Selector>
+      <Styled.Selector onClick={() => setisOpened(!isOpened)}>
         <Styled.Selected color={color} />
-        <Styled.WrapTogglebutton onClick={() => setisOpened(!isOpened)}>
+        <Styled.WrapTogglebutton>
           <ToggleButton />
         </Styled.WrapTogglebutton>
       </Styled.Selector>
-      {isOpened ? <ColorListModal setColor={handleClickColor} /> : <></>}
+      {isOpened && (
+        <ForwardColorListModal
+          ref={colorModalRef}
+          setNewColor={handleClickColor}
+          handleChangeColor={handleChangeColor}
+        />
+      )}
     </Styled.Root>
   );
 }
@@ -30,13 +60,14 @@ export default ColorPicker;
 
 const Styled = {
   Root: styled.div`
+    cursor: pointer;
     display: flex;
     flex-direction: column;
     gap: 0.3rem;
-    margin-top: 0.4rem;
+    margin-top: 0.2rem;
+    position: relative;
   `,
   Selector: styled.div`
-    position: relative;
     width: 2.8rem;
     height: 1.2rem;
     border-radius: 0.2rem;

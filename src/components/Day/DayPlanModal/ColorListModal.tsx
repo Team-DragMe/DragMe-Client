@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React from 'react';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
 
@@ -19,24 +19,27 @@ const colorList: colorInfo[] = [
 ];
 
 interface ColorListModalProps {
-  setColor: (value: string) => void;
+  setNewColor: (value: string) => void;
+  handleChangeColor: (newColor: string) => void;
 }
-function ColorListModal({ setColor }: ColorListModalProps) {
-  const [category, setCategory] = useState<string>('');
-  const handleChangeCategory = (color: string) => {
-    console.log(color);
-    setCategory(color);
-    setColor(color);
+
+function ColorListModal(
+  { setNewColor, handleChangeColor }: ColorListModalProps,
+  ref: React.ForwardedRef<HTMLDivElement>,
+) {
+  const handleChangeCategory = async (color: string) => {
+    await setNewColor(color);
     //TODO: 서버에 컬러코드 값 보내는 api 붙이기
+    await handleChangeColor(color);
   };
   return (
-    <Styled.Box>
+    <Styled.Box ref={ref}>
       <Styled.ColorBox>
         {colorList.map((info: colorInfo) => (
           <Styled.Color
             key={info.id}
             colorName={info.color}
-            onClick={() => handleChangeCategory(info.color)}
+            onClick={async () => handleChangeCategory(info.color)}
           />
         ))}
       </Styled.ColorBox>
@@ -44,12 +47,13 @@ function ColorListModal({ setColor }: ColorListModalProps) {
   );
 }
 
-export default ColorListModal;
+const ForwardColorListModal = React.forwardRef<HTMLDivElement, ColorListModalProps>(ColorListModal);
+export default ForwardColorListModal;
 
 const Styled = {
-  Box: styled.section`
+  Box: styled.div`
     position: absolute;
-    top: 1.9rem;
+    top: 1.5rem;
     width: 2.8rem;
     height: 5.4rem;
     border-radius: 0.2rem;
