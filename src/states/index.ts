@@ -11,3 +11,8 @@ export const weekInfo = atom({
   key: 'weekInfo',
   default: '220713-220719',
 });
+
+export const dayCount = atom({
+  key: 'weekInfo',
+  default: 0,
+});

@@ -1,11 +1,12 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import NextArrow from 'public/assets/NextArrow.png';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+import { flushSync } from 'react-dom';
 import { useRecoilState } from 'recoil';
-import { dayInfo } from 'src/states';
+import { dayCount, dayInfo } from 'src/states';
 import { theme } from 'src/styles/theme';
-import { getTodayDate } from 'src/utils/getDate';
+import { DayStorage, getTodayDate } from 'src/utils/getDate';
 import styled from 'styled-components';
 
 import PrevArrow from '/public/assets/PrevArrow.png';
@@ -13,31 +14,32 @@ import PrevArrow from '/public/assets/PrevArrow.png';
 function DayChange() {
   const router = useRouter();
   const [dayDate, setDayDate] = useRecoilState(dayInfo);
-  const [dayChange, setDayChange] = useState(0);
-  const day = getTodayDate(dayChange);
+  const [dayChange, setDayChange] = useRecoilState(dayCount);
+  const day = getTodayDate(0);
+  const SavedDay = DayStorage(day.slice(0, 10), dayChange);
   const dayPlanURL = router.query.date?.toString();
-
-  const goToAnotherDay = (clickEvent: number) => {
-    if (clickEvent === -1) {
-      setDayChange(dayChange - 1);
-    } else if (clickEvent === 1) {
-      setDayChange(dayChange + 1);
-    }
-  };
 
   const goToday = () => {
     setDayChange(0);
     if (dayPlanURL !== undefined) {
-      router.push(`/day/${day}`);
       setDayDate(day);
-      console.log(dayDate);
+      router.push(`/day/${day}`);
+
+      console.log('>>>>>>리코일값', dayDate);
     }
   };
 
   useEffect(() => {
+    console.log('>>>>day', day);
+    console.log('>>>>savedDay', SavedDay);
+    console.log('>>>>dayChange', dayChange);
+    console.log('&&&&recoil', dayDate);
+  }, [day, SavedDay, dayChange, dayDate]);
+
+  useEffect(() => {
     if (dayPlanURL !== undefined) {
-      router.push(`/day/${day}`);
-      setDayDate(dayPlanURL);
+      router.push(`/day/${SavedDay}`);
+      console.log('dayPlanUrl', dayPlanURL);
     }
   }, [dayChange]);
 
@@ -45,17 +47,31 @@ function DayChange() {
     if (dayPlanURL !== undefined) {
       const regex =
         /^(19|20)\d{2}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[0-1])-(MON|TUE|WED|THU|FRI|SAT|SUN)$/g;
-      !regex.test(dayPlanURL) ? router.push('/404') : setDayDate(dayPlanURL);
+      if (!regex.test(dayPlanURL)) {
+        router.push('/404');
+      } else {
+        router.push(`/day/${SavedDay}`);
+      }
     }
   }, [router.asPath]);
 
+  console.log(dayDate);
+  console.log(SavedDay);
+
+  const handleClick = (option: number) => {
+    flushSync(() => {
+      setDayChange((prev) => prev + option);
+    });
+    setDayDate(DayStorage(day.slice(0, 10), dayChange + option));
+  };
+
   return (
     <Styled.Root>
-      <Styled.Button onClick={() => goToAnotherDay(-1)}>
+      <Styled.Button onClick={() => handleClick(-1)}>
         <Image src={PrevArrow} alt="이전날짜" width={'5'} height={'12'} />
       </Styled.Button>
       <Styled.GoToday onClick={goToday}>TODAY</Styled.GoToday>
-      <Styled.Button onClick={() => goToAnotherDay(1)}>
+      <Styled.Button onClick={() => handleClick(+1)}>
         <Image src={NextArrow} alt="다음날짜" width={'5'} height={'12'} />
       </Styled.Button>
     </Styled.Root>
