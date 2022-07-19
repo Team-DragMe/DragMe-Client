@@ -1,27 +1,33 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { INTERNALS } from 'next/dist/server/web/spec-extension/request';
 import React, { useEffect } from 'react';
 import { DropTargetMonitor, useDrag, useDrop } from 'react-dnd';
 import { FLAG, PLAN_CHIP } from 'src/constants';
-import { dailyPlanFlag } from 'src/types';
+import { dailyPlanFlag, Schedule } from 'src/types';
 import styled, { css } from 'styled-components';
 
 import CommonDayPlanChip from '../DayPlanChip/CommonDayPlanChip';
 import SubDayPlan from './SubDayPlanList';
 
+export interface movePlanChipParams extends Schedule {
+  hoverFlag: dailyPlanFlag;
+  hoverIndex: number;
+}
+
 interface DayPlanProps {
   // @TODO 실제 데이터 타입에 맞춰서 타이핑 수정
-  item: any;
+  item: Schedule;
   idx: number;
-  findPlanChip: (_id: string) => { planChip: any; index: number };
-  movePlanChip: (_id: string, atIndex: number) => void;
   flag: dailyPlanFlag;
+  movePlanChip: (data: movePlanChipParams) => void;
+  endToMovePlanChip: (data: movePlanChipParams) => void;
 }
 
 interface liStyleProps {
   haveChild: boolean;
   isDragging: boolean;
   flag: dailyPlanFlag;
+  index: number;
+  isFake?: boolean;
 }
 
 interface subDayPlanStyleProps {
@@ -30,8 +36,8 @@ interface subDayPlanStyleProps {
 
 type FlagType = 'daily' | 'routine' | 'rechedule' | 'weekly' | 'child';
 
-interface dragItemType {
-  id: string;
+interface dragItemType extends Schedule {
+  _id: string;
   flag: FlagType;
   date: string;
   index: number;
@@ -40,12 +46,16 @@ interface dragItemType {
 const DayPlan = React.memo(function DayPlan({
   item,
   idx,
-  findPlanChip,
   movePlanChip,
   flag,
+  endToMovePlanChip,
 }: DayPlanProps) {
   const [isOpen, setIsOpen] = React.useState(false);
   // const originalIndex = findPlanChip(item._id);
+
+  React.useEffect(() => {
+    console.log('>>>>isFake', item.isFake);
+  }, []);
 
   const onArrowBtnClick = () => {
     setIsOpen((prev) => !prev);
@@ -55,24 +65,25 @@ const DayPlan = React.memo(function DayPlan({
   const [{ isDragging }, dragRef] = useDrag(
     () => ({
       type: flag,
-      // item 안에 넣어줄 정보들 세팅 itemId, flag, date, parentId,
-      item: { _id: item._id, flag, date: item.date, index: idx },
-      // isDragging 정보가 현재 드래깅 중인지 아닌지를 리턴
+      item: { index: idx, ...item },
       collect: (monitor: any) => ({
         isDragging: monitor.isDragging(),
       }),
       //드래그가 끝났을때 작동하는 부분.
       end: (item, monitor: any) => {
-        // item에서 정보를 리턴해서
-        const { _id, flag, date, index } = item;
-        console.log(_id, flag, date, index);
+        const dragItemObj = item as dragItemType;
+
+        const hoverFlag = flag;
+        const hoverIndex = idx;
+        endToMovePlanChip({
+          hoverFlag,
+          hoverIndex,
+          ...dragItemObj,
+        });
         const didDrop = monitor.didDrop();
         // 드래그 끝났을 때 dropRef 위로 떨어지지 않으면 원래대로 복귀시키는 함수
-        if (!didDrop && _id && index) {
-          // 아이템 아이디와 flag와 바꿀 위치를 받으면 순서를 바꿔주는 함수
-          movePlanChip(_id, index);
-          // moveNemo는 변경할 네모의 id와 변경될 index를 주면 순서를 바꾸어주는 함수다.
-          // 네모들의 state가 상위 컴포넌트인 page에 선언되어있기 때문에 page에 선언되어 있다.
+        if (didDrop) {
+          return 0;
         }
       },
     }),
@@ -81,7 +92,7 @@ const DayPlan = React.memo(function DayPlan({
 
   const [{ isOver, canDrop }, dropRef] = useDrop(
     () => ({
-      accept: FLAG.DAILY,
+      accept: [FLAG.DAILY, FLAG.RECHEDULE, FLAG.ROUTINE],
       collect: (monitor) => ({
         isOver: monitor.isOver(),
         canDrop: monitor.canDrop(),
@@ -89,30 +100,50 @@ const DayPlan = React.memo(function DayPlan({
       // canDrop: (item) => {
       //   console.log('>>item', item);
       // },
-      hover(node) {
-        // console.log('hover', node);
+      hover(item) {
+        const dragItemObj = item as dragItemType;
+
+        const hoverFlag = flag;
+        const hoverIndex = idx;
+        movePlanChip({
+          hoverFlag,
+          hoverIndex,
+          ...dragItemObj,
+        });
+
+        // if (hoverFlag === 'routine' || hoverFlag === 'rechedule') {
+        //   return;
+        // }
+
+        // console.log('>>>item', item);
+        // console.log('>>>>>>>>>item', item);
+        // console.log('>>hover한 아이의 index', idx);
+        // console.log('>>hover한 아이의 flag', flag);
+        // console.log('hover', item);
         // 기존 요소랑 다른 곳에 드랍이 되면 id를 바탕으로
         // console.log('>>>idx', item.index);
         // console.log('>>>idx>>', item._id);
 
-        if (item._id) {
-          // id를 바탕으로 변경할 index를 찾음 (기존 배열 )
-          const { index: overIndex } = findPlanChip(item._id);
-          // draggedId가 고유의 키값, 변경할 인덱스 -> draggedId를 가진 애를 overIndex로 옮긴다
-          movePlanChip(item._id, overIndex);
-        }
+        // if (item._id) {
+        //   // id를 바탕으로 변경할 index를 찾음 (기존 배열 )
+        //   const { index: overIndex } = findPlanChip(item._id);
+        //   // draggedId가 고유의 키값, 변경할 인덱스 -> draggedId를 가진 애를 overIndex로 옮긴다
+        //   movePlanChip(item._id, overIndex);
+        // }
       },
     }),
-    [findPlanChip, movePlanChip],
+    [movePlanChip],
   );
 
   return (
     <Styled.Li
       key={item._id}
       haveChild={item.subSchedules.length > 0}
-      ref={isOpen ? (node) => dragRef(dropRef(node)) : null}
+      ref={isOpen ? (item) => dragRef(dropRef(item)) : null}
       flag={item.flag}
       isDragging={isDragging}
+      index={idx}
+      isFake={item?.isFake}
     >
       <CommonDayPlanChip
         color={item.categoryColorCode}
@@ -122,9 +153,10 @@ const DayPlan = React.memo(function DayPlan({
         isOpened={isOpen}
         onArrowBtnClick={onArrowBtnClick}
         isCompleted={item.isCompleted}
-        ref={isOpen ? null : (node) => dragRef(dropRef(node))}
+        ref={isOpen ? null : (item) => dragRef(dropRef(item))}
         flag={item.flag}
         id={item._id}
+        index={idx}
       >
         {item.title}
       </CommonDayPlanChip>
@@ -159,6 +191,11 @@ const Styled = {
         : css`
             opacity: 0.999;
           `}
+    ${({ isFake }) =>
+      isFake &&
+      css`
+        opacity: 0.5;
+      `}
   `,
   SubDayPlanWrapper: styled.div<subDayPlanStyleProps>`
     display: flex;

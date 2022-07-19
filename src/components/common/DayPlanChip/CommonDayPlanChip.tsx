@@ -24,6 +24,7 @@ interface CommonDayPlanChipProps {
   isCompleted?: boolean;
   id?: string;
   flag: dailyPlanFlag;
+  index: number;
 }
 
 interface ColorChipStyleProps {
@@ -32,6 +33,8 @@ interface ColorChipStyleProps {
 
 interface BoxStyleProps {
   shape: shapeType;
+  flag: dailyPlanFlag;
+  index: number;
 }
 
 interface ContentsStyleProps {
@@ -51,6 +54,8 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
       children,
       isCompleted = false,
       id = '',
+      flag,
+      index,
       ...props
     }: CommonDayPlanChipProps,
     ref,
@@ -87,7 +92,7 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
     };
 
     return (
-      <Styled.Container {...props} shape={shape} ref={ref}>
+      <Styled.Container {...props} shape={shape} ref={ref} index={index} flag={flag}>
         {color !== 'none' && <Styled.ColorChip color={color} />}
         <Styled.Box shape={shape}>
           <CheckBox id="dayCheck" isChecked={isChecked} onChange={handleChange} />
