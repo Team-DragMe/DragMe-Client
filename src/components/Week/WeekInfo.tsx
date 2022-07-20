@@ -6,14 +6,18 @@ import styled from 'styled-components';
 
 function WeekInfo() {
   const weekData = useRecoilValue(weekInfo);
+  const monthOfThisWeek = weekData[0].slice(5, 7);
+  const yearOfThisWeek = weekData[0].slice(0, 4);
+  const firstDayInThisWeek = weekData[0].slice(8, 10);
+  const lastDayInThisWeek = weekData[6].slice(8, 10);
 
   return (
     <Styled.Root>
       <Styled.YearAndMonth>
-        <Styled.Month>{weekData.slice(4, 6)}</Styled.Month>
-        <Styled.Year>{weekData.slice(0, 4)}</Styled.Year>
+        <Styled.Month>{monthOfThisWeek}</Styled.Month>
+        <Styled.Year>{yearOfThisWeek}</Styled.Year>
       </Styled.YearAndMonth>
-      <Styled.WeekPeriod>{`${weekData.slice(6, 8)}-${weekData.slice(15, 17)}`}</Styled.WeekPeriod>
+      <Styled.WeekPeriod>{`${firstDayInThisWeek}-${lastDayInThisWeek}`}</Styled.WeekPeriod>
     </Styled.Root>
   );
 }

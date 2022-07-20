@@ -1,22 +1,34 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import NextArrow from 'public/assets/NextArrow.png';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
-import { weekInfo } from 'src/states';
+import { weekCount, weekInfo } from 'src/states';
 import { theme } from 'src/styles/theme';
-import { getWeekData } from 'src/utils/getWeek';
+import { getCurrentWeek } from 'src/utils/getWeek';
 import styled from 'styled-components';
 
 import PrevArrow from '/public/assets/PrevArrow.png';
 
 function WeekChange() {
+  const router = useRouter();
+  const [week, setWeek] = useRecoilState(weekInfo);
+  const [count, setCount] = useRecoilState(weekCount);
+  const firstDayInThisWeek = week[0].slice(8, 10);
+  const lastDayInThisWeek = week[6].slice(8, 10);
+
+  useEffect(() => {}, []);
+
+  const goThisWeek = () => {
+    setCount(0);
+  };
+
   return (
     <Styled.Root>
       <Styled.Button>
         <Image src={PrevArrow} alt="이전주간" width={'5'} height={'12'} />
       </Styled.Button>
-      <Styled.GoThisWeek>WEEK</Styled.GoThisWeek>
+      <Styled.GoThisWeek onClick={goThisWeek}>WEEK</Styled.GoThisWeek>
       <Styled.Button>
         <Image src={NextArrow} alt="다음주간" width={'5'} height={'12'} />
       </Styled.Button>
