@@ -38,7 +38,7 @@ function DayPlanList({ maxHeight = '44.9rem', flag, ...props }: DayPlanListProps
   const [dailyscheduleData, setDailyScheduleData] = useRecoilState(dailyPlanList);
   const [rescheduleData, setRescheduleData] = useRecoilState(reschedulePlanList);
   const [routineScheduleData, setRoutineScheduleData] = useRecoilState(routinePlanList);
-  const [dropItSelf, setDropItSelf] = useState(false);
+  const [currentDragChipState, setCurrentDragChipState] = useState<movePlanChipParams | null>(null);
   const currentDragChip = useRef<movePlanChipParams | null>(null);
   const scrollEndRef = useRef<HTMLDivElement>(null);
   /* item flag에 따라 드롭할 수 있는 영역 수정 */
@@ -68,11 +68,12 @@ function DayPlanList({ maxHeight = '44.9rem', flag, ...props }: DayPlanListProps
 
   const { schedulesData, setSchedulesData } = getCurrentTypeData(flag);
 
-  const [{ isOver, canDrop }, sectionDropRef] = useDrop(() => ({
+  const [{ isOver, canDrop, isActive }, sectionDropRef] = useDrop(() => ({
     accept: getAcceptableEl(flag),
     collect: (monitor) => ({
       isOver: monitor.isOver(),
       canDrop: monitor.canDrop(),
+      isActive: monitor.canDrop() && monitor.isOver(),
     }),
     canDrop: (item) => {
       const { flag: itemFlag } = item;
@@ -121,229 +122,228 @@ function DayPlanList({ maxHeight = '44.9rem', flag, ...props }: DayPlanListProps
   // 드랍되었을 때 실행될 함수
   const endToMovePlanChip = ({ hoverFlag, hoverIndex, ...item }: movePlanChipParams) => {
     currentDragChip.current = null;
-    const copyRoutineData = [...routineScheduleData];
-    const lastRoutineItem = copyRoutineData.pop();
-    if (lastRoutineItem?.isFake === true) {
-      setRoutineScheduleData([
-        ...copyRoutineData,
-        {
-          ...item,
-          isFake: false,
-        },
-      ]);
-    }
-
-    const copyReschedule = [...rescheduleData];
-    const lastRescheduleItem = copyReschedule.pop();
-
-    if (lastRescheduleItem?.isFake === true) {
-      setRescheduleData([
-        ...copyReschedule,
-        {
-          ...item,
-          isFake: false,
-        },
-      ]);
-    }
-
-    const copyDailyschedule = [...dailyscheduleData];
-    const lastDailycheduleItem = copyDailyschedule.pop();
-    if (lastDailycheduleItem?.isFake === true) {
-      setDailyScheduleData([
-        ...copyDailyschedule,
-        {
-          ...item,
-          isFake: false,
-        },
-      ]);
-    }
-    switch (item.flag) {
+    setCurrentDragChipState(null);
+    // currentDragChipState를 서버로 요청
+    // optimistic update
+    switch (currentDragChipState?.hoverFlag) {
       case 'daily':
-        if (hoverFlag === 'rechedule') {
-          // reschedule 데이터에 해당 요소 추가
-          // @TODO 나히 : type, item._id 보내면 그 타입에 해당하는 애 지우는 로직
-          // daily 데이터에 해당 요소 삭제
-          // 계획 미루기 api 호출
-        } else if (hoverFlag === 'routine') {
-          // routine 데이터에 해당 요소 추가
-          // daily 데이터는 유지
-          // 자주 사용하는 계획 등록하기 api 호출
-        } else {
-          // 업데이트된 순서 전송
-        }
+        // 일간 계획 요청 api post
         break;
       case 'rechedule':
-        if (hoverFlag !== 'daily') {
-          break;
-        }
-        // @TODO 나히 : type, item._id 보내면 그 타입에 해당하는 애 지우는 로직 (지워져야 함)
-
-        // daily 데이터에 해당 요소 추가
-        // reshedule 데이터에 해당 요소 삭제
-        // 일정 계획으로 옮기기 api 호풀
-
+        // 계획 미루기 api post
         break;
       case 'routine':
-        if (hoverFlag !== 'daily') {
-          break;
-        }
-        // daily 데이터에 해당 요소 추가
-        // 자주 사용하는 계획으로 옮기기 api 호풀
+        // 자주 사용하는 계획 api post
         break;
       default:
-        if (hoverFlag !== 'daily') {
-          break;
-        }
+        break;
     }
+
+    // const copyRoutineData = [...routineScheduleData];
+    // const lastRoutineItem = copyRoutineData.pop();
+    // if (lastRoutineItem?.isFake === true) {
+    //   setRoutineScheduleData([
+    //     ...copyRoutineData,
+    //     {
+    //       ...item,
+    //       isFake: false,
+    //     },
+    //   ]);
+    // }
+
+    // const copyReschedule = [...rescheduleData];
+    // const lastRescheduleItem = copyReschedule.pop();
+
+    // if (lastRescheduleItem?.isFake === true) {
+    //   setRescheduleData([
+    //     ...copyReschedule,
+    //     {
+    //       ...item,
+    //       isFake: false,
+    //     },
+    //   ]);
+    // }
+
+    // const copyDailyschedule = [...dailyscheduleData];
+    // const lastDailycheduleItem = copyDailyschedule.pop();
+    // if (lastDailycheduleItem?.isFake === true) {
+    //   setDailyScheduleData([
+    //     ...copyDailyschedule,
+    //     {
+    //       ...item,
+    //       isFake: false,
+    //     },
+    //   ]);
+    // }
+    // switch (item.flag) {
+    //   case 'daily':
+    //     if (hoverFlag === 'rechedule') {
+    //       // reschedule 데이터에 해당 요소 추가
+    //       // @TODO 나히 : type, item._id 보내면 그 타입에 해당하는 애 지우는 로직
+    //       // daily 데이터에 해당 요소 삭제
+    //       // 계획 미루기 api 호출
+    //     } else if (hoverFlag === 'routine') {
+    //       // routine 데이터에 해당 요소 추가
+    //       // daily 데이터는 유지
+    //       // 자주 사용하는 계획 등록하기 api 호출
+    //     } else {
+    //       // 업데이트된 순서 전송
+    //     }
+    //     break;
+    //   case 'rechedule':
+    //     if (hoverFlag !== 'daily') {
+    //       break;
+    //     }
+    //     // @TODO 나히 : type, item._id 보내면 그 타입에 해당하는 애 지우는 로직 (지워져야 함)
+
+    //     // daily 데이터에 해당 요소 추가
+    //     // reshedule 데이터에 해당 요소 삭제
+    //     // 일정 계획으로 옮기기 api 호풀
+
+    //     break;
+    //   case 'routine':
+    //     if (hoverFlag !== 'daily') {
+    //       break;
+    //     }
+    //     // daily 데이터에 해당 요소 추가
+    //     // 자주 사용하는 계획으로 옮기기 api 호풀
+    //     break;
+    //   default:
+    //     if (hoverFlag !== 'daily') {
+    //       break;
+    //     }
+    // }
   };
 
   // 메인 드래그앤 드랍 함수
   const movePlanChip = ({ hoverFlag, hoverIndex, ...item }: movePlanChipParams) => {
-    // if (item.flag === hoverFlag) {
-    //   return;
-    // }
-    // ref에 기존 상태 저장
-    currentDragChip.current = { hoverFlag, hoverIndex, ...item, isFake: false };
-
-    console.log('%%%%%%%%%%%%%>>item.flag', item.flag);
-    console.log('%%%%%%%%%%%%%>>>hoverFlag', hoverFlag);
-    switch (hoverFlag) {
-      case 'daily':
-        // daily에서 daily면
-        if (item.flag === 'daily') {
-          // @TODO 인덱스 계산해서 수정하는 로직
-          return;
-        }
-        // daily 외의 애들은 다 치워줌
-        // routine 삭제
-        const staleRoutineData1 = [...routineScheduleData];
-        const staleLastRoutineItem1 = staleRoutineData1.pop();
-        console.log('>>새로 넣을 애', staleLastRoutineItem1);
-        if (staleLastRoutineItem1?._id === item._id) {
-          setRoutineScheduleData([...staleRoutineData1]);
-        }
-        // rechedule 삭제
-        const copyReschedule3 = [...rescheduleData];
-        const lastRescheduleItem3 = copyReschedule3.pop();
-        if (lastRescheduleItem3?._id === item._id) {
-          setRescheduleData([...copyReschedule3]);
-        }
-        // 다른 섹션에서 daily면 -> 겹치지 않는 한 recoil 업데이트
-        const copyDailyschedule = [...dailyscheduleData];
-        const lastDailycheduleItem = copyDailyschedule.pop();
-        if (lastDailycheduleItem?._id !== item._id) {
-          setDailyScheduleData([
-            ...dailyscheduleData,
-            {
-              ...item,
-              isFake: true,
-              flag: 'daily',
-            },
-          ]);
-        }
-        scrollEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-        break;
-      case 'routine':
-        // routine 외의 애들은 다 치워줌
-        // rechedule 삭제
-        const copyReschedule2 = [...rescheduleData];
-        const lastRescheduleItem2 = copyReschedule2.pop();
-        if (lastRescheduleItem2?._id === item._id) {
-          setRescheduleData([...copyReschedule2]);
-        }
-        // daily 삭제
-        const copyDailyschedule1 = [...dailyscheduleData];
-        const lastDailycheduleItem1 = copyDailyschedule1.pop();
-        if (lastDailycheduleItem1?._id === item._id) {
-          setDailyScheduleData([...copyDailyschedule1]);
-        }
-        // rechedule에서 daily면 리턴
-        if (item.flag === 'rechedule') {
-          console.log('리스케줄 -> 루틴 안돼요.');
-          return;
-        }
-        // daily -> routine 이면 겹치지 않는 한 recoil 업데이트
-        const copyRoutineData = [...routineScheduleData];
-        const lastRoutineItem = copyRoutineData.pop();
-        if (lastRoutineItem?._id !== item._id) {
-          setRoutineScheduleData([
-            ...routineScheduleData,
-            {
-              ...item,
-              isFake: true,
-              flag: 'routine',
-            },
-          ]);
-        }
-        scrollEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-        break;
-      case 'rechedule':
-        // rechedule 외의 애들은 다 치워줌
-        // routine 삭제
-        const staleRoutineData = [...routineScheduleData];
-        const staleLastRoutineItem = staleRoutineData.pop();
-        console.log('>>새로 넣을 애', staleLastRoutineItem);
-        if (staleLastRoutineItem?._id === item._id) {
-          setRoutineScheduleData([...staleRoutineData]);
-        }
-        // daily 삭제
-        const copyDailyschedule2 = [...dailyscheduleData];
-        const lastDailycheduleItem2 = copyDailyschedule2.pop();
-        if (lastDailycheduleItem2?._id === item._id) {
-          setDailyScheduleData([...copyDailyschedule2]);
-        }
-        // rountine에서 rechedule이면 리턴
-        if (item.flag === 'routine') {
-          console.log('루틴 -> 리스케줄 안돼요.');
-          return;
-        }
-        // daily -> rechedule 이면 겹치지 않는 한 recoil 업데이트
-        const copyReschedule = [...rescheduleData];
-        const lastRescheduleItem = copyReschedule.pop();
-        if (lastRescheduleItem?._id !== item._id) {
-          setRescheduleData([
-            ...rescheduleData,
-            {
-              ...item,
-              isFake: true,
-              flag: 'rechedule',
-            },
-          ]);
-        }
-        scrollEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-        break;
-      default:
-        break;
-    }
-
-    // 여기까지 왔으면 담긴 애는 fake요소임
     currentDragChip.current = { hoverFlag, hoverIndex, ...item, isFake: true };
 
-    // 그리고 이제 호버만 하고 나가면 기존의 애들들 치워줘야 함
-    // routine이 아니면 routine이
-    // if (hoverFlag !== 'routine') {
-    //   const copyRoutineData = [...routineScheduleData];
-    //   const lastRoutineItem = copyRoutineData.pop();
-    //   console.log('>>새로 넣을 애', copyRoutineData);
-    //   if (lastRoutineItem?._id === item._id) {
-    //     setRoutineScheduleData([...copyRoutineData]);
-    //   }
+    // ref에 기존 상태 저장
+    if (!isActive) {
+      return;
+    }
+
+    if (item.flag === 'daily' && hoverFlag === 'daily') {
+      // 다른 로직
+      return;
+    }
+    scrollEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    currentDragChip.current = { hoverFlag, hoverIndex, ...item, isFake: false };
+    setCurrentDragChipState({ hoverFlag, hoverIndex, ...item, isFake: false });
+
+    // console.log('%%%%%%%%%%%%%>>item.flag', item.flag);
+    // console.log('%%%%%%%%%%%%%>>>hoverFlag', hoverFlag);
+    // switch (hoverFlag) {
+    //   case 'daily':
+    //     // daily에서 daily면
+    //     if (item.flag === 'daily') {
+    //       // @TODO 인덱스 계산해서 수정하는 로직
+    //       return;
+    //     }
+    //     // daily 외의 애들은 다 치워줌
+    //     // routine 삭제
+    //     const staleRoutineData1 = [...routineScheduleData];
+    //     const staleLastRoutineItem1 = staleRoutineData1.pop();
+    //     console.log('>>새로 넣을 애', staleLastRoutineItem1);
+    //     if (staleLastRoutineItem1?._id === item._id) {
+    //       setRoutineScheduleData([...staleRoutineData1]);
+    //     }
+    //     // rechedule 삭제
+    //     const copyReschedule3 = [...rescheduleData];
+    //     const lastRescheduleItem3 = copyReschedule3.pop();
+    //     if (lastRescheduleItem3?._id === item._id) {
+    //       setRescheduleData([...copyReschedule3]);
+    //     }
+    //     // 다른 섹션에서 daily면 -> 겹치지 않는 한 recoil 업데이트
+    //     const copyDailyschedule = [...dailyscheduleData];
+    //     const lastDailycheduleItem = copyDailyschedule.pop();
+    //     if (lastDailycheduleItem?._id !== item._id) {
+    //       setDailyScheduleData([
+    //         ...dailyscheduleData,
+    //         {
+    //           ...item,
+    //           isFake: true,
+    //           flag: 'daily',
+    //         },
+    //       ]);
+    //     }
+    //     scrollEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    //     break;
+    //   case 'routine':
+    //     // routine 외의 애들은 다 치워줌
+    //     // rechedule 삭제
+    //     const copyReschedule2 = [...rescheduleData];
+    //     const lastRescheduleItem2 = copyReschedule2.pop();
+    //     if (lastRescheduleItem2?._id === item._id) {
+    //       setRescheduleData([...copyReschedule2]);
+    //     }
+    //     // daily 삭제
+    //     const copyDailyschedule1 = [...dailyscheduleData];
+    //     const lastDailycheduleItem1 = copyDailyschedule1.pop();
+    //     if (lastDailycheduleItem1?._id === item._id) {
+    //       setDailyScheduleData([...copyDailyschedule1]);
+    //     }
+    //     // rechedule에서 daily면 리턴
+    //     if (item.flag === 'rechedule') {
+    //       console.log('리스케줄 -> 루틴 안돼요.');
+    //       return;
+    //     }
+    //     // daily -> routine 이면 겹치지 않는 한 recoil 업데이트
+    //     const copyRoutineData = [...routineScheduleData];
+    //     const lastRoutineItem = copyRoutineData.pop();
+    //     if (lastRoutineItem?._id !== item._id) {
+    //       setRoutineScheduleData([
+    //         ...routineScheduleData,
+    //         {
+    //           ...item,
+    //           isFake: true,
+    //           flag: 'routine',
+    //         },
+    //       ]);
+    //     }
+    //     scrollEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    //     break;
+    //   case 'rechedule':
+    //     // rechedule 외의 애들은 다 치워줌
+    //     // routine 삭제
+    //     const staleRoutineData = [...routineScheduleData];
+    //     const staleLastRoutineItem = staleRoutineData.pop();
+    //     console.log('>>새로 넣을 애', staleLastRoutineItem);
+    //     if (staleLastRoutineItem?._id === item._id) {
+    //       setRoutineScheduleData([...staleRoutineData]);
+    //     }
+    //     // daily 삭제
+    //     const copyDailyschedule2 = [...dailyscheduleData];
+    //     const lastDailycheduleItem2 = copyDailyschedule2.pop();
+    //     if (lastDailycheduleItem2?._id === item._id) {
+    //       setDailyScheduleData([...copyDailyschedule2]);
+    //     }
+    //     // rountine에서 rechedule이면 리턴
+    //     if (item.flag === 'routine') {
+    //       console.log('루틴 -> 리스케줄 안돼요.');
+    //       return;
+    //     }
+    //     // daily -> rechedule 이면 겹치지 않는 한 recoil 업데이트
+    //     const copyReschedule = [...rescheduleData];
+    //     const lastRescheduleItem = copyReschedule.pop();
+    //     if (lastRescheduleItem?._id !== item._id) {
+    //       setRescheduleData([
+    //         ...rescheduleData,
+    //         {
+    //           ...item,
+    //           isFake: true,
+    //           flag: 'rechedule',
+    //         },
+    //       ]);
+    //     }
+    //     scrollEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    //     break;
+    //   default:
+    //     break;
     // }
-    // if (hoverFlag !== 'rechedule') {
-    //   const copyReschedule = [...rescheduleData];
-    //   const lastRescheduleItem = copyReschedule.pop();
-    //   if (lastRescheduleItem?._id === item._id) {
-    //     setRescheduleData([...copyReschedule]);
-    //   }
-    // }
-    // if (hoverFlag !== 'daily') {
-    //   const copyDailyschedule = [...dailyscheduleData];
-    //   const lastDailycheduleItem = copyDailyschedule.pop();
-    //   if (lastDailycheduleItem?._id === item._id) {
-    //     setDailyScheduleData([...copyDailyschedule]);
-    //   }
-    // }
-    // const { planChip, index: currentIndex } = findPlanChip(itemId);
+
+    // 여기까지 왔으면 담긴 애는 fake요소임
   };
 
   const changeCurrentSection = (flag: dailyPlanFlag) => {
@@ -353,7 +353,6 @@ function DayPlanList({ maxHeight = '44.9rem', flag, ...props }: DayPlanListProps
   // isOver가 풀렸는데 fake인 애가 잔류할 때 바뀔때마다 체크해줄 것
   // -> isOver끝나면 이전 호버했던 애는 다시 위로 스크롤 올리기
   const resetFakeItem = () => {
-    console.log('>>currentDragChip.current', currentDragChip.current);
     const currentItem = currentDragChip?.current as movePlanChipParams;
     if (!isOver && currentItem?.isFake) {
       switch (currentItem.hoverFlag) {
@@ -390,9 +389,9 @@ function DayPlanList({ maxHeight = '44.9rem', flag, ...props }: DayPlanListProps
   const throttleResetFakeItem = useThrottle(resetFakeItem, 300);
 
   useEffect(() => {
-    throttleResetFakeItem();
-  }, [isOver]);
-
+    console.log('>>>>>>isActive', isActive);
+    console.log('>>>>ref', currentDragChip.current);
+  }, [isActive]);
   return (
     <Styled.Root {...props}>
       <Styled.UlWrapper maxHeight={maxHeight} ref={sectionDropRef} flag={flag} isOver={isOver}>
@@ -408,7 +407,20 @@ function DayPlanList({ maxHeight = '44.9rem', flag, ...props }: DayPlanListProps
               flag={flag}
             />
           ))}
-          {isOver && <div ref={scrollEndRef} />}
+          {/* {isActive && <div ref={scrollEndRef} />} */}
+          {isActive && currentDragChipState && (
+            <Styled.ScrollEnd>
+              <DayPlan
+                item={currentDragChipState}
+                idx={schedulesData.length}
+                movePlanChip={throttleMovePlanChip}
+                endToMovePlanChip={endToMovePlanChip}
+                flag={flag}
+                isFake
+              />
+            </Styled.ScrollEnd>
+          )}
+          <div ref={scrollEndRef} />
         </Styled.Ul>
       </Styled.UlWrapper>
       {flag !== FLAG.RECHEDULE && (
@@ -459,5 +471,8 @@ const Styled = {
     border-top: 1px solid ${theme.colors.plan_grey};
     width: 21rem;
   `,
-  ScrollEnd: styled.div``,
+  ScrollEnd: styled.div`
+    width: 100%;
+    height: 3.2rem;
+  `,
 };

@@ -20,6 +20,7 @@ interface DayPlanProps {
   flag: dailyPlanFlag;
   movePlanChip: (data: movePlanChipParams) => void;
   endToMovePlanChip: (data: movePlanChipParams) => void;
+  isFake?: boolean;
 }
 
 interface liStyleProps {
@@ -49,13 +50,10 @@ const DayPlan = React.memo(function DayPlan({
   movePlanChip,
   flag,
   endToMovePlanChip,
+  isFake = false,
 }: DayPlanProps) {
   const [isOpen, setIsOpen] = React.useState(false);
   // const originalIndex = findPlanChip(item._id);
-
-  React.useEffect(() => {
-    console.log('>>>>isFake', item.isFake);
-  }, []);
 
   const onArrowBtnClick = () => {
     setIsOpen((prev) => !prev);
@@ -82,7 +80,7 @@ const DayPlan = React.memo(function DayPlan({
         });
         const didDrop = monitor.didDrop();
         // 드래그 끝났을 때 dropRef 위로 떨어지지 않으면 원래대로 복귀시키는 함수
-        if (didDrop) {
+        if (!didDrop) {
           return 0;
         }
       },
@@ -90,17 +88,20 @@ const DayPlan = React.memo(function DayPlan({
     [item._id, movePlanChip],
   );
 
-  const [{ isOver, canDrop }, dropRef] = useDrop(
+  const [{ isOver, canDrop, isActive }, dropRef] = useDrop(
     () => ({
       accept: [FLAG.DAILY, FLAG.RECHEDULE, FLAG.ROUTINE],
       collect: (monitor) => ({
         isOver: monitor.isOver(),
         canDrop: monitor.canDrop(),
+        isActive: monitor.canDrop() && monitor.isOver(),
       }),
       // canDrop: (item) => {
       //   console.log('>>item', item);
       // },
       hover(item) {
+        // console.log('>>isOver인가요', mouseEnter);
+
         const dragItemObj = item as dragItemType;
 
         const hoverFlag = flag;
@@ -143,7 +144,7 @@ const DayPlan = React.memo(function DayPlan({
       flag={item.flag}
       isDragging={isDragging}
       index={idx}
-      isFake={item?.isFake}
+      isFake={isFake}
     >
       <CommonDayPlanChip
         color={item.categoryColorCode}
