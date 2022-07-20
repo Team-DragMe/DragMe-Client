@@ -22,8 +22,3 @@ export const dayCount = atom({
   key: 'weekInfo',
   default: 0,
 });
-
-export const menuCount = atom({
-  key: 'weekInfo',
-  default: 'Today',
-});

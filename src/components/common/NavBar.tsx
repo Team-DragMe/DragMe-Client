@@ -33,23 +33,38 @@ function NavBar() {
     }
   }, [router.pathname]);
 
+  const handleClick = (count: string) => {
+    if (count === 'Mypage') {
+      setPickedMenu('Mypage');
+    } else if (count === 'Today') {
+      setPickedMenu('Today');
+    } else if (count === 'Week') {
+      setPickedMenu('Week');
+    }
+  };
+
   const periodData = [
     { id: '1', name: 'TODAY PLAN', path: '/day/', term: dayPeriod, symbol: 'Today' },
     { id: '2', name: 'WEEK PLAN', path: '/week/', term: weekDomain, symbol: 'Week' },
-    { id: '3', name: 'MY PLAN', path: '/mypage', term: '', symbol: 'Mypage' },
+    { id: '3', name: 'MY PAGE', path: '/mypage', term: '', symbol: 'Mypage' },
   ];
 
   return (
     <Styled.Root>
       <Link href={`${periodData[0].path}${encodeURIComponent(dayPeriod)}`}>
-        <Styled.LogoWrapper>
+        <Styled.LogoWrapper onClick={() => handleClick('Today')}>
           <Image src={Logo} alt="로고이미지" width={'108.8'} height={'24'} />
         </Styled.LogoWrapper>
       </Link>
       <Styled.Contents>
         <Styled.MenuList>
           {periodData.map((period) => (
-            <Styled.List key={period.id} symbol={period.symbol} pickedMenu={pickedMenu}>
+            <Styled.List
+              key={period.id}
+              symbol={period.symbol}
+              pickedMenu={pickedMenu}
+              onClick={() => handleClick(period.symbol)}
+            >
               <Link href={`${period.path}${encodeURIComponent(period.term)}`}>
                 <Styled.Link id={period.id}>{period.name}</Styled.Link>
               </Link>
