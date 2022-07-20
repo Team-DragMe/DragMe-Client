@@ -1,6 +1,6 @@
 export const getCurrentWeek = (count: number) => {
   const today = new Date();
-  const countDay = new Date(today.setDate(today.getDate() + 7 * count + 5));
+  const countDay = new Date(today.setDate(today.getDate() + 7 * count));
   let mondayStandard = countDay.getDay() - 1;
   const year = countDay.getFullYear();
   const month = ('0' + (countDay.getMonth() + 1)).slice(-2);

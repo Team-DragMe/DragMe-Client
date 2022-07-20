@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import Logo from 'public/assets/Logo.png';
 import MenuBar from 'public/assets/MenuBar.png';
 import React, { useEffect, useState } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { dayInfo, weekInfo } from 'src/states';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
@@ -18,7 +18,7 @@ interface LiStyle {
 
 function NavBar() {
   const router = useRouter();
-  const [dayPeriod] = useRecoilState(dayInfo);
+  const dayPeriod = useRecoilValue(dayInfo);
   const weekPeriod = useRecoilValue(weekInfo);
   const [pickedMenu, setPickedMenu] = useState<isMenuType>('Today');
   const weekDomain = `${weekPeriod[0]}-${weekPeriod[6]}`;
