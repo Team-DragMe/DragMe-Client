@@ -30,7 +30,7 @@ function WeeklyGoalBox() {
       <span>WEEKLY GOAL</span>
       <Styled.Wrapper>
         {weeklyGoalList?.map((el: weeklyGoalType, idx: number) => (
-          <WeeklyGoalInput key={el.type} idx={idx} content={el.value} />
+          <WeeklyGoalInput key={el.type} idx={idx} content={el.value} date={startDate} />
         ))}
       </Styled.Wrapper>
     </Styled.Root>
