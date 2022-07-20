@@ -12,15 +12,11 @@ const useCalendarData = ({ currentMonth }: CalendarQueryKeyType) =>
         }`,
       }),
     {
-      // select 옵션으로 데이터 가공 가능
-      select: (data) => {
-        console.log(data.data);
-        return data.data;
-      },
+      select: (data) => data.data,
       keepPreviousData: true,
       useErrorBoundary: true,
       retry: 0,
-      suspense: true,
+      suspense: false,
     },
   );
 
