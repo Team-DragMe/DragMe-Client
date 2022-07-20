@@ -1,15 +1,29 @@
+import { useRouter } from 'next/router';
 import React from 'react';
+import useGetMonthlyGoalData from 'src/hooks/query/useGetMonthlyGoalData';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
+
 import MonthlyGoalInput from './MonthlyGoalInput';
 
+const parseToValidQuery = (query: string | string[] | undefined) => {
+  if (!query) return '';
+  if (Array.isArray(query)) return '';
+
+  return query;
+};
+
 function MonthlyGoalBox() {
-  const testData = { content: '이번주도 화이팅' };
+  const router = useRouter();
+  const startDate = parseToValidQuery(router.query?.week).slice(0, 10);
+  const { data } = useGetMonthlyGoalData({ startDate });
+  const monthlyGoal = data?.data.value;
+
   return (
     <Styled.Root>
       <p>MONTHLY GOAL</p>
       <Styled.Wrapper>
-        <MonthlyGoalInput monthlygoal={testData}></MonthlyGoalInput>
+        <MonthlyGoalInput monthlygoal={monthlyGoal} />
       </Styled.Wrapper>
     </Styled.Root>
   );
@@ -29,7 +43,8 @@ const Styled = {
       line-height: 150%;
       color: ${theme.colors.letter_black};
       margin-bottom: 1rem;
-      width: 12.7rem;
+      width: 100%;
+      text-align: center;
     }
   `,
   Wrapper: styled.div`

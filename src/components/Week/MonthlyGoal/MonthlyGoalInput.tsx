@@ -1,25 +1,27 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import useDebouncing from 'src/hooks/useDebouncing';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
-import useDebouncing from 'src/hooks/useDebouncing';
 
 interface MonthlyGoalInputProps {
-  monthlygoal: {
-    content: string;
-  };
+  monthlygoal: string;
 }
 
 function MonthlyGoalInput(props: MonthlyGoalInputProps) {
   const { monthlygoal } = props;
-  const [value, setValue] = useState(monthlygoal.content);
+  const [value, setValue] = useState('');
   const { onChange } = useDebouncing();
   const changeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (e.target instanceof HTMLTextAreaElement) {
       setValue(e.target.value);
       onChange(e);
-      console.log(value);
     }
   };
+
+  useEffect(() => {
+    setValue(monthlygoal);
+  }, [monthlygoal]);
+
   return (
     <Styled.Root>
       <Styled.TextareaWrapper>

@@ -1,24 +1,35 @@
+import { useRouter } from 'next/router';
 import React from 'react';
+import useGetWeeklyGoalData from 'src/hooks/query/useGetWeeklyGoalData';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
 
 import WeeklyGoalInput from './WeeklyGoalInput';
 
+interface weeklyGoalType {
+  date: string;
+  type: string;
+  value: string;
+}
+
+const parseToValidQuery = (query: string | string[] | undefined) => {
+  if (!query) return '';
+  if (Array.isArray(query)) return '';
+
+  return query;
+};
+
 function WeeklyGoalBox() {
-  const testData = [
-    { type: 'weeklyGoal1', value: '' },
-    { type: 'weeklyGoal2', value: '' },
-    { type: 'weeklyGoal3', value: '' },
-    { type: 'weeklyGoal4', value: '' },
-    { type: 'weeklyGoal5', value: '' },
-    { type: 'weeklyGoal6', value: '' },
-    { type: 'weeklyGoal7', value: '' },
-  ];
+  const router = useRouter();
+  const startDate = parseToValidQuery(router.query?.week).slice(0, 10);
+  const { data } = useGetWeeklyGoalData({ startDate });
+  const weeklyGoalList = data?.data;
+
   return (
     <Styled.Root>
       <span>WEEKLY GOAL</span>
       <Styled.Wrapper>
-        {testData?.map((el, idx) => (
+        {weeklyGoalList?.map((el: weeklyGoalType, idx: number) => (
           <WeeklyGoalInput key={el.type} idx={idx} content={el.value} />
         ))}
       </Styled.Wrapper>
@@ -32,6 +43,8 @@ const Styled = {
   Root: styled.div`
     display: flex;
     flex-direction: column;
+    width: 24.3rem;
+    align-items: center;
     & > span {
       font-size: 1.6rem;
       font-weight: 800;
@@ -43,7 +56,7 @@ const Styled = {
   Wrapper: styled.div`
     display: flex;
     flex-direction: column;
-    width: 20.6rem;
+    width: 100%;
     & > input {
       display: none;
     }

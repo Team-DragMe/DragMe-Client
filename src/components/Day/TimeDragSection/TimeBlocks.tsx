@@ -1,4 +1,5 @@
-import { theme } from 'src/styles/theme';
+import { useState } from 'react';
+import useDragBlock from 'src/hooks/useDragBlock';
 import { getTimeArray } from 'src/utils/dateUtil';
 import styled from 'styled-components';
 
@@ -55,7 +56,6 @@ function TimeBlocks({ blocksId }: TimeBlocksProps) {
   };
 
   const { ...dragInfo } = useDragBlock({ isDragging, handleDragState, handleSubmit });
-  console.log(startBlock, endBlock);
   return (
     <Styled.Root id={blocksId} {...dragInfo}>
       {timeArr.map((el: number) => (
