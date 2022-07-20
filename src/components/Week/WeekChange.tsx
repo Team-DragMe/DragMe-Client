@@ -16,7 +16,7 @@ function WeekChange() {
   const [count, setCount] = useRecoilState(weekCount);
   const firstDayInThisWeek = week[0].slice(8, 10);
   const lastDayInThisWeek = week[6].slice(8, 10);
-
+  const weekDomain = `${week[0]}-${week[6]}`;
   useEffect(() => {}, []);
 
   const goThisWeek = () => {
