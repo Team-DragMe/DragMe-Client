@@ -1,18 +1,22 @@
+import { useRouter } from 'next/router';
 import React from 'react';
-import { useRecoilValue } from 'recoil';
 import useGetMonthlyGoalData from 'src/hooks/query/useGetMonthlyGoalData';
-import { weekInfo } from 'src/states';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
 
 import MonthlyGoalInput from './MonthlyGoalInput';
 
+const parseToValidQuery = (query: string | string[] | undefined) => {
+  if (!query) return '';
+  if (Array.isArray(query)) return '';
+
+  return query;
+};
+
 function MonthlyGoalBox() {
-  const weekDate = useRecoilValue(weekInfo);
-  console.log(weekDate);
-  // const startDate = weekDate.slice(0, 10);
-  // console.log(startDate);
-  const { data } = useGetMonthlyGoalData({ startDate: '2022-07-13' });
+  const router = useRouter();
+  const startDate = parseToValidQuery(router.query?.week).slice(0, 10);
+  const { data } = useGetMonthlyGoalData({ startDate });
   const monthlyGoal = data?.data.value;
 
   return (
@@ -39,7 +43,8 @@ const Styled = {
       line-height: 150%;
       color: ${theme.colors.letter_black};
       margin-bottom: 1rem;
-      width: 12.7rem;
+      width: 100%;
+      text-align: center;
     }
   `,
   Wrapper: styled.div`
