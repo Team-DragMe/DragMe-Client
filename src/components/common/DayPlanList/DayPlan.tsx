@@ -176,7 +176,7 @@ const Styled = {
   Li: styled.li<liStyleProps>`
     margin: 0;
     padding: 0;
-    width: 210px;
+    width: 21rem;
     height: fit-content;
     list-style-type: none;
     ${({ haveChild }) =>
