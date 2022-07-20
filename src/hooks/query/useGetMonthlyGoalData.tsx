@@ -4,7 +4,7 @@ import { StartDateQuery } from 'src/types/week';
 
 const useGetMonthlyGoalData = ({ startDate }: StartDateQuery) =>
   useQuery(
-    ['weeklyGoal', startDate],
+    ['monthlyGoal', startDate],
     async () =>
       getMonthlyGoalData({
         startDate,
@@ -13,7 +13,7 @@ const useGetMonthlyGoalData = ({ startDate }: StartDateQuery) =>
       select: (data) => data.data,
       keepPreviousData: true,
       useErrorBoundary: true,
-      retry: 0,
+      retry: 3,
       suspense: false,
     },
   );
