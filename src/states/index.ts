@@ -44,3 +44,8 @@ export const routinePlanList = atom({
   key: 'routinePlanList',
   default: [] as Schedule[],
 });
+
+export const menuCount = atom({
+  key: 'weekInfo',
+  default: 'Today',
+});

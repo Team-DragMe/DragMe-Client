@@ -32,19 +32,6 @@ function DayChange() {
       router.push(`/day/${SavedDay}`);
     }
   }, [dayChange]);
-
-  useEffect(() => {
-    if (dayPlanURL !== undefined) {
-      const regex =
-        /^(19|20)\d{2}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[0-1])-(MON|TUE|WED|THU|FRI|SAT|SUN)$/g;
-      if (!regex.test(dayPlanURL)) {
-        router.push('/404');
-      } else {
-        router.push(`/day/${SavedDay}`);
-      }
-    }
-  }, [router.asPath]);
-
   const handleClick = (option: number) => {
     flushSync(() => {
       setDayChange((prev) => prev + option);

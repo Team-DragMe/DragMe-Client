@@ -17,7 +17,7 @@ function WeekChange() {
   const [count, setCount] = useRecoilState(weekCount);
   const thisWeek = getCurrentWeek(0);
   const changedWeek = getCurrentWeek(count);
-  const weekDomain = `${week[0]}-${week[6]}`;
+  const weekDomain = `${thisWeek[0]}-${thisWeek[6]}`;
 
   const goThisWeek = () => {
     setCount(0);
@@ -35,22 +35,17 @@ function WeekChange() {
   };
 
   useEffect(() => {
+    if (week !== undefined) {
+      setWeek(getCurrentWeek(count));
+      router.push(`/week/${changedWeek[0]}-${changedWeek[6]}`);
+    }
+  }, []);
+
+  useEffect(() => {
     if (weekDomain !== undefined) {
       router.push(`/week/${changedWeek[0]}-${changedWeek[6]}`);
     }
   }, [count]);
-
-  useEffect(() => {
-    if (weekDomain !== undefined) {
-      const regex =
-        /^(19|20)\d{2}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[0-1])-(19|20)\d{2}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[0-1])$/g;
-      if (!regex.test(weekDomain)) {
-        router.push('/404');
-      } else {
-        router.push(`/week/${weekDomain}`);
-      }
-    }
-  }, [router.asPath]);
 
   return (
     <Styled.Root>

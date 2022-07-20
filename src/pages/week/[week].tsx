@@ -1,8 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import WeekChange from '../../components/Week/WeekChange';
+import WeekInfo from '../../components/Week/WeekInfo';
+
 function Week() {
-  return <Styled.Root>마이페이지입니다.</Styled.Root>;
+  return (
+    <Styled.Root>
+      <WeekInfo />
+      <WeekChange />
+    </Styled.Root>
+  );
 }
 
 export default Week;
