@@ -1,6 +1,7 @@
-import { useRouter } from 'next/router';
 import React from 'react';
+import { useRecoilValue } from 'recoil';
 import useGetWeeklyGoalData from 'src/hooks/query/useGetWeeklyGoalData';
+import { weekInfo } from 'src/states';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
 
@@ -12,24 +13,16 @@ interface weeklyGoalType {
   value: string;
 }
 
-const parseToValidQuery = (query: string | string[] | undefined) => {
-  if (!query) return '';
-  if (Array.isArray(query)) return '';
-
-  return query;
-};
-
 function WeeklyGoalBox() {
-  const router = useRouter();
-  const startDate = parseToValidQuery(router.query?.week).slice(0, 10);
+  const week = useRecoilValue(weekInfo);
+  const startDate = week[0];
   const { data } = useGetWeeklyGoalData({ startDate });
-  const weeklyGoalList = data?.data;
 
   return (
     <Styled.Root>
       <span>WEEKLY GOAL</span>
       <Styled.Wrapper>
-        {weeklyGoalList?.map((el: weeklyGoalType, idx: number) => (
+        {data?.data.map((el: weeklyGoalType, idx: number) => (
           <WeeklyGoalInput key={el.type} idx={idx} content={el.value} date={startDate} />
         ))}
       </Styled.Wrapper>
