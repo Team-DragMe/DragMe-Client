@@ -1,7 +1,7 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
+import useDebouncing from 'src/hooks/useDebouncing';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
-import useDebouncing from 'src/hooks/useDebouncing';
 
 interface MonthlyGoalInputProps {
   monthlygoal: {

@@ -1,10 +1,11 @@
 import styled from 'styled-components';
+
 import MonthlyGoalBox from './MonthlyGoalBox';
 
 function MonthlyGoal() {
   return (
     <Styled.Root>
-      <MonthlyGoalBox></MonthlyGoalBox>
+      <MonthlyGoalBox />
     </Styled.Root>
   );
 }

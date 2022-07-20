@@ -1,6 +1,7 @@
 import React from 'react';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
+
 import MonthlyGoalInput from './MonthlyGoalInput';
 
 function MonthlyGoalBox() {
@@ -9,7 +10,7 @@ function MonthlyGoalBox() {
     <Styled.Root>
       <p>MONTHLY GOAL</p>
       <Styled.Wrapper>
-        <MonthlyGoalInput monthlygoal={testData}></MonthlyGoalInput>
+        <MonthlyGoalInput monthlygoal={testData} />
       </Styled.Wrapper>
     </Styled.Root>
   );
