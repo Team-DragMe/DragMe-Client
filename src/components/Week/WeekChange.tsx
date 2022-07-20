@@ -2,6 +2,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import NextArrow from 'public/assets/NextArrow.png';
 import React, { useEffect } from 'react';
+import { flushSync } from 'react-dom';
 import { useRecoilState } from 'recoil';
 import { weekCount, weekInfo } from 'src/states';
 import { theme } from 'src/styles/theme';
@@ -14,23 +15,59 @@ function WeekChange() {
   const router = useRouter();
   const [week, setWeek] = useRecoilState(weekInfo);
   const [count, setCount] = useRecoilState(weekCount);
-  const firstDayInThisWeek = week[0].slice(8, 10);
-  const lastDayInThisWeek = week[6].slice(8, 10);
+  const thisWeek = getCurrentWeek(0);
+  const changedWeek = getCurrentWeek(count);
   const weekDomain = `${week[0]}-${week[6]}`;
-  useEffect(() => {}, []);
+
+  useEffect(() => {
+    console.log('>>>>thisWeek', thisWeek);
+    console.log('>>>>weekCount', count);
+    console.log('>>>>ChangedWeek', changedWeek);
+    console.log('&&&&recoil', week);
+  }, [thisWeek, count, week, changedWeek]);
 
   const goThisWeek = () => {
     setCount(0);
+    if (weekDomain !== undefined) {
+      setWeek(thisWeek);
+      router.push(`/week/${weekDomain}`);
+    }
+  };
+
+  useEffect(() => {
+    if (weekDomain !== undefined) {
+      router.push(`/week/${weekDomain}`);
+      console.log('weekdomain', weekDomain);
+    }
+  }, [count]);
+
+  const handleClick = (option: number) => {
+    flushSync(() => {
+      setCount((prev) => prev + option);
+      setWeek(changedWeek);
+    });
   };
 
   return (
     <Styled.Root>
       <Styled.Button>
-        <Image src={PrevArrow} alt="이전주간" width={'5'} height={'12'} />
+        <Image
+          src={PrevArrow}
+          alt="이전주간"
+          width={'5'}
+          height={'12'}
+          onClick={() => handleClick(-1)}
+        />
       </Styled.Button>
       <Styled.GoThisWeek onClick={goThisWeek}>WEEK</Styled.GoThisWeek>
       <Styled.Button>
-        <Image src={NextArrow} alt="다음주간" width={'5'} height={'12'} />
+        <Image
+          src={NextArrow}
+          alt="다음주간"
+          width={'5'}
+          height={'12'}
+          onClick={() => handleClick(1)}
+        />
       </Styled.Button>
     </Styled.Root>
   );
