@@ -19,13 +19,6 @@ function WeekChange() {
   const changedWeek = getCurrentWeek(count);
   const weekDomain = `${week[0]}-${week[6]}`;
 
-  useEffect(() => {
-    console.log('>>>>thisWeek', thisWeek);
-    console.log('>>>>weekCount', count);
-    console.log('>>>>ChangedWeek', changedWeek);
-    console.log('&&&&recoil', week);
-  }, [thisWeek, count, week, changedWeek]);
-
   const goThisWeek = () => {
     setCount(0);
     if (weekDomain !== undefined) {
@@ -34,19 +27,25 @@ function WeekChange() {
     }
   };
 
-  useEffect(() => {
-    if (weekDomain !== undefined) {
-      router.push(`/week/${weekDomain}`);
-      console.log('weekdomain', weekDomain);
-    }
-  }, [count]);
-
   const handleClick = (option: number) => {
     flushSync(() => {
       setCount((prev) => prev + option);
-      setWeek(changedWeek);
     });
+    setWeek(getCurrentWeek(count + option));
   };
+
+  useEffect(() => {
+    console.log('>>>>thisWeek', thisWeek);
+    console.log('>>>>weekCount', count);
+    console.log('>>>>ChangedWeek', changedWeek);
+    console.log('&&&&recoil', week);
+  }, [thisWeek, count, week, changedWeek]);
+
+  useEffect(() => {
+    if (weekDomain !== undefined) {
+      router.push(`/week/${changedWeek[0]}-${changedWeek[6]}`);
+    }
+  }, [count]);
 
   return (
     <Styled.Root>
