@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from 'react';
-import { DropTargetMonitor, useDrag, useDrop } from 'react-dnd';
-import { FLAG, PLAN_CHIP } from 'src/constants';
+import { useDrag, useDrop } from 'react-dnd';
+import { FLAG } from 'src/constants';
 import useLatestState from 'src/hooks/useLatestState';
 import { dailyPlanFlag, Schedule } from 'src/types';
 import styled, { css } from 'styled-components';
@@ -34,7 +34,7 @@ interface DayPlanProps {
 interface liStyleProps {
   haveChild: boolean;
   isDragging: boolean;
-  flag: dailyPlanFlag;
+  flag?: dailyPlanFlag;
   index: number;
   isFake?: boolean;
   currentDraggingEl?: dailyPlanFlag | null;
@@ -60,7 +60,6 @@ const DayPlan = React.memo(function DayPlan({
   flag,
   endToMovePlanChip,
   isFake = false,
-  dataLength = 0,
   isDragMode = false,
   thorottleMoveItemInSection,
   ...props
@@ -68,15 +67,11 @@ const DayPlan = React.memo(function DayPlan({
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [currentDraggingEl, setCurrentDraggingEl, latestDraggingEl] =
     useLatestState<FlagType | null>(null);
-  // const [draggingItem, setDraggingItem] = useState<Schedule | null>();
   const onArrowBtnClick = () => {
     setIsOpen((prev) => !prev);
   };
 
-  // 1. 드래깅 객체 flag가 daily가 아니면 순서 영역 감지 안되도록
-  // 2. flag 랑 hoverflag가 둘다 daily이면 아예 absolute로 갈기기
-
-  // daily일 때 그 내부에서 드래그앤 드랍 결정
+  // control drag element
   const [{ isDragging }, dragRef] = useDrag(
     () => ({
       type: flag,
@@ -84,14 +79,9 @@ const DayPlan = React.memo(function DayPlan({
       collect: (monitor: any) => ({
         isDragging: monitor.isDragging(),
       }),
-      // isDragging: (item) => {
-      //   console.log('>>emformwnd');
-      //   return true;
-      // },
       //드래그가 끝났을때 작동하는 부분.
       end: (item, monitor: any) => {
         const dragItemObj = item as dragItemType;
-        console.log('드래그 끗');
         const hoverFlag = flag;
         const hoverIndex = idx;
         endToMovePlanChip({
@@ -134,7 +124,6 @@ const DayPlan = React.memo(function DayPlan({
     [movePlanChip],
   );
   const handleDragEnter = (type: positionType, index: number, hoverId: string) => {
-    // console.log('>>draggingItem 이거야', draggingItem);
     if (item.flag !== 'daily') {
       return;
     }
@@ -148,19 +137,6 @@ const DayPlan = React.memo(function DayPlan({
       ...(item as Schedule),
     });
   };
-  const handleMouseDown = (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
-    setCurrentDraggingEl(e.currentTarget.id as FlagType);
-    console.log('---------------------------------');
-    console.log(e.currentTarget.id);
-  };
-
-  useEffect(() => {
-    console.log('>>>>currentDraggingEl', currentDraggingEl);
-  }, [currentDraggingEl]);
-
-  useEffect(() => {
-    console.log('>>>>latestDraggingEl.current', latestDraggingEl.current);
-  }, [latestDraggingEl.current]);
 
   return (
     <Styled.Li
@@ -172,8 +148,6 @@ const DayPlan = React.memo(function DayPlan({
       currentDraggingEl={currentDraggingEl}
       index={idx}
       isFake={isFake}
-      liType="haveChild"
-      // onMouseDown={handleMouseDown}
     >
       <CommonDayPlanChip
         color={item.categoryColorCode}
@@ -186,9 +160,7 @@ const DayPlan = React.memo(function DayPlan({
         ref={(item) => dragRef(dropRef(item))}
         itemId={item._id}
         index={idx}
-        id={flag}
-        liType="notChild"
-        // onMouseDown={handleMouseDown}
+        flag={flag}
       >
         {item.title}
       </CommonDayPlanChip>
@@ -198,7 +170,7 @@ const DayPlan = React.memo(function DayPlan({
           <SubDayPlan subschedules={item.subSchedules} categoryColorCode={item.categoryColorCode} />
         </Styled.SubDayPlanWrapper>
       )}
-
+      {/* 브라우저 리플로우 방지를 위한 이벤트 핸들용 가상돔 */}
       {currentDraggingEl === 'daily' && flag === 'daily' && !isDragging && isDragMode && (
         <div>
           <Styled.EventHandleTopDom
@@ -289,18 +261,14 @@ const Styled = {
     /* background: red; */
     opacity: 0.3;
     top: 1.6rem;
-    /* bottom: 50%; */
-    /* top: ${({ index }) => `${index}rem`}; */
   `,
   EventHandleTopDom: styled.div<{ index: number }>`
     width: 21rem;
     height: 1.6rem;
     position: absolute;
     z-index: 5;
-    /*  */
+    /* background: blue;  */
     opacity: 0.3;
     top: 0;
-    /* bottom: 50%; */
-    /* top: ${({ index }) => `${index}rem`}; */
   `,
 };

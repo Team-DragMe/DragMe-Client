@@ -1,9 +1,7 @@
 /* eslint-disable no-case-declarations */
 import update from 'immutability-helper';
-import dynamic from 'next/dynamic';
-import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
-import { ConnectDropTarget, useDrop } from 'react-dnd';
-import { mergeRefs } from 'react-merge-refs';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useDrop } from 'react-dnd';
 import { useRecoilState } from 'recoil';
 import { FLAG } from 'src/constants';
 import useThrottle from 'src/hooks/useThrottle';
@@ -44,7 +42,6 @@ function DayPlanList({ maxHeight = '46.2rem', flag, ...props }: DayPlanListProps
   const [rescheduleData, setRescheduleData] = useRecoilState(reschedulePlanList);
   const [routineScheduleData, setRoutineScheduleData] = useRecoilState(routinePlanList);
   const [currentDragChipState, setCurrentDragChipState] = useState<movePlanChipParams | null>(null);
-  const [middleIndex, setMiddleIndex] = useState<number | null>(null);
   const currentDragChip = useRef<movePlanChipParams | null>(null);
   const scrollEndRef = useRef<HTMLDivElement>(null);
   /* item flag에 따라 드롭할 수 있는 영역 수정 */
@@ -108,23 +105,6 @@ function DayPlanList({ maxHeight = '46.2rem', flag, ...props }: DayPlanListProps
     [dailyscheduleData],
   );
 
-  // 현재 스케줄 받아서 array를 업데이트 -> 내 카드 이전의 애들은 내 전에 가고 / 내 카드 이후에 애들은 내 뒤로 오도록
-  // const movePlanChip = useCallback(
-  //   (_id: string, atIndex: number) => {
-  //     const { planChip, index } = findPlanChip(_id);
-  //     // console.log('8888088planChip', planChip);
-  //     setSchedulesData(
-  //       update(schedulesData, {
-  //         $splice: [
-  //           [index, 1],
-  //           [atIndex, 0, planChip],
-  //         ],
-  //       }),
-  //     );
-  //   },
-  //   [findPlanChip, schedulesData, setSchedulesData],
-  // );
-
   // 드랍되었을 때 실행될 함수
   const endToMovePlanChip = ({ hoverFlag, hoverIndex, ...item }: movePlanChipParams) => {
     currentDragChip.current = null;
@@ -146,31 +126,26 @@ function DayPlanList({ maxHeight = '46.2rem', flag, ...props }: DayPlanListProps
     }
   };
 
-  // 메인 드래그앤 드랍 함수
+  // move planBlock section to section
   const movePlanChip = ({ hoverFlag, hoverIndex, ...item }: movePlanChipParams) => {
     currentDragChip.current = { hoverFlag, hoverIndex, ...item, isFake: true };
     if (!isActive) {
       return;
     }
-    // ref에 기존 상태 저장
+    // 이 경우엔 내부에서 순서 바뀌어야 하므로 return
     if (item.flag === 'daily' && hoverFlag === 'daily') {
-      // currentDragChip.current = { hoverFlag, hoverIndex, ...item, isFake: true };
-      // setCurrentDragChipState({ hoverFlag, hoverIndex, ...item, isFake: true });
-      // console.log('>>여기로 들어오나요');
       return;
     }
 
     scrollEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     setCurrentDragChipState({ hoverFlag, hoverIndex, ...item, isFake: true });
-    console.log('&&******들어왔나', item, hoverFlag);
-    console.log('&&******인덱스 잡히니', hoverIndex);
-    // currentDragChip.current = { hoverFlag, hoverIndex, ...item, isFake: false };
   };
 
   const changeCurrentSection = (flag: dailyPlanFlag) => {
     setCurrentSection(flag);
   };
 
+  // deprecated
   const resetFakeItem = () => {
     const currentItem = currentDragChip?.current as movePlanChipParams;
     if (!isOver && currentItem?.isFake) {
@@ -211,41 +186,17 @@ function DayPlanList({ maxHeight = '46.2rem', flag, ...props }: DayPlanListProps
     };
   };
 
-  // type이랑 index를 가지고 real index를 측정
-  //  map돌다가 만약 real index가 있고 / realIndx - idx === 0.5 이면 페이크인 애 그림
-  // end일 때에는 data에 푸쉬해서 그대로 서버에 보내기
+  // move planBlock in section
   const moveItemInSection = ({ type, index, hoverId, ...item }: moveItemInSectionParams) => {
-    // currentDragChip.current = {
-    //   hoverFlag: 'daily',
-    //   hoverIndex: index,
-    //   ...item,
-    //   isFake: true,
-    // };
-    // console.log('))))))))))))))))))))))))))))))어떤아이템', item);
-    // setCurrentDragChipState({ hoverFlag: 'daily', hoverIndex: index, ...item, isFake: true });
-    // if (type === 'top') {
-    //   setMiddleIndex(index - 0.5);
-    //   console.log('중앙인덱스', index - 0.5);
-    // } else {
-    //   setMiddleIndex(index + 0.5);
-    //   console.log('중앙인덱스', index + 0.5);
-    // }
     if (!currentDragChip.current) {
       return;
     }
-    console.log('>>현재 얘 담김', currentDragChip.current);
 
-    // 내가 들고 있는 아이템이 뭔지
     const { index: currentItemIndex, planChip: currentItemObj } = findDailyIndex(
       currentDragChip.current?._id as string,
     );
-    // 호버한 아이템이 뭔지
     const { index: hoverItemIndex, planChip: hoverItemObj } = findDailyIndex(hoverId as string);
-    console.log('%%%%%%%%%%%%%%%%%%currentItemIndex', currentItemIndex);
-    console.log('%%%%%%%%%%%%%%%%%%currentItemObj', currentItemObj);
-    console.log('%%%%%%%%%%%%%%%%%%hoverItemIndex', hoverItemIndex);
-    console.log('%%%%%%%%%%%%%%%%%%hoverItemObj', hoverItemObj);
-    console.log('%%%%%%%%%%%%%%%%%%item', currentDragChipState);
+
     setDailyScheduleData(
       update(dailyscheduleData, {
         $splice: [
@@ -254,8 +205,6 @@ function DayPlanList({ maxHeight = '46.2rem', flag, ...props }: DayPlanListProps
         ],
       }),
     );
-
-    console.log('결과가 궁금해', dailyscheduleData);
   };
 
   const throttleMovePlanChip = useThrottle(movePlanChip, 300);
@@ -263,42 +212,24 @@ function DayPlanList({ maxHeight = '46.2rem', flag, ...props }: DayPlanListProps
   const throttleResetFakeItem = useThrottle(resetFakeItem, 300);
   const thorottleMoveItemInSection = useThrottle(moveItemInSection, 100);
 
-  useEffect(() => {
-    console.log('>>>>>>isActive', isActive);
-    console.log('>>>>ref', currentDragChip.current);
-  }, [isActive]);
   return (
     <Styled.Root {...props}>
       <Styled.UlWrapper maxHeight={maxHeight} ref={sectionDropRef} flag={flag} isOver={isOver}>
         {/* {isOver && <Styled.DropWrapper canDrop={canDrop} maxHeight={maxHeight} />} */}
         <Styled.Ul maxHeight={maxHeight}>
           {schedulesData.map((item, idx) => (
-            <>
-              <DayPlan
-                item={item}
-                key={item._id}
-                idx={idx}
-                movePlanChip={throttleMovePlanChip}
-                endToMovePlanChip={endToMovePlanChip}
-                flag={flag}
-                dataLength={schedulesData.length}
-                isDragMode={isActive}
-                thorottleMoveItemInSection={thorottleMoveItemInSection}
-              />
-              {/* {middleIndex && middleIndex - idx === 0.5 && (
-                <DayPlan
-                  item={currentDragChipState}
-                  idx={schedulesData.length}
-                  movePlanChip={throttleMovePlanChip}
-                  endToMovePlanChip={endToMovePlanChip}
-                  thorottleMoveItemInSection={thorottleMoveItemInSection}
-                  flag={flag}
-                  isFake
-                />
-              )} */}
-            </>
+            <DayPlan
+              item={item}
+              key={item._id}
+              idx={idx}
+              movePlanChip={throttleMovePlanChip}
+              endToMovePlanChip={endToMovePlanChip}
+              flag={flag}
+              dataLength={schedulesData.length}
+              isDragMode={isActive}
+              thorottleMoveItemInSection={thorottleMoveItemInSection}
+            />
           ))}
-          {/* {isActive && <div ref={scrollEndRef} />} */}
           {isActive && currentDragChipState && (
             <Styled.ScrollEnd>
               <DayPlan
@@ -337,7 +268,6 @@ const Styled = {
 
   UlWrapper: styled.article<UlWrapperStyleProps>`
     max-height: ${({ maxHeight }) => maxHeight};
-    /* overflow-y: ${({ isOver }) => (isOver ? 'hidden' : 'scroll')}; */
     width: 100%;
     display: flex;
     justify-content: center;
@@ -366,9 +296,6 @@ const Styled = {
     z-index: 5;
     background: red;
     opacity: 0.3;
-    /* bottom: 50%; */
-    /* top: ${({ index }) => `${index}rem`}; */
-    /* border-bottom: 3px solid black; */
   `,
   AddDayPlanChipWrapper: styled.div`
     padding-top: 0.8rem;
