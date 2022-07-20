@@ -29,7 +29,7 @@ function TodayPlan() {
 
   return (
     <StyledTodayPlan.Root>
-      <ForwardEmojiPicker ref={refPicker} click={click} setClick={handleClick} />
+      <ForwardEmojiPicker ref={refPicker} click={click} setClick={handleClick} emoji="" />
       <TodayPlanInput />
     </StyledTodayPlan.Root>
   );
