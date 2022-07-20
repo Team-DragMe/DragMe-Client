@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import Logo from 'public/assets/Logo.png';
 import MenuBar from 'public/assets/MenuBar.png';
 import React, { useEffect, useState } from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { dayInfo, weekInfo } from 'src/states';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
@@ -19,7 +19,7 @@ interface LiStyle {
 function NavBar() {
   const router = useRouter();
   const [dayPeriod] = useRecoilState(dayInfo);
-  const [weekPeriod] = useRecoilState(weekInfo);
+  const weekPeriod = useRecoilValue(weekInfo);
   const [pickedMenu, setPickedMenu] = useState<isMenuType>('Today');
   const weekDomain = `${weekPeriod[0]}-${weekPeriod[6]}`;
 
@@ -41,7 +41,7 @@ function NavBar() {
 
   return (
     <Styled.Root>
-      <Link href={`${periodData[0].path}${encodeURIComponent(periodData[0].term)}`}>
+      <Link href={`${periodData[0].path}${encodeURIComponent(dayPeriod)}`}>
         <Styled.LogoWrapper>
           <Image src={Logo} alt="로고이미지" width={'108.8'} height={'24'} />
         </Styled.LogoWrapper>
@@ -80,7 +80,6 @@ const Styled = {
   `,
   LogoWrapper: styled.div`
     display: flex;
-
     width: 10.88rem;
     height: 2rem;
     cursor: pointer;

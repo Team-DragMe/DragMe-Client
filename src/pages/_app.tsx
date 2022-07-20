@@ -3,6 +3,7 @@ import Head from 'next/head';
 import { useState } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { RecoilRoot } from 'recoil';
+import NavBar from 'src/components/common/NavBar';
 import GlobalStyles from 'src/styles/globalStyle';
 import { theme } from 'src/styles/theme';
 import { ThemeProvider } from 'styled-components';
@@ -18,6 +19,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       </Head>
       <RecoilRoot>
         <QueryClientProvider client={queryClient}>
+          <NavBar />
           <Component {...pageProps} />
         </QueryClientProvider>
       </RecoilRoot>
