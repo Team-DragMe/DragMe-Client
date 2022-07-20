@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import React from 'react';
 import useGetWeeklyGoalData from 'src/hooks/query/useGetWeeklyGoalData';
 import { theme } from 'src/styles/theme';
@@ -10,8 +11,18 @@ interface weeklyGoalType {
   type: string;
   value: string;
 }
+
+const parseToValidQuery = (query: string | string[] | undefined) => {
+  if (!query) return '';
+  if (Array.isArray(query)) return '';
+
+  return query;
+};
+
 function WeeklyGoalBox() {
-  const { data } = useGetWeeklyGoalData({ startDate: '2022-07-13' });
+  const router = useRouter();
+  const startDate = parseToValidQuery(router.query?.week).slice(0, 10);
+  const { data } = useGetWeeklyGoalData({ startDate });
   const weeklyGoalList = data?.data;
 
   return (
