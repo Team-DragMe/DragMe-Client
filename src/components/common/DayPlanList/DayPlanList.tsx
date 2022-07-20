@@ -8,9 +8,10 @@ import useThrottle from 'src/hooks/useThrottle';
 import { dailyPlanList, reschedulePlanList, routinePlanList } from 'src/states';
 import { theme } from 'src/styles/theme';
 import { dailyPlanFlag, Schedule } from 'src/types';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import AddDayPlanChip from '../DayPlanChip/AddDayPlanChip';
+import CommonDayPlanChip from '../DayPlanChip/CommonDayPlanChip';
 import DayPlan, { movePlanChipParams, positionType } from './DayPlan';
 
 export interface moveItemInSectionParams extends Schedule {
@@ -36,6 +37,7 @@ interface DropWrapperStyleProps {
   canDrop: boolean;
   maxHeight: string;
 }
+
 function DayPlanList({ maxHeight = '46.2rem', flag, ...props }: DayPlanListProps) {
   const [currentSection, setCurrentSection] = useState<dailyPlanFlag>(flag);
   const [dailyscheduleData, setDailyScheduleData] = useRecoilState(dailyPlanList);
@@ -44,6 +46,7 @@ function DayPlanList({ maxHeight = '46.2rem', flag, ...props }: DayPlanListProps
   const [currentDragChipState, setCurrentDragChipState] = useState<movePlanChipParams | null>(null);
   const currentDragChip = useRef<movePlanChipParams | null>(null);
   const scrollEndRef = useRef<HTMLDivElement>(null);
+  const [addPlan, setAddPlan] = useState(false);
   /* item flag에 따라 드롭할 수 있는 영역 수정 */
   const getAcceptableEl = (currentType: string) => {
     switch (currentType) {
@@ -207,6 +210,14 @@ function DayPlanList({ maxHeight = '46.2rem', flag, ...props }: DayPlanListProps
     );
   };
 
+  const handleAddClick = () => {
+    setAddPlan(true);
+    // @TODO 할 일 등록 이후 false로 초기화
+    setTimeout(() => {
+      scrollEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, 50);
+  };
+
   const throttleMovePlanChip = useThrottle(movePlanChip, 300);
   const throttleChangeCurrentSection = useThrottle(changeCurrentSection, 300);
   const throttleResetFakeItem = useThrottle(resetFakeItem, 300);
@@ -243,12 +254,23 @@ function DayPlanList({ maxHeight = '46.2rem', flag, ...props }: DayPlanListProps
               />
             </Styled.ScrollEnd>
           )}
+          {addPlan && (
+            <Styled.Li>
+              <CommonDayPlanChip
+                color="#FFFFFF"
+                shape="rectangle"
+                flag={flag}
+                index={schedulesData.length + 1}
+              />
+              <div ref={scrollEndRef} />
+            </Styled.Li>
+          )}
           {isOver && <div ref={scrollEndRef} />}
         </Styled.Ul>
       </Styled.UlWrapper>
       {flag !== FLAG.RECHEDULE && (
         <Styled.AddDayPlanChipWrapper>
-          <AddDayPlanChip />
+          <AddDayPlanChip onClick={handleAddClick} />
         </Styled.AddDayPlanChipWrapper>
       )}
     </Styled.Root>
@@ -288,6 +310,14 @@ const Styled = {
     min-height: ${({ maxHeight }) => maxHeight};
     width: 21rem;
     padding-top: 1.3rem;
+  `,
+  Li: styled.li`
+    margin: 0;
+    padding: 0;
+    width: 21rem;
+    height: fit-content;
+    list-style-type: none;
+    position: relative;
   `,
   EventHandleDom: styled.div<{ index: number }>`
     width: 21rem;

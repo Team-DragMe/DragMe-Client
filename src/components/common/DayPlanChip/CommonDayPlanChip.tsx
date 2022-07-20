@@ -14,7 +14,7 @@ type shapeType = 'rectangle' | 'triangle';
 interface CommonDayPlanChipProps {
   //@TODO color code값 타입으로 한정하기
   color?: string;
-  children: string;
+  children?: string;
   shape?: shapeType;
   addon?: boolean;
   onAddonClick?: () => void;
@@ -104,7 +104,7 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
                 <Styled.Contents isChecked={isChecked}>{children}</Styled.Contents>
               ) : (
                 <Styled.Form onSubmit={handleSubmit}>
-                  <Styled.Input type="text" ref={inputValue} onBlur={handleBlur} />
+                  <Styled.Input type="text" ref={inputValue} onBlur={handleBlur} autoFocus />
                 </Styled.Form>
               )}
             </div>
