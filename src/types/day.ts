@@ -5,3 +5,7 @@ export interface CalendarQueryType {
 export interface CalendarQueryKeyType {
   currentMonth: { year: number; month: number };
 }
+
+export interface DateQueryType {
+  date: string;
+}
