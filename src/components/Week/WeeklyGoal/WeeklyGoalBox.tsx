@@ -6,6 +6,7 @@ import WeeklyGoalInput from './WeeklyGoalInput';
 
 function WeeklyGoalBox() {
   const testData = [
+    { type: 'weeklyGoal0', value: '' },
     { type: 'weeklyGoal1', value: '' },
     { type: 'weeklyGoal2', value: '' },
     { type: 'weeklyGoal3', value: '' },
@@ -13,6 +14,8 @@ function WeeklyGoalBox() {
     { type: 'weeklyGoal5', value: '' },
     { type: 'weeklyGoal6', value: '' },
     { type: 'weeklyGoal7', value: '' },
+    { type: 'weeklyGoal8', value: '' },
+    { type: 'weeklyGoal9', value: '' },
   ];
   return (
     <Styled.Root>
@@ -32,6 +35,8 @@ const Styled = {
   Root: styled.div`
     display: flex;
     flex-direction: column;
+    width: 24.3rem;
+    align-items: center;
     & > span {
       font-size: 1.6rem;
       font-weight: 800;
@@ -43,7 +48,7 @@ const Styled = {
   Wrapper: styled.div`
     display: flex;
     flex-direction: column;
-    width: 20.6rem;
+    width: 100%;
     & > input {
       display: none;
     }
