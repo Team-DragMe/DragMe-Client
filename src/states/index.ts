@@ -1,5 +1,6 @@
 import { atom } from 'recoil';
 
+import { getCurrentWeek } from '../utils/getWeek';
 import { getTodayDate } from '../utils/getDate';
 
 export const dayInfo = atom({
@@ -9,7 +10,12 @@ export const dayInfo = atom({
 
 export const weekInfo = atom({
   key: 'weekInfo',
-  default: '220713-220719',
+  default: getCurrentWeek(0),
+});
+
+export const weekCount = atom({
+  key: 'weekCount',
+  default: 0,
 });
 
 export const dayCount = atom({
