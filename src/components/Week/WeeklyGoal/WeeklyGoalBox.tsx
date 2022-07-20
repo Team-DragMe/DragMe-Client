@@ -1,27 +1,24 @@
 import React from 'react';
+import useGetWeeklyGoalData from 'src/hooks/query/useGetWeeklyGoalData';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
 
 import WeeklyGoalInput from './WeeklyGoalInput';
 
+interface weeklyGoalType {
+  date: string;
+  type: string;
+  value: string;
+}
 function WeeklyGoalBox() {
-  const testData = [
-    { type: 'weeklyGoal0', value: '' },
-    { type: 'weeklyGoal1', value: '' },
-    { type: 'weeklyGoal2', value: '' },
-    { type: 'weeklyGoal3', value: '' },
-    { type: 'weeklyGoal4', value: '' },
-    { type: 'weeklyGoal5', value: '' },
-    { type: 'weeklyGoal6', value: '' },
-    { type: 'weeklyGoal7', value: '' },
-    { type: 'weeklyGoal8', value: '' },
-    { type: 'weeklyGoal9', value: '' },
-  ];
+  const { data } = useGetWeeklyGoalData({ startDate: '2022-07-13' });
+  const weeklyGoalList = data?.data;
+
   return (
     <Styled.Root>
       <span>WEEKLY GOAL</span>
       <Styled.Wrapper>
-        {testData?.map((el, idx) => (
+        {weeklyGoalList?.map((el: weeklyGoalType, idx: number) => (
           <WeeklyGoalInput key={el.type} idx={idx} content={el.value} />
         ))}
       </Styled.Wrapper>
