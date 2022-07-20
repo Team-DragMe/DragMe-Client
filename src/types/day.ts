@@ -3,5 +3,5 @@ export interface CalendarQueryType {
 }
 
 export interface CalendarQueryKeyType {
-  currentMonth:{year:number; month:number;}
+  currentMonth: { year: number; month: number };
 }
