@@ -5,8 +5,7 @@ import LeftArrow from 'public/assets/ic_leftArrow.svg';
 import RightArrow from 'public/assets/ic_rightArrow.svg';
 import React, { useEffect, useState } from 'react';
 import type { CalendarProps } from 'react-calendar';
-import { useQuery } from 'react-query';
-import { getCalendarData } from 'src/lib/api/dayApi';
+import useCalendarData from 'src/hooks/query/useCalendarData';
 import { CalendarStyle } from 'src/styles/Calendar';
 import { theme } from 'src/styles/theme';
 import { parseToValidMonth } from 'src/utils/dateUtil';
@@ -40,14 +39,10 @@ function CalendarModal({ toggle }: CalendarModalProps) {
   const todayDate = new Date().toDateString();
   const router = useRouter();
   const { date } = router.query;
-  const parsedDate = parseToValidQuery(date);
-  const { data } = useQuery(['month', currentMonth], async () =>
-    getCalendarData({
-      month: `${currentMonth.year}-${
-        currentMonth.month > 9 ? currentMonth.month : '0' + currentMonth.month
-      }`,
-    }),
-  );
+  const parsedDate = parseToValidQuery(date?.slice(0, 10));
+  const data = useCalendarData({ currentMonth });
+  const test = [1, 2];
+  console.log(data);
 
   const dayObject: dayObjectType = {
     0: 'S',
@@ -120,7 +115,7 @@ function CalendarModal({ toggle }: CalendarModalProps) {
         }
         tileContent={({ date }) => {
           const html = [];
-          if (data?.data.includes(date.getDate())) {
+          if (test.includes(date.getDate())) {
             html.push(<div className="dot" />);
           }
           return <div className="dot-wrapper">{html}</div>;
