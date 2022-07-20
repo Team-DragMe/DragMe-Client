@@ -22,9 +22,10 @@ interface CommonDayPlanChipProps {
   isOpened?: boolean;
   onArrowBtnClick?: () => void;
   isCompleted?: boolean;
-  id?: string;
+  itemId?: string;
   flag: dailyPlanFlag;
   index: number;
+  id?: string;
 }
 
 interface ColorChipStyleProps {
@@ -53,7 +54,7 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
       onArrowBtnClick,
       children,
       isCompleted = false,
-      id = '',
+      itemId = '',
       flag,
       index,
       ...props
@@ -75,7 +76,7 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
       setTimeout(() => {
         inputValue.current?.focus();
       }, 50);
-      setCurrentTargetPlan(id);
+      setCurrentTargetPlan(itemId);
     };
 
     const handleBlur = () => {
@@ -99,7 +100,7 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
           <Styled.ContentsWrapper onDoubleClick={handleDbClick}>
             <div>
               {/* 이쪽 Input이거나 콘텐츠이거나 분기처리 - 더블클릭 이벤트허면 Input나오도록 */}
-              {currentTargetPlan !== id && dayPlan ? (
+              {currentTargetPlan !== itemId && dayPlan ? (
                 <Styled.Contents isChecked={isChecked}>{children}</Styled.Contents>
               ) : (
                 <Styled.Form onSubmit={handleSubmit}>
@@ -130,6 +131,7 @@ const Styled = {
     align-items: center;
     width: 100%;
     height: 3.2rem;
+    position: relative;
     background: ${theme.category.cate_white};
     ${({ shape }) =>
       shape === 'triangle' &&

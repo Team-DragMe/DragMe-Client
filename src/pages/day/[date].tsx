@@ -28,6 +28,7 @@ const Styled = {
   Root: styled.div`
     margin-left: 1rem;
     display: flex;
+    padding: 5rem;
     & > section {
       margin-bottom: 6.1rem;
     }
