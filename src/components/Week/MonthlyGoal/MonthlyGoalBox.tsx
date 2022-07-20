@@ -1,16 +1,25 @@
 import React from 'react';
+import { useRecoilValue } from 'recoil';
+import useGetMonthlyGoalData from 'src/hooks/query/useGetMonthlyGoalData';
+import { weekInfo } from 'src/states';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
 
 import MonthlyGoalInput from './MonthlyGoalInput';
 
 function MonthlyGoalBox() {
-  const testData = { content: '이번주도 화이팅' };
+  const weekDate = useRecoilValue(weekInfo);
+  console.log(weekDate);
+  // const startDate = weekDate.slice(0, 10);
+  // console.log(startDate);
+  const { data } = useGetMonthlyGoalData({ startDate: '2022-07-13' });
+  const monthlyGoal = data?.data.value;
+
   return (
     <Styled.Root>
       <p>MONTHLY GOAL</p>
       <Styled.Wrapper>
-        <MonthlyGoalInput monthlygoal={testData} />
+        <MonthlyGoalInput monthlygoal={monthlyGoal} />
       </Styled.Wrapper>
     </Styled.Root>
   );
