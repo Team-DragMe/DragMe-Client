@@ -35,17 +35,22 @@ function WeekChange() {
   };
 
   useEffect(() => {
-    console.log('>>>>thisWeek', thisWeek);
-    console.log('>>>>weekCount', count);
-    console.log('>>>>ChangedWeek', changedWeek);
-    console.log('&&&&recoil', week);
-  }, [thisWeek, count, week, changedWeek]);
-
-  useEffect(() => {
     if (weekDomain !== undefined) {
       router.push(`/week/${changedWeek[0]}-${changedWeek[6]}`);
     }
   }, [count]);
+
+  useEffect(() => {
+    if (weekDomain !== undefined) {
+      const regex =
+        /^(19|20)\d{2}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[0-1])-(19|20)\d{2}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[0-1])$/g;
+      if (!regex.test(weekDomain)) {
+        router.push('/404');
+      } else {
+        router.push(`/week/${weekDomain}`);
+      }
+    }
+  }, [router.asPath]);
 
   return (
     <Styled.Root>

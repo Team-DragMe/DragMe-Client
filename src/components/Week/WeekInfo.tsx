@@ -33,9 +33,6 @@ const Styled = {
     height: 110px;
     font-size: 5rem;
     font-weight: 900;
-    margin-top: 2rem;
-    margin-left: 2rem;
-    /* 임시 마진 푸쉬시 삭제*/
   `,
   YearAndMonth: styled.div`
     display: flex;
