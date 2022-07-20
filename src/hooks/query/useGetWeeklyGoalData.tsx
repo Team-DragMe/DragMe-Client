@@ -1,8 +1,8 @@
 import { useQuery } from 'react-query';
 import { getWeeklyGoalData } from 'src/lib/api/weekApi';
-import { WeeklyGoalQueryType } from 'src/types/week';
+import { StartDateQuery } from 'src/types/week';
 
-const useGetWeeklyGoalData = ({ startDate }: WeeklyGoalQueryType) =>
+const useGetWeeklyGoalData = ({ startDate }: StartDateQuery) =>
   useQuery(
     ['weeklyGoal', startDate],
     async () =>

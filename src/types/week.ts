@@ -1,3 +1,3 @@
-export interface WeeklyGoalQueryType {
+export interface StartDateQuery {
   startDate: string;
 }
