@@ -3,8 +3,9 @@ import { useState } from 'react';
     사용방법: const { value, onChange } = useDebouncing();
     onChange에 onChange를 담아서 사용, value 사용
 */
-function useDebouncing() {
-  const [value, setValue] = useState<string>();
+
+function useDebouncing(str: string) {
+  const [value, setValue] = useState<string>(str);
   const [timer, setTimer] = useState<NodeJS.Timeout | number>(0);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
