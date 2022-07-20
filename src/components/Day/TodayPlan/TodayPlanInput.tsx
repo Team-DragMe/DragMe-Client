@@ -2,8 +2,12 @@ import useDebouncing from 'src/hooks/useDebouncing';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
 
-function TodayPlanInput() {
-  const { onChange } = useDebouncing();
+interface TodayPlanInputProps {
+  note: string;
+}
+
+function TodayPlanInput({ note }: TodayPlanInputProps) {
+  const { onChange } = useDebouncing(note);
 
   return (
     <StyledTodayPlanInput.Root>
