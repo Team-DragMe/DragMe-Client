@@ -5,9 +5,11 @@ import LeftArrow from 'public/assets/ic_leftArrow.svg';
 import RightArrow from 'public/assets/ic_rightArrow.svg';
 import React, { useEffect, useState } from 'react';
 import type { CalendarProps } from 'react-calendar';
+import { useQuery } from 'react-query';
+import { getCalendarData } from 'src/lib/api/dayApi';
 import { CalendarStyle } from 'src/styles/Calendar';
 import { theme } from 'src/styles/theme';
-import { getLastDayOfMonth, parseToValidMonth } from 'src/utils/dateUtil';
+import { parseToValidMonth } from 'src/utils/dateUtil';
 import styled from 'styled-components';
 
 const Calendar = dynamic(async () => import('react-calendar'), {
@@ -31,12 +33,21 @@ const parseToValidQuery = (query: string | string[] | undefined) => {
 
 function CalendarModal({ toggle }: CalendarModalProps) {
   const [value, onChange] = useState(new Date());
-  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth() + 1);
+  const [currentMonth, setCurrentMonth] = useState({
+    year: new Date().getFullYear(),
+    month: new Date().getMonth() + 1,
+  });
   const todayDate = new Date().toDateString();
   const router = useRouter();
   const { date } = router.query;
   const parsedDate = parseToValidQuery(date);
-  const data = [22, 27, 28];
+  const { data } = useQuery(['month', currentMonth], async () =>
+    getCalendarData({
+      month: `${currentMonth.year}-${
+        currentMonth.month > 9 ? currentMonth.month : '0' + currentMonth.month
+      }`,
+    }),
+  );
 
   const dayObject: dayObjectType = {
     0: 'S',
@@ -49,13 +60,18 @@ function CalendarModal({ toggle }: CalendarModalProps) {
   };
 
   const onClickDay = (value: Date) => {
-    const dateString = value.getFullYear() + '-' + (value.getMonth() + 1) + '-' + value.getDate();
+    const dateString =
+      value.getFullYear() +
+      '-' +
+      (value.getMonth() + 1 > 9 ? value.getMonth() + 1 : '0' + (value.getMonth() + 1)) +
+      '-' +
+      value.getDate();
     router.push(`/day/${dateString}`);
   };
 
   const onChangeMonth = (isPrev: boolean) => {
     const payload = isPrev ? -1 : 1;
-    const afterChangeMonth = parseToValidMonth(currentMonth + payload);
+    const afterChangeMonth = parseToValidMonth(currentMonth.year, currentMonth.month + payload);
 
     setCurrentMonth(afterChangeMonth);
   };
@@ -75,15 +91,15 @@ function CalendarModal({ toggle }: CalendarModalProps) {
 
   useEffect(() => {
     onChange(parsedDate);
-    setCurrentMonth(parsedDate.getMonth() + 1);
+    setCurrentMonth({ year: parsedDate.getFullYear(), month: parsedDate.getMonth() + 1 });
   }, [router.query]);
 
-  useEffect(() => {
-    if (!date) return;
+  // useEffect(() => {
+  //   if (!date) return;
 
-    //@TODO 서버에 달의 마지막 날을 전송하는 로직 처리
-    console.log(getLastDayOfMonth(currentMonth));
-  }, [currentMonth]);
+  //   //@TODO 서버에 달의 마지막 날을 전송하는 로직 처리
+  //   console.log(getLastDayOfMonth(currentMonth));
+  // }, [currentMonth]);
 
   return (
     <CalendarStyle.Wrapper>
@@ -92,10 +108,10 @@ function CalendarModal({ toggle }: CalendarModalProps) {
         value={value}
         {...calendarProps}
         navigationAriaLabel={''}
-        navigationLabel={({ date }) => (
+        navigationLabel={() => (
           <Styled.MonthYear>
-            <p>{date.getFullYear()}</p>
-            <span>{currentMonth > 9 ? currentMonth : '0' + currentMonth}</span>
+            <p>{currentMonth.year}</p>
+            <span>{currentMonth.month > 9 ? currentMonth.month : '0' + currentMonth.month}</span>
           </Styled.MonthYear>
         )}
         formatShortWeekday={(locale, date) => dayObject[date.getDay()]}
@@ -104,7 +120,7 @@ function CalendarModal({ toggle }: CalendarModalProps) {
         }
         tileContent={({ date }) => {
           const html = [];
-          if (data.includes(date.getDate())) {
+          if (data?.data.includes(date.getDate())) {
             html.push(<div className="dot" />);
           }
           return <div className="dot-wrapper">{html}</div>;
