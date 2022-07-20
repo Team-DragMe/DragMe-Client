@@ -18,7 +18,7 @@ export const theme = {
     cate_purple: '#CEB9EA',
     cate_yellow: '#EAC96E',
     cate_green: '#95B39C',
-    cate_corarl: 'F67F6F',
+    cate_corarl: '#F67F6F',
     cate_white: '#FFFFFF',
     cate_mint: '#96CCC9',
   },
