@@ -3,6 +3,7 @@ import {
   DateQueryType,
   InformationRequestType,
   ScheduleId,
+  ScheduleTimePostType,
 } from 'src/types/day';
 
 import { client } from './api';
@@ -44,6 +45,18 @@ export const postInformationData = async (data: InformationRequestType) => {
 
   return post;
 };
+
+export const postScheduleTime = async ({ scheduleId, ...data }: ScheduleTimePostType) => {
+  const post = await client.post(`/schedule/time?scheduleId=${scheduleId}`, { ...data });
+
+  return post;
+};
+
+// export const deleteScheduleTime = async ({ scheduleId, ...data }: ScheduleTimePostType) => {
+//   const post = await client.delete(`/schedule/time/scheduleId=${scheduleId}`, { ...data });
+
+//   return post;
+// };
 
 export const patchCompleteScheduleData = async ({ scheduleId }: ScheduleId) => {
   const post = await client.patch(`/schedule/complete?scheduleId=${scheduleId}`);

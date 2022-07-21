@@ -19,3 +19,9 @@ export interface DateQueryType {
 export interface ScheduleId {
   scheduleId: string;
 }
+
+export interface ScheduleTimePostType {
+  scheduleId: string;
+  isUsed: boolean;
+  timeBlockNumbers: number[];
+}

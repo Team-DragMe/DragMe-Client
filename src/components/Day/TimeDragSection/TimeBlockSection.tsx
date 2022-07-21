@@ -1,19 +1,32 @@
+import { schedules } from 'src/mock-data/schedules';
 import styled from 'styled-components';
 
 import TimeBlocks from './TimeBlocks';
 
-interface TimeBlockSectionProps {
-  plans: string[];
-}
+// interface TimeBlockSectionProps {
+//   plans: string[];
+// }
 
-function TimeBlockSection(props: TimeBlockSectionProps) {
-  const { plans } = props;
+function TimeBlockSection() {
+  //리코일에 있는 열려있는 리스트 값 받아오기
+  const openList = ['sampleScheduleId6'];
 
   return (
     <Styled.Root>
-      {plans.map((el) => (
-        <TimeBlocks key={el} blocksId={el} />
-      ))}
+      {schedules.map((el) => {
+        // 포함여부 판단해서 열려있고 subSchdules가 0이 아니면 map 돌기
+        if (openList.includes(el._id) && el.subSchedules.length > 0) {
+          return (
+            <>
+              <TimeBlocks key={el._id} schedule={el} />
+              {el.subSchedules.map((el) => (
+                <TimeBlocks key={el._id} schedule={undefined} />
+              ))}
+            </>
+          );
+        }
+        return <TimeBlocks key={el._id} schedule={el} />;
+      })}
     </Styled.Root>
   );
 }
