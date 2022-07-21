@@ -24,7 +24,6 @@ const Styled = {
   Root: styled.div`
     color: ${theme.colors.letter_black};
     width: 12.9rem;
-    height: 12.6rem;
     display: flex;
     font-weight: 900;
     flex-direction: column;

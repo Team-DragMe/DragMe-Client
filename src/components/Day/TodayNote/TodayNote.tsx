@@ -48,7 +48,7 @@ export default TodayNote;
 const StyledTodayNote = {
   Root: styled.div`
     width: 108.5rem;
-    height: 11rem;
+    height: 16.4rem;
     margin-top: 1.2rem;
     padding: 1.6rem 2rem;
     background-color: ${theme.colors.scroll_grey};
@@ -56,6 +56,7 @@ const StyledTodayNote = {
   `,
   Textarea: styled.textarea`
     background-color: ${theme.colors.scroll_grey};
+    resize: none;
     border: none;
     padding: 0;
     width: 100%;
