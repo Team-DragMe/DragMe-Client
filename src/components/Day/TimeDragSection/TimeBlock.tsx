@@ -17,7 +17,11 @@ function TimeBlock(props: timeType) {
   const [draged, setDraged] = useState(isDraged);
 
   useEffect(() => {
-    if (parseInt(startBlock) === id && parseInt(endBlock) === id) {
+    if (parseInt(startBlock) <= id && id <= parseInt(endBlock)) {
+      isUsed ? setDraged('done') : setDraged('plan');
+    } else if (parseInt(startBlock) >= id && id >= parseInt(endBlock)) {
+      setDraged('');
+    } else if (parseInt(startBlock) === id && parseInt(endBlock) === id) {
       if (draged === '') {
         isUsed ? setDraged('done') : setDraged('plan');
         setIsClickMakeBlock(true);
@@ -25,10 +29,6 @@ function TimeBlock(props: timeType) {
         setDraged('');
         setIsClickMakeBlock(false);
       }
-    } else if (parseInt(startBlock) <= id && id <= parseInt(endBlock)) {
-      isUsed ? setDraged('done') : setDraged('plan');
-    } else if (parseInt(startBlock) >= id && id >= parseInt(endBlock)) {
-      setDraged('');
     }
   }, [endBlock]);
 

@@ -30,3 +30,8 @@ export interface ScheduleTimePostType {
   isUsed: boolean;
   timeBlockNumbers: number[];
 }
+
+export interface ScheduleTimeDeleteType {
+  scheduleId: string;
+  timeBlockNumbers: number[];
+}
