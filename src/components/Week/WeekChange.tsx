@@ -89,6 +89,7 @@ const Styled = {
     font-weight: bold;
     color: ${theme.colors.letter_black};
     margin-left: 2rem;
+    margin-top: -2.8rem;
   `,
   GoThisWeek: styled.div`
     width: 4.2rem;
