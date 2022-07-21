@@ -3,7 +3,7 @@ import { getTodayScheduleData } from 'src/lib/api/dayApi';
 import { DateQueryType } from 'src/types/day';
 import { getFlagedData } from 'src/utils/getFlagedData';
 
-const useGetTodaySchedule = ({ date }: DateQueryType) =>
+const useGetTodaySchedules = ({ date }: DateQueryType) =>
   useQuery(
     ['todaySchedule', date],
     async () =>
@@ -19,4 +19,4 @@ const useGetTodaySchedule = ({ date }: DateQueryType) =>
     },
   );
 
-export default useGetTodaySchedule;
+export default useGetTodaySchedules;
