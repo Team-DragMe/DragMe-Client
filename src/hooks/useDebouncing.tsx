@@ -7,15 +7,14 @@ import { InformationRequestType } from 'src/types/day';
 */
 
 interface useDebouncingProps {
-  str: string;
   date: string;
   type: string;
   handlePost: MutateType<InformationRequestType>;
 }
 
 function useDebouncing(args: useDebouncingProps) {
-  const { str, date, type, handlePost } = args;
-  const [value, setValue] = useState<string>(str);
+  const { date, type, handlePost } = args;
+  const [value, setValue] = useState<string>('');
   const [timer, setTimer] = useState<NodeJS.Timeout | number>(0);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

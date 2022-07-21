@@ -17,7 +17,6 @@ function TodayPlanInput({ dailyGoal }: TodayPlanInputProps) {
   const [value, setValue] = useState(dailyGoal);
   const { onChange } = useDebouncing({
     date,
-    str: dailyGoal,
     type: 'dailyGoal',
     handlePost: postDailyGoal,
   });
