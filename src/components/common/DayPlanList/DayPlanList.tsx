@@ -23,10 +23,6 @@ interface UlStyleProps {
   maxHeight: string;
 }
 
-interface DayPlanListProps extends UlWrapperStyleProps {
-  flag: dailyPlanFlag;
-  [key: string]: any;
-}
 interface UlWrapperStyleProps extends UlStyleProps {
   flag?: dailyPlanFlag;
   isOver?: boolean;
@@ -37,8 +33,14 @@ interface DropWrapperStyleProps {
   canDrop: boolean;
   maxHeight: string;
 }
+interface DayPlanListProps {
+  flag: dailyPlanFlag;
+  maxHeight?: string;
+  schedulesData?: Schedule[];
+  [key: string]: any;
+}
 
-function DayPlanList({ maxHeight = '46.2rem', flag, ...props }: DayPlanListProps) {
+function DayPlanList({ maxHeight = '46.2rem', flag, schedulesData, ...props }: DayPlanListProps) {
   const [currentSection, setCurrentSection] = useState<dailyPlanFlag>(flag);
   const [dailyscheduleData, setDailyScheduleData] = useRecoilState(dailyPlanList);
   const [rescheduleData, setRescheduleData] = useRecoilState(reschedulePlanList);
@@ -61,18 +63,18 @@ function DayPlanList({ maxHeight = '46.2rem', flag, ...props }: DayPlanListProps
     }
   };
   /* 현재 스케줄 리스트의 데이터 반환 */
-  const getCurrentTypeData = (currentType: string) => {
-    switch (currentType) {
-      case 'routine':
-        return { schedulesData: routineScheduleData, setSchedulesData: setRoutineScheduleData };
-      case 'rechedule':
-        return { schedulesData: rescheduleData, setSchedulesData: setRescheduleData };
-      default:
-        return { schedulesData: dailyscheduleData, setSchedulesData: setDailyScheduleData };
-    }
-  };
+  // const getCurrentTypeData = (currentType: string) => {
+  //   switch (currentType) {
+  //     case 'routine':
+  //       return { schedulesData: routineScheduleData, setSchedulesData: setRoutineScheduleData };
+  //     case 'rechedule':
+  //       return { schedulesData: rescheduleData, setSchedulesData: setRescheduleData };
+  //     default:
+  //       return { schedulesData: dailyscheduleData, setSchedulesData: setDailyScheduleData };
+  //   }
+  // };
 
-  const { schedulesData, setSchedulesData } = getCurrentTypeData(flag);
+  // const { schedulesData, setSchedulesData } = getCurrentTypeData(flag);
 
   const [{ isOver, canDrop, isActive }, sectionDropRef] = useDrop(() => ({
     accept: getAcceptableEl(flag),
@@ -228,7 +230,7 @@ function DayPlanList({ maxHeight = '46.2rem', flag, ...props }: DayPlanListProps
       <Styled.UlWrapper maxHeight={maxHeight} ref={sectionDropRef} flag={flag} isOver={isOver}>
         {/* {isOver && <Styled.DropWrapper canDrop={canDrop} maxHeight={maxHeight} />} */}
         <Styled.Ul maxHeight={maxHeight}>
-          {schedulesData.map((item, idx) => (
+          {schedulesData?.map((item, idx) => (
             <DayPlan
               item={item}
               key={item._id}

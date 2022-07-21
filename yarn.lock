@@ -530,6 +530,11 @@
     "@types/react" "*"
     csstype "^3.0.2"
 
+"@types/uuid@^8.3.4":
+  version "8.3.4"
+  resolved "https://registry.yarnpkg.com/@types/uuid/-/uuid-8.3.4.tgz#bd86a43617df0594787d38b735f55c805becf1bc"
+  integrity sha512-c/I8ZRb51j+pYGAu5CrFMRxqZ2ke4y2grEBO5AUjgSkSk+qT2Ea+OdWElz/OiMf5MNpn2b17kuVBwZLQJXzihw==
+
 "@typescript-eslint/eslint-plugin@^5.30.5":
   version "5.30.5"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/eslint-plugin/-/eslint-plugin-5.30.5.tgz#e9a0afd6eb3b1d663db91cf1e7bc7584d394503d"
@@ -2979,6 +2984,16 @@ quick-lru@^4.0.1:
   resolved "https://registry.yarnpkg.com/quick-lru/-/quick-lru-4.0.1.tgz#5b8878f113a58217848c6482026c73e1ba57727f"
   integrity sha512-ARhCpm70fzdcvNQfPoy49IaanKkTlRWF2JMzqhcJbhSFRZv7nPTvZJdcY7301IPmvW+/p0RgIWnQDLJxifsQ7g==
 
+react-calendar@^3.7.0:
+  version "3.7.0"
+  resolved "https://registry.yarnpkg.com/react-calendar/-/react-calendar-3.7.0.tgz#951d56e91afb33b1c1e019cb790349fbffcc6894"
+  integrity sha512-zkK95zWLWLC6w3O7p3SHx/FJXEyyD2UMd4jr3CrKD+G73N+G5vEwrXxYQCNivIPoFNBjqoyYYGlkHA+TBDPLCw==
+  dependencies:
+    "@wojtekmaj/date-utils" "^1.0.2"
+    get-user-locale "^1.2.0"
+    merge-class-names "^1.1.1"
+    prop-types "^15.6.0"
+
 react-dnd-html5-backend@^16.0.1:
   version "16.0.1"
   resolved "https://registry.yarnpkg.com/react-dnd-html5-backend/-/react-dnd-html5-backend-16.0.1.tgz#87faef15845d512a23b3c08d29ecfd34871688b6"
@@ -2996,16 +3011,6 @@ react-dnd@^16.0.1:
     dnd-core "^16.0.1"
     fast-deep-equal "^3.1.3"
     hoist-non-react-statics "^3.3.2"
-
-react-calendar@^3.7.0:
-  version "3.7.0"
-  resolved "https://registry.yarnpkg.com/react-calendar/-/react-calendar-3.7.0.tgz#951d56e91afb33b1c1e019cb790349fbffcc6894"
-  integrity sha512-zkK95zWLWLC6w3O7p3SHx/FJXEyyD2UMd4jr3CrKD+G73N+G5vEwrXxYQCNivIPoFNBjqoyYYGlkHA+TBDPLCw==
-  dependencies:
-    "@wojtekmaj/date-utils" "^1.0.2"
-    get-user-locale "^1.2.0"
-    merge-class-names "^1.1.1"
-    prop-types "^15.6.0"
 
 react-dom@18.2.0:
   version "18.2.0"
@@ -3702,6 +3707,11 @@ util-deprecate@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
   integrity sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==
+
+uuid@^8.3.2:
+  version "8.3.2"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
+  integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==
 
 v8-compile-cache@^2.0.3, v8-compile-cache@^2.3.0:
   version "2.3.0"
