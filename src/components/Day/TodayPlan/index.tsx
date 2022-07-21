@@ -6,9 +6,9 @@ import TodayPlanInput from './TodayPlanInput';
 
 interface TodayPlanProps {
   emoji: string;
-  note: string;
+  dailyGoal: string;
 }
-function TodayPlan({ emoji, note }: TodayPlanProps) {
+function TodayPlan({ emoji, dailyGoal }: TodayPlanProps) {
   const [click, setClick] = useState<boolean>(false);
   const useOutsideAlert = (ref: React.RefObject<HTMLDivElement>) => {
     useEffect(() => {
@@ -34,7 +34,7 @@ function TodayPlan({ emoji, note }: TodayPlanProps) {
   return (
     <StyledTodayPlan.Root>
       <ForwardEmojiPicker ref={refPicker} click={click} setClick={handleClick} emoji={emoji} />
-      <TodayPlanInput note={note} />
+      <TodayPlanInput dailyGoal={dailyGoal} />
     </StyledTodayPlan.Root>
   );
 }

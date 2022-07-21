@@ -1,16 +1,24 @@
 import React, { useEffect, useState } from 'react';
+import usePostInformationData from 'src/hooks/query/usePostInformationData';
 import useDebouncing from 'src/hooks/useDebouncing';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
 
 interface MonthlyGoalInputProps {
   monthlygoal: string;
+  date: string;
 }
 
 function MonthlyGoalInput(props: MonthlyGoalInputProps) {
-  const { monthlygoal } = props;
+  const { monthlygoal, date } = props;
   const [value, setValue] = useState('');
-  const { onChange } = useDebouncing(monthlygoal);
+  const { mutate: postMonthlyGoal } = usePostInformationData();
+  const { onChange } = useDebouncing({
+    handlePost: postMonthlyGoal,
+    date: date.slice(0, 7) + '-01',
+    type: 'monthlyGoal',
+  });
+
   const changeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (e.target instanceof HTMLTextAreaElement) {
       setValue(e.target.value);

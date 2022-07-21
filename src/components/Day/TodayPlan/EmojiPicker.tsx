@@ -3,6 +3,9 @@ import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import SmileEmoticon from 'public/assets/SmileEmoticon.png';
 import React, { useState } from 'react';
+import { useRecoilValue } from 'recoil';
+import usePostInformationData from 'src/hooks/query/usePostInformationData';
+import { dayInfo } from 'src/states';
 import styled from 'styled-components';
 
 const Picker = dynamic(async () => import('emoji-picker-react'), {
@@ -21,11 +24,15 @@ function EmojiPicker(
   { click, setClick, emoji }: EmojiPickerProps,
   ref: React.ForwardedRef<EmojiPickerElement>,
 ) {
+  const { mutate: postEmoji } = usePostInformationData();
+  const today = useRecoilValue(dayInfo);
+  const date = today.slice(0, 10);
   const [chosenEmoji, setChosenEmoji] = useState<IEmojiData>();
   const handleEmojiClick = (
     event: React.MouseEvent<Element, MouseEvent>,
     emojiObject: IEmojiData,
   ) => {
+    postEmoji({ date, type: 'emoji', value: emojiObject.emoji });
     setChosenEmoji(emojiObject);
     setClick(false);
   };

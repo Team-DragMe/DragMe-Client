@@ -1,4 +1,4 @@
-import { CalendarQueryType, DateQueryType, ScheduleId } from 'src/types/day';
+import { CalendarQueryType, DateQueryType, ScheduleId, InformationRequestType } from 'src/types/day';
 
 import { client } from './api';
 
@@ -32,4 +32,10 @@ export const getRoutineScheduleData = async () => {
 export const getSubScheduleData = async ({ scheduleId }: ScheduleId) => {
   const { data } = await client.get(`/schedule/subschedule?scheduleId=${scheduleId}`);
   return { data };
+};
+
+export const postInformationData = async (data: InformationRequestType) => {
+  const post = await client.post('/information', { ...data });
+
+  return post;
 };
