@@ -9,7 +9,7 @@ import MonthlyGoalInput from './MonthlyGoalInput';
 
 function MonthlyGoalBox() {
   const week = useRecoilValue(weekInfo);
-  const startDate = week[0] === 'T' ? '' : week[0];
+  const startDate = week[0] === 'T' ? '' : week[0].slice(0, 7) + '-01';
   const { data } = useGetMonthlyGoalData({ startDate });
   const monthlyGoal = data?.data.value;
 
