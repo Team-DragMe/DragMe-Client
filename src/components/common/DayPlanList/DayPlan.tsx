@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
+import ReactDOM from 'react-dom';
 import { FLAG } from 'src/constants';
 import useGetSubSchedules from 'src/hooks/query/useGetSubSchedules';
 import useLatestState from 'src/hooks/useLatestState';
@@ -43,6 +44,7 @@ interface liStyleProps {
 
 interface subDayPlanStyleProps {
   isOpen: boolean;
+  haveChild?: boolean;
 }
 
 type FlagType = 'daily' | 'routine' | 'rechedule' | 'weekly' | 'child';
@@ -75,6 +77,7 @@ const DayPlan = React.memo(function DayPlan({
   const onArrowBtnClick = () => {
     setIsOpen((prev) => !prev);
   };
+  const subscheduleRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     console.log('>>subSchedules', subSchedules);
@@ -146,6 +149,15 @@ const DayPlan = React.memo(function DayPlan({
     });
   };
 
+  useEffect(() => {
+    // if (!isOpen) {
+    //   setTimeout(() => {
+    //     subscheduleRef && subscheduleRef.current?.style = 'display: none;';
+    //   }, 150);
+    // } else {
+    //   subscheduleRef && subscheduleRef.current?.style = 'display: block;';
+    // }
+  }, [isOpen]);
   return (
     <Styled.Li
       key={item?._id}
@@ -174,7 +186,7 @@ const DayPlan = React.memo(function DayPlan({
       </CommonDayPlanChip>
 
       {subSchedules?.length > 0 && (
-        <Styled.SubDayPlanWrapper isOpen={isOpen}>
+        <Styled.SubDayPlanWrapper isOpen={isOpen} ref={subscheduleRef} id="subSchedule-wrapper">
           <SubDayPlan subschedules={subSchedules} categoryColorCode={item?.categoryColorCode} />
         </Styled.SubDayPlanWrapper>
       )}
@@ -253,12 +265,12 @@ const Styled = {
         ? css`
             transition: max-height 0.2s ease-in;
             max-height: 10rem;
-            z-index: 1;
+            /* z-index: 1; */
           `
         : css`
             transition: max-height 0.15s ease-out;
             max-height: 1.2rem;
-            z-index: -1;
+            /* z-index: -1; */
           `}
   `,
   EventHandleBottomDom: styled.div<{ index: number }>`

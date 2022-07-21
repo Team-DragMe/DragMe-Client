@@ -26,7 +26,7 @@ export const dayCount = atom({
 
 export const currentModifyDayPlan = atom({
   key: 'currentModifyDayPlan',
-  default: null,
+  default: '' as string,
 });
 
 // 기본적으로 업데이트 시킬 때 이 atom에 임시 저장 -> cache값 optimistic update (mutation 시에)
