@@ -18,3 +18,13 @@ export const getTodayScheduleData = async ({ date }: DateQueryType) => {
   const { data } = await client.get(`/schedule/days?date=${date}`);
   return { data };
 };
+
+export const getDelayedScheduleData = async () => {
+  const { data } = await client.get('/schedule/delay');
+  return { data };
+};
+
+export const getRoutineScheduleData = async () => {
+  const { data } = await client.get('/schedule/routine');
+  return { data };
+};
