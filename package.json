@@ -20,6 +20,7 @@
     "react": "18.2.0",
     "react-calendar": "^3.7.0",
     "react-dom": "18.2.0",
+    "react-lottie-player": "^1.4.3",
     "react-query": "^3.39.1",
     "recoil": "^0.7.4",
     "styled-components": "^5.3.5",
