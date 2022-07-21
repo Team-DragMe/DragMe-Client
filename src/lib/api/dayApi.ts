@@ -73,3 +73,23 @@ export const getEmojiListData = async ({ startDate, endDate }: getEmojiQueryType
 
   return { data };
 };
+
+export const patchDayToRescheduleSchedules = async ({ scheduleId }: ScheduleId) => {
+  const post = await client.patch(`/schedule/day-reschedule?scheduleId=${scheduleId}`);
+  return post;
+};
+
+export const patchDayToRoutineSchedules = async ({ scheduleId }: ScheduleId) => {
+  const post = await client.patch(`/schedule/day-routine?scheduleId=${scheduleId}`);
+  return post;
+};
+
+export const patchRoutineToDaySchedules = async ({ scheduleId }: ScheduleId) => {
+  const post = await client.post(`/schedule/routine-day?scheduleId=${scheduleId}`);
+  return post;
+};
+
+export const patchRescheduleToDaySchedules = async ({ scheduleId }: ScheduleId) => {
+  const post = await client.patch(`/schedule/reschedule-day?scheduleId=${scheduleId}`);
+  return post;
+};
