@@ -1,4 +1,4 @@
-import { CalendarQueryType, DateQueryType } from 'src/types/day';
+import { CalendarQueryType, DateQueryType, ScheduleId } from 'src/types/day';
 
 import { client } from './api';
 
@@ -16,18 +16,20 @@ export const getTodayNoteData = async ({ date }: DateQueryType) => {
 
 export const getTodayScheduleData = async ({ date }: DateQueryType) => {
   const { data } = await client.get(`/schedule/days?date=${date}`);
-  console.log('>>>데이 data', data);
   return { data };
 };
 
 export const getDelayedScheduleData = async () => {
   const { data } = await client.get('/schedule/delay');
-  console.log('>>>미룰 data', data);
   return { data };
 };
 
 export const getRoutineScheduleData = async () => {
   const { data } = await client.get('/schedule/routine');
-  console.log('>>>루틴 data', data);
+  return { data };
+};
+
+export const getSubScheduleData = async ({ scheduleId }: ScheduleId) => {
+  const { data } = await client.get(`/schedule/subschedule?scheduleId=${scheduleId}`);
   return { data };
 };

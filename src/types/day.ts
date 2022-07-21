@@ -9,3 +9,7 @@ export interface CalendarQueryKeyType {
 export interface DateQueryType {
   date: string;
 }
+
+export interface ScheduleId {
+  scheduleId: string;
+}

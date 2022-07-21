@@ -23,8 +23,8 @@ interface CommonDayPlanChipProps {
   onArrowBtnClick?: () => void;
   isCompleted?: boolean;
   itemId?: string;
-  flag: dailyPlanFlag;
-  index: number;
+  flag?: dailyPlanFlag;
+  index?: number;
   id?: string;
 }
 

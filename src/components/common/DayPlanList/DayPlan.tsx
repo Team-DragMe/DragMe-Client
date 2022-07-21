@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { FLAG } from 'src/constants';
+import useGetSubSchedules from 'src/hooks/query/useGetSubSchedules';
 import useLatestState from 'src/hooks/useLatestState';
 import { dailyPlanFlag, Schedule } from 'src/types';
 import styled, { css } from 'styled-components';
@@ -67,10 +68,17 @@ const DayPlan = React.memo(function DayPlan({
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [currentDraggingEl, setCurrentDraggingEl, latestDraggingEl] =
     useLatestState<FlagType | null>(null);
+  const { data: subSchedules } = useGetSubSchedules({
+    scheduleId: item?._id,
+    isAbled: item?.subSchedules?.length > 0,
+  });
   const onArrowBtnClick = () => {
     setIsOpen((prev) => !prev);
   };
 
+  useEffect(() => {
+    console.log('>>subSchedules', subSchedules);
+  }, [subSchedules]);
   // control drag element
   const [{ isDragging }, dragRef] = useDrag(
     () => ({
@@ -96,7 +104,7 @@ const DayPlan = React.memo(function DayPlan({
         }
       },
     }),
-    [item._id, movePlanChip],
+    [item?._id, movePlanChip],
   );
 
   const [{ isOver, canDrop, isActive }, dropRef] = useDrop(
@@ -124,7 +132,7 @@ const DayPlan = React.memo(function DayPlan({
     [movePlanChip],
   );
   const handleDragEnter = (type: positionType, index: number, hoverId: string) => {
-    if (item.flag !== 'daily') {
+    if (item?.flag !== 'daily') {
       return;
     }
     console.log('type은 이거야', type);
@@ -140,8 +148,8 @@ const DayPlan = React.memo(function DayPlan({
 
   return (
     <Styled.Li
-      key={item._id}
-      haveChild={item.subSchedules?.length > 0}
+      key={item?._id}
+      haveChild={item?.subSchedules?.length > 0}
       ref={isOpen ? (item) => dragRef(dropRef(item)) : null}
       id={flag}
       isDragging={isDragging}
@@ -150,43 +158,43 @@ const DayPlan = React.memo(function DayPlan({
       isFake={isFake}
     >
       <CommonDayPlanChip
-        color={item.categoryColorCode}
-        shape={item.subSchedules?.length > 0 ? 'rectangle' : 'triangle'}
-        haveChild={item.subSchedules?.length > 0}
+        color={item?.categoryColorCode}
+        shape={item?.subSchedules?.length > 0 ? 'rectangle' : 'triangle'}
+        haveChild={item?.subSchedules?.length > 0}
         addon
         isOpened={isOpen}
         onArrowBtnClick={onArrowBtnClick}
-        isCompleted={item.isCompleted}
+        isCompleted={item?.isCompleted}
         ref={(item) => dragRef(dropRef(item))}
-        itemId={item._id}
+        itemId={item?._id}
         index={idx}
         flag={flag}
       >
-        {item.title}
+        {item?.title}
       </CommonDayPlanChip>
 
-      {item.subSchedules?.length > 0 && (
+      {subSchedules?.length > 0 && (
         <Styled.SubDayPlanWrapper isOpen={isOpen}>
-          <SubDayPlan subschedules={item.subSchedules} categoryColorCode={item.categoryColorCode} />
+          <SubDayPlan subschedules={subSchedules} categoryColorCode={item?.categoryColorCode} />
         </Styled.SubDayPlanWrapper>
       )}
       {/* 브라우저 리플로우 방지를 위한 이벤트 핸들용 가상돔 */}
       {currentDraggingEl === 'daily' && flag === 'daily' && !isDragging && isDragMode && (
         <div>
           <Styled.EventHandleTopDom
-            key={item._id}
+            key={item?._id}
             index={idx * 3.8}
-            id={item._id}
+            id={item?._id}
             onDragEnter={() => {
-              handleDragEnter('top', idx, item._id);
+              handleDragEnter('top', idx, item?._id);
             }}
           />
           <Styled.EventHandleBottomDom
-            key={item._id}
+            key={item?._id}
             index={idx * 3.8}
-            id={item._id}
+            id={item?._id}
             onDragEnter={() => {
-              handleDragEnter('bottom', idx, item._id);
+              handleDragEnter('bottom', idx, item?._id);
             }}
           />
         </div>

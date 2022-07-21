@@ -25,11 +25,11 @@ function SubDayPlanList({ subschedules, categoryColorCode, ...props }: SubDayPla
   }));
   return (
     <Styled.SubUl>
-      {subschedules.map((item) => (
+      {subschedules?.map((item) => (
         <Styled.SubLi key={item._id} categoryColorCode={categoryColorCode}>
           {/* @TODO 하위 아이템 데이터 오면 넘길 인자 정하기 */}
           <CommonDayPlanChip id={item._id} ref={dragRef}>
-            서브 메뉴
+            {item.title}
           </CommonDayPlanChip>
         </Styled.SubLi>
       ))}
