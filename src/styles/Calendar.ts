@@ -12,7 +12,6 @@ export const CalendarStyle = {
     padding: 2.6rem 0.8rem;
     padding-bottom: 0;
     position: absolute;
-    top: 100%;
     right: 0;
     margin-top: 1.1rem;
     z-index: 100;
