@@ -9,6 +9,7 @@ import TodayNote from './TodayNote';
 function TodayNoteSection() {
   const today = useRecoilValue(dayInfo);
   const date = today.slice(0, 10);
+  console.log(date);
   const { data } = useGetTodayNoteData({ date });
   const todayNoteInfo = data?.data;
 

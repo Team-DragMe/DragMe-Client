@@ -54,6 +54,7 @@ export default TodayPlan;
 const StyledTodayPlan = {
   Root: styled.div`
     display: flex;
+    align-items: center;
     gap: 1.3rem;
   `,
 };
