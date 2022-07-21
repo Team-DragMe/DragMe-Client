@@ -15,3 +15,7 @@ export interface InformationRequestType {
 export interface DateQueryType {
   date: string;
 }
+
+export interface ScheduleId {
+  scheduleId: string;
+}

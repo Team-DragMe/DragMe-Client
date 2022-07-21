@@ -23,8 +23,8 @@ interface CommonDayPlanChipProps {
   onArrowBtnClick?: () => void;
   isCompleted?: boolean;
   itemId?: string;
-  flag: dailyPlanFlag;
-  index: number;
+  flag?: dailyPlanFlag;
+  index?: number;
   id?: string;
 }
 
@@ -69,14 +69,18 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
     const handleChange = () => {
       setIsChecked((prev) => !prev);
       // @TODO React query optimistic update로 완료된 계획 post
+      console.log('>>>체크 상태', isChecked);
+      console.log('체크된 애 아이디', itemId);
     };
 
-    const handleDbClick = () => {
+    const handleDbClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+      e.preventDefault();
       // recoil 상태 업데이트 이후 UI 렌더된 이후 focusing되어야 함
       setTimeout(() => {
         inputValue.current?.focus();
       }, 50);
-      setCurrentTargetPlan(itemId);
+      // 배타적이어야 하므로 현재 선택된 애를 리코일에 저장
+      setCurrentTargetPlan(e.currentTarget.id);
     };
 
     const handleBlur = () => {
@@ -88,24 +92,34 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
       // @TODO inputValue.current?.value 를 post
       console.log(inputValue.current?.value);
       setDayPlan(inputValue.current?.value);
-      setCurrentTargetPlan(null);
+      setCurrentTargetPlan('');
       // @TODO 서버로 계획 생성 POST
     };
 
+    useEffect(() => {
+      console.log('>>>여기 아이디,itemId', itemId);
+      console.log('>>>>currentTargetPlan', currentTargetPlan);
+    }, [itemId, currentTargetPlan]);
     return (
-      <Styled.Container {...props} shape={shape} ref={ref} index={index} flag={flag}>
+      <Styled.Container {...props} shape={shape} ref={ref} index={index} flag={flag} id={itemId}>
         {color !== 'none' && <Styled.ColorChip color={color} />}
         <Styled.Box shape={shape}>
           <CheckBox id="dayCheck" isChecked={isChecked} onChange={handleChange} />
-          <Styled.ContentsWrapper onDoubleClick={handleDbClick}>
+          <Styled.ContentsWrapper onDoubleClick={handleDbClick} id={itemId}>
             <div>
-              {/* 이쪽 Input이거나 콘텐츠이거나 분기처리 - 더블클릭 이벤트허면 Input나오도록 */}
-              {currentTargetPlan !== itemId && dayPlan ? (
+              {color === 'none' ? (
                 <Styled.Contents isChecked={isChecked}>{children}</Styled.Contents>
               ) : (
-                <Styled.Form onSubmit={handleSubmit}>
-                  <Styled.Input type="text" ref={inputValue} onBlur={handleBlur} autoFocus />
-                </Styled.Form>
+                // eslint-disable-next-line react/jsx-no-useless-fragment
+                <>
+                  {currentTargetPlan !== itemId && dayPlan ? (
+                    <Styled.Contents isChecked={isChecked}>{children}</Styled.Contents>
+                  ) : (
+                    <Styled.Form onSubmit={handleSubmit}>
+                      <Styled.Input type="text" ref={inputValue} onBlur={handleBlur} autoFocus />
+                    </Styled.Form>
+                  )}
+                </>
               )}
             </div>
             <Styled.BtnWrapper>
