@@ -230,7 +230,7 @@ function DayPlanList({ maxHeight = '46.2rem', flag, schedulesData, ...props }: D
       <Styled.UlWrapper maxHeight={maxHeight} ref={sectionDropRef} flag={flag} isOver={isOver}>
         {/* {isOver && <Styled.DropWrapper canDrop={canDrop} maxHeight={maxHeight} />} */}
         <Styled.Ul maxHeight={maxHeight}>
-          {schedulesData.map((item, idx) => (
+          {schedulesData?.map((item, idx) => (
             <DayPlan
               item={item}
               key={item._id}

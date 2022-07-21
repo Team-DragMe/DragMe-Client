@@ -18,7 +18,7 @@ function RoutineBox() {
   const routinePlanData = useSetRecoilState(routinePlanList);
   const { data } = useGetRoutineSchedules();
   useEffect(() => {
-    routinePlanData(data);
+    data && routinePlanData(data);
   }, [data, routinePlanData]);
   return (
     <Styled.Root>

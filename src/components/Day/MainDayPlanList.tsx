@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { FLAG } from 'src/constants';
-import useGetTodaySchedule from 'src/hooks/query/useGetTodaySchedule';
+import useGetTodaySchedule from 'src/hooks/query/useGetTodaySchedules';
 import { schedules } from 'src/mock-data/schedules';
 import { dailyPlanList, dayInfo } from 'src/states';
 
@@ -18,8 +18,7 @@ function MainDayPlanList() {
   const { data } = useGetTodaySchedule({ date });
 
   useEffect(() => {
-    console.log('>>>day data NEW', data);
-    dailyPlanData(data);
+    data && dailyPlanData(data);
   }, [data, dailyPlanData]);
 
   return <DayPlanList flag={FLAG.DAILY} schedulesData={data} />;

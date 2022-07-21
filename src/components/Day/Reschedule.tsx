@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { FLAG } from 'src/constants';
-import useGetDelaySchedule from 'src/hooks/query/useGetDelaySchedules';
+import useGetDelaySchedules from 'src/hooks/query/useGetDelaySchedules';
 import { reschedules } from 'src/mock-data/schedules';
 import { reschedulePlanList } from 'src/states';
 import styled from 'styled-components';
@@ -15,9 +15,9 @@ const RESCHEDULE = {
 
 function Reschedule() {
   const reschedulePlanData = useSetRecoilState(reschedulePlanList);
-  const { data } = useGetDelaySchedule();
+  const { data } = useGetDelaySchedules();
   useEffect(() => {
-    reschedulePlanData(data);
+    data && reschedulePlanData(data);
   }, [data, reschedulePlanData]);
   return (
     <Styled.Root>
