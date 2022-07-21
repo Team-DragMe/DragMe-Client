@@ -3,11 +3,6 @@ import {
   DateQueryType,
   InformationRequestType,
   ScheduleId,
-} from 'src/types/day';
-import {
-  CalendarQueryType,
-  DateQueryType,
-  InformationRequestType,
   ScheduleTimePostType,
 } from 'src/types/day';
 
