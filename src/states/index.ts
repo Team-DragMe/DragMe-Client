@@ -20,7 +20,7 @@ export const weekCount = atom({
 });
 
 export const dayCount = atom({
-  key: 'weekInfo',
+  key: 'dayCount',
   default: 0,
 });
 
@@ -46,6 +46,6 @@ export const routinePlanList = atom({
 });
 
 export const menuCount = atom({
-  key: 'weekInfo',
+  key: 'menuCount',
   default: 'Today',
 });
