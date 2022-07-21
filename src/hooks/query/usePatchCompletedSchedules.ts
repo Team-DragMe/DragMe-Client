@@ -1,21 +1,20 @@
 import { useMutation, useQueryClient } from 'react-query';
 import { patchCompleteScheduleData } from 'src/lib/api/dayApi';
 import { dailyPlanFlag, Schedule } from 'src/types';
-import { ScheduleId } from 'src/types/day';
 
-interface usePostInformationDataParams {
+interface usePatchCompletedSchedulesParams {
   scheduleId: string;
   flag: dailyPlanFlag;
   isCompleted: boolean;
   date?: string;
 }
 // 해당하는 flag에 대해서만 invalidated 시키도록
-const usePostInformationData = ({
+const usePatchCompletedSchedules = ({
   scheduleId,
   flag,
   isCompleted,
   date = '',
-}: usePostInformationDataParams) => {
+}: usePatchCompletedSchedulesParams) => {
   const queryClient = useQueryClient();
   const queryKeys = [flag] as string[];
   if (flag === 'daily') {
@@ -48,4 +47,4 @@ const usePostInformationData = ({
   });
 };
 
-export default usePostInformationData;
+export default usePatchCompletedSchedules;

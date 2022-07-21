@@ -1,7 +1,7 @@
 import SemiArrow from 'public/assets/icons/SemiArrow8.svg';
 import React, { forwardRef, useEffect, useRef, useState } from 'react';
 import { useRecoilState } from 'recoil';
-import { currentModifyDayPlan } from 'src/states';
+import { currentModifyDayPlan, openedSchedules } from 'src/states';
 import { theme } from 'src/styles/theme';
 import { dailyPlanFlag } from 'src/types';
 import styled, { css } from 'styled-components';
@@ -65,6 +65,7 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
     const inputValue = useRef<HTMLInputElement>(null);
     const [dayPlan, setDayPlan] = useState<string | undefined>(children);
     const [currentTargetPlan, setCurrentTargetPlan] = useRecoilState(currentModifyDayPlan);
+    const [openItem, setOpenItem] = useRecoilState(openedSchedules);
 
     const handleChange = () => {
       setIsChecked((prev) => !prev);
@@ -100,6 +101,23 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
       console.log('>>>여기 아이디,itemId', itemId);
       console.log('>>>>currentTargetPlan', currentTargetPlan);
     }, [itemId, currentTargetPlan]);
+
+    useEffect(() => {
+      if (isOpened) {
+        // set 자료형에 대한 copy 필요
+        const coptItem = new Set([...Array.from(openItem)]);
+        coptItem.add(itemId);
+        setOpenItem(coptItem);
+      } else {
+        const coptItem = new Set([...Array.from(openItem)]);
+        coptItem.delete(itemId);
+        setOpenItem(coptItem);
+      }
+    }, [isOpened]);
+
+    useEffect(() => {
+      console.log('>>>openItem', openItem);
+    }, [openItem]);
     return (
       <Styled.Container {...props} shape={shape} ref={ref} index={index} flag={flag} id={itemId}>
         {color !== 'none' && <Styled.ColorChip color={color} />}

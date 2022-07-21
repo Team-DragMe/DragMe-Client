@@ -49,3 +49,9 @@ export const menuCount = atom({
   key: 'menuCount',
   default: 'Today',
 });
+
+// 체크한 애들 관리 / 열린 애들 관리
+export const openedSchedules = atom({
+  key: 'openedSchedules',
+  default: new Set([]) as Set<string>,
+});

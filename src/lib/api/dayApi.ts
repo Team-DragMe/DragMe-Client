@@ -22,17 +22,21 @@ export const getTodayNoteData = async ({ date }: DateQueryType) => {
 };
 
 export const getTodayScheduleData = async ({ date }: DateQueryType) => {
-  const { data } = await client.get(`/schedule/days?date=${date}`);
+  const tempdate = '2022-07-21';
+  const { data } = await client.get(`/schedule/days?date=${tempdate}`);
+  console.log('>>>getTodayScheduleData', data);
   return { data };
 };
 
 export const getDelayedScheduleData = async () => {
   const { data } = await client.get('/schedule/delay');
+  console.log('>>>getDelayedScheduleData', data);
   return { data };
 };
 
 export const getRoutineScheduleData = async () => {
   const { data } = await client.get('/schedule/routine');
+  console.log('>>>getDelayedScheduleData', data);
   return { data };
 };
 
