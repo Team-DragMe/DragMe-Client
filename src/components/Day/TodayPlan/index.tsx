@@ -4,7 +4,11 @@ import styled from 'styled-components';
 import ForwardEmojiPicker from './EmojiPicker';
 import TodayPlanInput from './TodayPlanInput';
 
-function TodayPlan() {
+interface TodayPlanProps {
+  emoji: string;
+  note: string;
+}
+function TodayPlan({ emoji, note }: TodayPlanProps) {
   const [click, setClick] = useState<boolean>(false);
   const useOutsideAlert = (ref: React.RefObject<HTMLDivElement>) => {
     useEffect(() => {
@@ -29,8 +33,8 @@ function TodayPlan() {
 
   return (
     <StyledTodayPlan.Root>
-      <ForwardEmojiPicker ref={refPicker} click={click} setClick={handleClick} emoji="" />
-      <TodayPlanInput />
+      <ForwardEmojiPicker ref={refPicker} click={click} setClick={handleClick} emoji={emoji} />
+      <TodayPlanInput note={note} />
     </StyledTodayPlan.Root>
   );
 }

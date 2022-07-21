@@ -10,7 +10,7 @@ interface MonthlyGoalInputProps {
 function MonthlyGoalInput(props: MonthlyGoalInputProps) {
   const { monthlygoal } = props;
   const [value, setValue] = useState('');
-  const { onChange } = useDebouncing();
+  const { onChange } = useDebouncing(monthlygoal);
   const changeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (e.target instanceof HTMLTextAreaElement) {
       setValue(e.target.value);

@@ -11,3 +11,7 @@ export interface InformationRequestType {
   type: string;
   value: string;
 }
+
+export interface DateQueryType {
+  date: string;
+}

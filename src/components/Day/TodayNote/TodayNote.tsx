@@ -2,8 +2,12 @@ import useDebouncing from 'src/hooks/useDebouncing';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
 
-function TodayNote() {
-  const { ...debouncingInfo } = useDebouncing();
+interface TodayNoteProps {
+  memo: string;
+}
+
+function TodayNote({ memo }: TodayNoteProps) {
+  const { ...debouncingInfo } = useDebouncing(memo);
   return (
     <StyledTodayNote.Root>
       <StyledTodayNote.Textarea placeholder="오늘 하루 노트를 작성해보세요." {...debouncingInfo} />
