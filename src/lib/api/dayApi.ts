@@ -1,5 +1,4 @@
-import { CalendarQueryType, DateQueryType } from 'src/types/day';
-import { CalendarQueryType, InformationRequestType } from 'src/types/day';
+import { CalendarQueryType, DateQueryType, InformationRequestType } from 'src/types/day';
 
 import { client } from './api';
 
@@ -15,5 +14,8 @@ export const getTodayNoteData = async ({ date }: DateQueryType) => {
   return { data };
 };
 
-export const postInformationData = async (data: InformationRequestType) =>
-  await client.post('/information', { ...data });
+export const postInformationData = async (data: InformationRequestType) => {
+  const post = await client.post('/information', { ...data });
+
+  return post;
+};
