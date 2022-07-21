@@ -1,6 +1,7 @@
 import {
   CalendarQueryType,
   DateQueryType,
+  getEmojiQueryType,
   InformationRequestType,
   ScheduleId,
   ScheduleTimePostType,
