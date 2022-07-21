@@ -1,19 +1,44 @@
+import { useEffect, useState } from 'react';
+import { useRecoilValue } from 'recoil';
+import usePostInformationData from 'src/hooks/query/usePostInformationData';
 import useDebouncing from 'src/hooks/useDebouncing';
+import { dayInfo } from 'src/states';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
 
 interface TodayPlanInputProps {
-  note: string;
+  dailyGoal: string;
 }
 
-function TodayPlanInput({ note }: TodayPlanInputProps) {
-  const { onChange } = useDebouncing(note);
+function TodayPlanInput({ dailyGoal }: TodayPlanInputProps) {
+  const today = useRecoilValue(dayInfo);
+  const date = today.slice(0, 10);
+  const { mutate: postDailyGoal } = usePostInformationData();
+  const [value, setValue] = useState(dailyGoal);
+  const { onChange } = useDebouncing({
+    date,
+    str: dailyGoal,
+    type: 'dailyGoal',
+    handlePost: postDailyGoal,
+  });
+
+  const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target instanceof HTMLInputElement) {
+      setValue(e.target.value);
+      onChange(e);
+    }
+  };
+
+  useEffect(() => {
+    setValue(dailyGoal);
+  }, [dailyGoal]);
 
   return (
     <StyledTodayPlanInput.Root>
       <StyledTodayPlanInput.Input
         placeholder="오늘 하루 계획 및 다짐을 입력해주세요."
-        onChange={onChange}
+        onChange={changeHandler}
+        value={value}
       />
       <StyledTodayPlanInput.Hr />
     </StyledTodayPlanInput.Root>

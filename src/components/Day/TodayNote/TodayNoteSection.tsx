@@ -7,13 +7,14 @@ import TodayPlan from '../TodayPlan';
 import TodayNote from './TodayNote';
 
 function TodayNoteSection() {
-  const date = useRecoilValue(dayInfo).slice(0, 10);
+  const today = useRecoilValue(dayInfo)
+  const date = today.slice(0, 10);
   const { data } = useGetTodayNoteData({ date });
   const todayNoteInfo = data?.data;
-
+console.log(data);
   return (
     <Styled.Root>
-      <TodayPlan emoji={todayNoteInfo?.emoji || ''} note={todayNoteInfo?.dailyGoal || ''} />
+      <TodayPlan emoji={todayNoteInfo?.emoji || ''} dailyGoal={todayNoteInfo?.dailyGoal || ''} />
       <TodayNote memo={todayNoteInfo?.memo || ''} />
     </Styled.Root>
   );
