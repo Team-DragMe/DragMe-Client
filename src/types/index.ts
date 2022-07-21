@@ -27,7 +27,6 @@ export interface Schedule {
   updatedAt: string;
   // react Query에서 데이터 가공해서 넣기
   flag?: dailyPlanFlag;
-  __v: number;
   isFake?: boolean;
 }
 

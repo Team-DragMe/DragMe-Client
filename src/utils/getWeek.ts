@@ -1,23 +1,24 @@
-export const getCurrentWeek = (count: number) => {
-  const today = new Date();
-  const countDay = new Date(today.setDate(today.getDate() + 7 * count));
-  let mondayStandard = countDay.getDay() - 1;
-  const year = countDay.getFullYear();
-  const month = ('0' + (countDay.getMonth() + 1)).slice(-2);
+export function getCurrentWeek(count: number) {
+  const currentDay = new Date();
+  const countDay = new Date(currentDay.setDate(currentDay.getDate() + 7 * count));
+  const theYear = countDay.getFullYear();
+  const theMonth = countDay.getMonth();
+  const theDate = countDay.getDate();
+  const theDayOfWeek = countDay.getDay();
 
-  if (mondayStandard === -1) {
-    mondayStandard = 6;
+  const thisWeek = [];
+
+  for (let i = 0; i < 7; i++) {
+    const resultDay = new Date(theYear, theMonth, theDate + (i - theDayOfWeek + 1));
+    const yyyy = resultDay.getFullYear();
+    let mm: number | string = Number(resultDay.getMonth()) + 1;
+    let dd: number | string = resultDay.getDate();
+
+    mm = String(mm).length === 1 ? '0' + mm : mm;
+    dd = String(dd).length === 1 ? '0' + dd : dd;
+
+    thisWeek[i] = yyyy + '-' + mm + '-' + dd;
   }
 
-  const monday = countDay.getTime() - 86400000 * mondayStandard;
-
-  countDay.setTime(monday);
-
-  const result = [year + '-' + month + '-' + countDay.toString().slice(8, 10)];
-
-  for (let i = 1; i < 7; i++) {
-    countDay.setTime(countDay.getTime() + 86400000);
-    result.push(year + '-' + month + '-' + countDay.toString().slice(8, 10));
-  }
-  return result;
-};
+  return thisWeek;
+}
