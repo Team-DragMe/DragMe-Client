@@ -1,6 +1,7 @@
 import { useQuery } from 'react-query';
 import { getTodayScheduleData } from 'src/lib/api/dayApi';
 import { DateQueryType } from 'src/types/day';
+import { getFlagedData } from 'src/utils/getFlagedData';
 
 const useGetTodaySchedule = ({ date }: DateQueryType) =>
   useQuery(
@@ -10,7 +11,7 @@ const useGetTodaySchedule = ({ date }: DateQueryType) =>
         date,
       }),
     {
-      select: (data) => data.data,
+      select: (data) => getFlagedData({ data, type: 'daily' }),
       keepPreviousData: true,
       useErrorBoundary: true,
       retry: 3,

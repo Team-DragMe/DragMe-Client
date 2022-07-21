@@ -15,19 +15,14 @@ function MainDayPlanList() {
 
   const dailyPlanData = useSetRecoilState(dailyPlanList);
   const date = useRecoilValue(dayInfo).slice(0, 10);
-  console.log('>>date', date);
   const { data } = useGetTodaySchedule({ date });
 
   useEffect(() => {
-    console.log('>>>day data', data);
-  }, []);
+    console.log('>>>day data NEW', data);
+    dailyPlanData(data);
+  }, [data, dailyPlanData]);
 
-  // useQuery로 가져온 schedules를 리코일 값에 set했다고 가정
-  useEffect(() => {
-    dailyPlanData(schedules);
-  }, []);
-
-  return <DayPlanList flag={FLAG.DAILY} />;
+  return <DayPlanList flag={FLAG.DAILY} schedulesData={data} />;
 }
 
 export default MainDayPlanList;
