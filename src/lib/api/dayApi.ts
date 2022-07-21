@@ -4,6 +4,7 @@ import {
   getEmojiQueryType,
   InformationRequestType,
   ScheduleId,
+  ScheduleTimeDeleteType,
   ScheduleTimePostType,
 } from 'src/types/day';
 
@@ -53,11 +54,16 @@ export const postScheduleTime = async ({ scheduleId, ...data }: ScheduleTimePost
   return post;
 };
 
-// export const deleteScheduleTime = async ({ scheduleId, ...data }: ScheduleTimePostType) => {
-//   const post = await client.delete(`/schedule/time/scheduleId=${scheduleId}`, { ...data });
+export const patchScheduleTime = async ({
+  scheduleId,
+  timeBlockNumbers,
+}: ScheduleTimeDeleteType) => {
+  const post = await client.patch(`/schedule/time?scheduleId=${scheduleId}`, {
+    timeBlockNumbers,
+  });
 
-//   return post;
-// };
+  return post;
+};
 
 export const patchCompleteScheduleData = async ({ scheduleId }: ScheduleId) => {
   const post = await client.patch(`/schedule/complete?scheduleId=${scheduleId}`);
