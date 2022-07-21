@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import NextArrow from 'public/assets/NextArrow.png';
 import React, { useEffect } from 'react';
 import { flushSync } from 'react-dom';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { dayCount, dayInfo } from 'src/states';
 import { theme } from 'src/styles/theme';
 import { DayStorage, getTodayDate } from 'src/utils/getDate';
@@ -13,7 +13,7 @@ import PrevArrow from '/public/assets/PrevArrow.png';
 
 function DayChange() {
   const router = useRouter();
-  const setDayDate = useSetRecoilState(dayInfo);
+  const [dayDate, setDayDate] = useRecoilState(dayInfo);
   const [dayChange, setDayChange] = useRecoilState(dayCount);
   const day = getTodayDate(0);
   const SavedDay = DayStorage(day.slice(0, 10), dayChange);
@@ -32,6 +32,14 @@ function DayChange() {
       router.push(`/day/${SavedDay}`);
     }
   }, [dayChange]);
+
+  useEffect(() => {
+    if (dayDate !== undefined) {
+      setDayDate(getTodayDate(dayChange));
+      router.push(`/day/${SavedDay}`);
+    }
+  }, []);
+
   const handleClick = (option: number) => {
     flushSync(() => {
       setDayChange((prev) => prev + option);

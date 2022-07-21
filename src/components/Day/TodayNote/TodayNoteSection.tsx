@@ -11,7 +11,7 @@ function TodayNoteSection() {
   const date = today.slice(0, 10);
   const { data } = useGetTodayNoteData({ date });
   const todayNoteInfo = data?.data;
-console.log(data);
+
   return (
     <Styled.Root>
       <TodayPlan emoji={todayNoteInfo?.emoji || ''} dailyGoal={todayNoteInfo?.dailyGoal || ''} />

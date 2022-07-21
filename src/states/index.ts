@@ -20,7 +20,7 @@ export const weekCount = atom({
 });
 
 export const dayCount = atom({
-  key: 'weekInfo',
+  key: 'dayCount',
   default: 0,
 });
 
