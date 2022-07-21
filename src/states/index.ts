@@ -49,3 +49,8 @@ export const menuCount = atom({
   key: 'menuCount',
   default: 'Today',
 });
+
+export const scrollY = atom({
+  key: 'scrollY',
+  default: 0,
+});
