@@ -1,4 +1,7 @@
+import { useEffect, useRef } from 'react';
+import { useRecoilValue } from 'recoil';
 import { schedules } from 'src/mock-data/schedules';
+import { scrollY } from 'src/states';
 import styled from 'styled-components';
 
 import TimeBlocks from './TimeBlocks';
@@ -10,9 +13,17 @@ import TimeBlocks from './TimeBlocks';
 function TimeBlockSection() {
   //리코일에 있는 열려있는 리스트 값 받아오기
   const openList = ['sampleScheduleId6'];
+  const divRef = useRef<HTMLDivElement>(null);
+  const scroll = useRecoilValue(scrollY);
+
+  useEffect(() => {
+    if (divRef.current) {
+      divRef.current.scrollTop = scroll;
+    }
+  }, [scroll]);
 
   return (
-    <Styled.Root>
+    <Styled.Root ref={divRef}>
       {schedules.map((el) => {
         // 포함여부 판단해서 열려있고 subSchdules가 0이 아니면 map 돌기
         if (openList.includes(el._id) && el.subSchedules.length > 0) {
@@ -42,6 +53,6 @@ const Styled = {
     gap: 1.2rem;
     margin-left: 1.95rem;
     height: 42.8rem;
-    overflow-y: scroll;
+    overflow-y: hidden;
   `,
 };

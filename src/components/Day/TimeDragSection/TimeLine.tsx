@@ -84,6 +84,7 @@ const Styled = {
 
   Wrapper: styled.div`
     display: flex;
+    margin-bottom: 7.4rem;
   `,
 
   TimeLineWrapper: styled.div`

@@ -2,10 +2,10 @@
 import update from 'immutability-helper';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDrop } from 'react-dnd';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { FLAG } from 'src/constants';
 import useThrottle from 'src/hooks/useThrottle';
-import { dailyPlanList, reschedulePlanList, routinePlanList } from 'src/states';
+import { dailyPlanList, reschedulePlanList, routinePlanList, scrollY } from 'src/states';
 import { theme } from 'src/styles/theme';
 import { dailyPlanFlag, Schedule } from 'src/types';
 import styled, { css } from 'styled-components';
@@ -45,6 +45,7 @@ function DayPlanList({ maxHeight = '46.2rem', flag, schedulesData, ...props }: D
   const [dailyscheduleData, setDailyScheduleData] = useRecoilState(dailyPlanList);
   const [rescheduleData, setRescheduleData] = useRecoilState(reschedulePlanList);
   const [routineScheduleData, setRoutineScheduleData] = useRecoilState(routinePlanList);
+  const setScrollData = useSetRecoilState(scrollY);
   const [currentDragChipState, setCurrentDragChipState] = useState<movePlanChipParams | null>(null);
   const currentDragChip = useRef<movePlanChipParams | null>(null);
   const scrollEndRef = useRef<HTMLDivElement>(null);
@@ -220,6 +221,13 @@ function DayPlanList({ maxHeight = '46.2rem', flag, schedulesData, ...props }: D
     }, 50);
   };
 
+  const handleScroll = (e: React.WheelEvent<HTMLElement>) => {
+    if (e.target instanceof HTMLElement) {
+      console.log(e.currentTarget.scrollTop);
+      setScrollData(e.currentTarget.scrollTop);
+    }
+  };
+
   const throttleMovePlanChip = useThrottle(movePlanChip, 300);
   const throttleChangeCurrentSection = useThrottle(changeCurrentSection, 300);
   const throttleResetFakeItem = useThrottle(resetFakeItem, 300);
@@ -227,7 +235,13 @@ function DayPlanList({ maxHeight = '46.2rem', flag, schedulesData, ...props }: D
 
   return (
     <Styled.Root {...props}>
-      <Styled.UlWrapper maxHeight={maxHeight} ref={sectionDropRef} flag={flag} isOver={isOver}>
+      <Styled.UlWrapper
+        maxHeight={maxHeight}
+        ref={sectionDropRef}
+        flag={flag}
+        isOver={isOver}
+        onWheel={handleScroll}
+      >
         {/* {isOver && <Styled.DropWrapper canDrop={canDrop} maxHeight={maxHeight} />} */}
         <Styled.Ul maxHeight={maxHeight}>
           {schedulesData?.map((item, idx) => (
