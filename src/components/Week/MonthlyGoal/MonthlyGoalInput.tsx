@@ -15,7 +15,7 @@ function MonthlyGoalInput(props: MonthlyGoalInputProps) {
   const { mutate: postMonthlyGoal } = usePostInformationData();
   const { onChange } = useDebouncing({
     handlePost: postMonthlyGoal,
-    date,
+    date: date.slice(0, 7) + '-01',
     type: 'monthlyGoal',
   });
 
