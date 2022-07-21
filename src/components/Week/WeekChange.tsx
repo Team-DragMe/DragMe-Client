@@ -16,8 +16,11 @@ function WeekChange() {
   const [week, setWeek] = useRecoilState(weekInfo);
   const [count, setCount] = useRecoilState(weekCount);
   const thisWeek = getCurrentWeek(0);
+  console.log('thisweek', thisWeek);
   const changedWeek = getCurrentWeek(count);
+  console.log('changedweek', changedWeek);
   const weekDomain = `${thisWeek[0]}-${thisWeek[6]}`;
+  console.log('weekdomain', weekDomain);
 
   const goThisWeek = () => {
     setCount(0);

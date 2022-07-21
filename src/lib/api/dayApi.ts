@@ -1,6 +1,7 @@
 import {
   CalendarQueryType,
   DateQueryType,
+  getEmojiQueryType,
   InformationRequestType,
   ScheduleId,
   ScheduleTimePostType,
@@ -61,4 +62,10 @@ export const postScheduleTime = async ({ scheduleId, ...data }: ScheduleTimePost
 export const patchCompleteScheduleData = async ({ scheduleId }: ScheduleId) => {
   const post = await client.patch(`/schedule/complete?scheduleId=${scheduleId}`);
   return post;
+};
+
+export const getEmojiListData = async ({ startDate, endDate }: getEmojiQueryType) => {
+  const { data } = await client.get(`/information/emoji?startDate=${startDate}&endDate=${endDate}`);
+
+  return { data };
 };

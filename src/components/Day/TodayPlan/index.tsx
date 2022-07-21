@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
+import { dayInfo } from 'src/states';
 
 import ForwardEmojiPicker from './EmojiPicker';
 import TodayPlanInput from './TodayPlanInput';
@@ -31,9 +33,17 @@ function TodayPlan({ emoji, dailyGoal }: TodayPlanProps) {
   const refPicker = useRef<HTMLDivElement>(null);
   useOutsideAlert(refPicker);
 
+  const today = useRecoilValue(dayInfo);
+  const todayDate = today.slice(0, 10);
   return (
     <StyledTodayPlan.Root>
-      <ForwardEmojiPicker ref={refPicker} click={click} setClick={handleClick} emoji={emoji} />
+      <ForwardEmojiPicker
+        ref={refPicker}
+        click={click}
+        setClick={handleClick}
+        emoji={emoji}
+        date={todayDate}
+      />
       <TodayPlanInput dailyGoal={dailyGoal} />
     </StyledTodayPlan.Root>
   );
@@ -44,6 +54,7 @@ export default TodayPlan;
 const StyledTodayPlan = {
   Root: styled.div`
     display: flex;
+    align-items: center;
     gap: 1.3rem;
   `,
 };

@@ -6,6 +6,11 @@ export interface CalendarQueryKeyType {
   currentMonth: { year: number; month: number };
 }
 
+export interface getEmojiQueryType {
+  startDate: string;
+  endDate: string;
+}
+
 export interface InformationRequestType {
   date: string;
   type: string;

@@ -1,4 +1,5 @@
 import React from 'react';
+import WeekPlan from 'src/components/Week/WeekPlan/WeekPlan';
 import styled from 'styled-components';
 
 import WeekChange from '../../components/Week/WeekChange';
@@ -9,6 +10,7 @@ function Week() {
     <Styled.Root>
       <WeekInfo />
       <WeekChange />
+      <WeekPlan></WeekPlan>
     </Styled.Root>
   );
 }
