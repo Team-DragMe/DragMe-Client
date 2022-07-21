@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import Logo from 'public/assets/Logo.png';
+import Logo from 'public/assets/DragmeLogo.svg';
 import MenuBar from 'public/assets/MenuBar.png';
 import React, { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
@@ -53,7 +53,7 @@ function NavBar() {
     <Styled.Root>
       <Link href={`${periodData[0].path}${encodeURIComponent(dayPeriod)}`}>
         <Styled.LogoWrapper onClick={() => handleClick('Today')}>
-          <Image src={Logo} alt="로고이미지" width={'108.8'} height={'24'} />
+          <Logo />
         </Styled.LogoWrapper>
       </Link>
       <Styled.Contents>
@@ -95,7 +95,6 @@ const Styled = {
   `,
   LogoWrapper: styled.div`
     display: flex;
-    width: 10.88rem;
     height: 2rem;
     cursor: pointer;
   `,

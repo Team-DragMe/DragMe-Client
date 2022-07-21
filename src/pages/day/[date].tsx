@@ -56,15 +56,13 @@ const Styled = {
     display: flex;
     gap: 3.3rem;
     margin-left: 4.2rem;
-    position: relative;
-    top: -4rem;
+    margin-top: -4rem;
   `,
   BottomWrapper: styled.div`
     display: flex;
     align-items: flex-start;
     padding: 0 4.4rem;
     gap: 4.7rem;
-    margin-top: -4rem;
     margin-bottom: 6.1rem;
   `,
 };
