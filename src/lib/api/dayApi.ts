@@ -1,4 +1,9 @@
-import { CalendarQueryType, DateQueryType, ScheduleId, InformationRequestType } from 'src/types/day';
+import {
+  CalendarQueryType,
+  DateQueryType,
+  InformationRequestType,
+  ScheduleId,
+} from 'src/types/day';
 
 import { client } from './api';
 
@@ -37,5 +42,10 @@ export const getSubScheduleData = async ({ scheduleId }: ScheduleId) => {
 export const postInformationData = async (data: InformationRequestType) => {
   const post = await client.post('/information', { ...data });
 
+  return post;
+};
+
+export const patchCompleteScheduleData = async ({ scheduleId }: ScheduleId) => {
+  const post = await client.patch(`/schedule/complete?scheduleId=${scheduleId}`);
   return post;
 };

@@ -3,7 +3,7 @@ import { getDelayedScheduleData } from 'src/lib/api/dayApi';
 import { getFlagedData } from 'src/utils/getFlagedData';
 
 const useGetDelaySchedules = () =>
-  useQuery(['delaySchedule'], async () => getDelayedScheduleData(), {
+  useQuery(['rechedule'], async () => getDelayedScheduleData(), {
     select: (data) => getFlagedData({ data, type: 'rechedule' }),
     keepPreviousData: true,
     useErrorBoundary: true,

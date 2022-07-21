@@ -69,6 +69,8 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
     const handleChange = () => {
       setIsChecked((prev) => !prev);
       // @TODO React query optimistic update로 완료된 계획 post
+      console.log('>>>체크 상태', isChecked);
+      console.log('체크된 애 아이디', itemId);
     };
 
     const handleDbClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {

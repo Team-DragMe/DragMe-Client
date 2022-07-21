@@ -8,7 +8,7 @@ interface UseGetSubSchedules {
 
 const useGetSubSchedules = ({ scheduleId, isAbled }: UseGetSubSchedules) =>
   useQuery(
-    ['subSchedule', scheduleId],
+    ['child', scheduleId],
     async () =>
       getSubScheduleData({
         scheduleId,

@@ -3,7 +3,7 @@ import { getRoutineScheduleData } from 'src/lib/api/dayApi';
 import { getFlagedData } from 'src/utils/getFlagedData';
 
 const useGetRoutineSchedules = () =>
-  useQuery(['routineSchedule'], async () => getRoutineScheduleData(), {
+  useQuery(['routine'], async () => getRoutineScheduleData(), {
     select: (data) => getFlagedData({ data, type: 'routine' }),
     keepPreviousData: true,
     useErrorBoundary: true,

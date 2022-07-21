@@ -5,7 +5,7 @@ import { getFlagedData } from 'src/utils/getFlagedData';
 
 const useGetTodaySchedules = ({ date }: DateQueryType) =>
   useQuery(
-    ['todaySchedule', date],
+    ['daily', date],
     async () =>
       getTodayScheduleData({
         date,
