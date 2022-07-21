@@ -46,6 +46,6 @@ export const routinePlanList = atom({
 });
 
 export const menuCount = atom({
-  key: 'weekInfo',
+  key: 'menuCount',
   default: 'Today',
 });

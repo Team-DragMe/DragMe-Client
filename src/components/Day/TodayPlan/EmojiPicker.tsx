@@ -1,11 +1,10 @@
 import { IEmojiData, IEmojiPickerProps } from 'emoji-picker-react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
-import SmileEmoticon from 'public/assets/SmileEmoticon.png';
+import SmileEmoticon from 'public/assets/SmileEmoticon.svg';
 import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import usePostInformationData from 'src/hooks/query/usePostInformationData';
-import { dayInfo } from 'src/states';
 import styled from 'styled-components';
 
 const Picker = dynamic(async () => import('emoji-picker-react'), {
@@ -18,15 +17,14 @@ interface EmojiPickerProps extends Omit<IEmojiPickerProps, 'onEmojiClick'> {
   click: boolean;
   setClick: (value: boolean) => void;
   emoji: string;
+  date: string;
 }
 
 function EmojiPicker(
-  { click, setClick, emoji }: EmojiPickerProps,
+  { click, setClick, emoji, date }: EmojiPickerProps,
   ref: React.ForwardedRef<EmojiPickerElement>,
 ) {
   const { mutate: postEmoji } = usePostInformationData();
-  const today = useRecoilValue(dayInfo);
-  const date = today.slice(0, 10);
   const [chosenEmoji, setChosenEmoji] = useState<IEmojiData>();
   const handleEmojiClick = (
     event: React.MouseEvent<Element, MouseEvent>,
@@ -49,7 +47,7 @@ function EmojiPicker(
         ) : (
           <StyledEmojiPicker.DefaultEmoji>
             {emoji === '' ? (
-              <Image src={SmileEmoticon} alt="" />
+              <StyledEmojiPicker.SmileEmoticon></StyledEmojiPicker.SmileEmoticon>
             ) : (
               <StyledEmojiPicker.Emoji>{emoji}</StyledEmojiPicker.Emoji>
             )}
@@ -72,12 +70,16 @@ const StyledEmojiPicker = {
     position: fixed;
     cursor: pointer;
   `,
-  Emoji: styled.div`
+  Emoji: styled.a`
     font-size: 1.5rem;
     padding: 0.5rem;
     cursor: pointer;
   `,
-  DefaultEmoji: styled.div`
+  SmileEmoticon: styled(SmileEmoticon)`
+    cursor: pointer;
+  `,
+  DefaultEmoji: styled.a`
+    font-size: 1.5rem;
     padding: 0.5rem;
     cursor: pointer;
   `,

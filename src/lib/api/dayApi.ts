@@ -1,4 +1,5 @@
-import { CalendarQueryType, DateQueryType, InformationRequestType } from 'src/types/day';
+import { start } from 'repl';
+import { CalendarQueryType, DateQueryType, InformationRequestType, getEmojiQueryType } from 'src/types/day';
 
 import { client } from './api';
 
@@ -18,4 +19,10 @@ export const postInformationData = async (data: InformationRequestType) => {
   const post = await client.post('/information', { ...data });
 
   return post;
+};
+
+export const getEmojiListData = async ({ startDate, endDate }: getEmojiQueryType) => {
+  const { data } = await client.get(`/information/emoji?startDate=${startDate}&endDate=${endDate}`);
+
+  return { data };
 };
