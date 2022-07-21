@@ -13,3 +13,8 @@ export const getTodayNoteData = async ({ date }: DateQueryType) => {
 
   return { data };
 };
+
+export const getTodayScheduleData = async ({ date }: DateQueryType) => {
+  const { data } = await client.get(`/schedule/days?date=${date}`);
+  return { data };
+};
