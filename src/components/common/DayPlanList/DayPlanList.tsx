@@ -40,7 +40,7 @@ interface DayPlanListProps {
   [key: string]: any;
 }
 
-function DayPlanList({ maxHeight = '46.2rem', flag, schedulesData, ...props }: DayPlanListProps) {
+function DayPlanList({ maxHeight = '45rem', flag, schedulesData, ...props }: DayPlanListProps) {
   const [currentSection, setCurrentSection] = useState<dailyPlanFlag>(flag);
   const [dailyscheduleData, setDailyScheduleData] = useRecoilState(dailyPlanList);
   const [rescheduleData, setRescheduleData] = useRecoilState(reschedulePlanList);
