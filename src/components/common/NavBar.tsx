@@ -1,7 +1,9 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Logo from 'public/assets/DragmeLogo.svg';
 import HamburgerMenu from 'public/assets/icons/HamburgerMenu.svg';
+import MyPageModal from 'public/assets/MyPageModal.png';
 import React, { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { dayInfo, RoutineBoxIsOpened, weekInfo } from 'src/states';
@@ -26,15 +28,26 @@ function NavBar() {
 
   useEffect(() => {
     setHamburgerMenu(false);
+    setMyPageIsOpened(false);
   }, []);
 
   const handleHamburgerMenu = () => {
+    setHamburgerMenu(false);
+
     if (hamburgerMenu === true) {
-      setHamburgerMenu(false);
+      setMyPageIsOpened(false);
     } else {
       setHamburgerMenu(true);
     }
   };
+  const handleModalToggle = () => {
+    if (hamburgerMenu) {
+      setMyPageIsOpened(false);
+    } else if (!hamburgerMenu) {
+      myPageIsOpened ? setMyPageIsOpened(false) : setMyPageIsOpened(true);
+    }
+  };
+
   useEffect(() => {
     if (router.pathname === '/day/[data]') {
       setPickedMenu('Today');
@@ -79,12 +92,15 @@ function NavBar() {
             </Styled.List>
           ))}
           {myPageIsOpened ? (
-            <Styled.MyPageOn onClick={() => setMyPageIsOpened(false)}>MY PAGE</Styled.MyPageOn>
+            <Styled.MyPageOn onClick={handleModalToggle}>MY PAGE</Styled.MyPageOn>
           ) : (
-            <Styled.MyPageOff onClick={() => setMyPageIsOpened(true)}>MY PAGE</Styled.MyPageOff>
+            <Styled.MyPageOff onClick={handleModalToggle}>MY PAGE</Styled.MyPageOff>
           )}
         </Styled.MenuList>
         <Styled.HamburgerMenu isOpened={hamburgerMenu} onClick={handleHamburgerMenu} />
+        <Styled.MyPageWrapper isToggle={myPageIsOpened}>
+          <Image src={MyPageModal} alt="개인정보 모달" width={'272'} height={'354'} />
+        </Styled.MyPageWrapper>
       </Styled.Contents>
     </Styled.Root>
   );
@@ -128,6 +144,7 @@ const Styled = {
   MyPageOff: styled.div`
     color: ${theme.colors.plan_grey};
     font-weight: bold;
+    margin-top: 0.1rem;
     margin-left: -1rem;
     margin-right: 4rem;
     cursor: pointer;
@@ -136,6 +153,7 @@ const Styled = {
   MyPageOn: styled.div`
     color: ${theme.colors.letter_black};
     font-weight: bold;
+    margin-top: 0.1rem;
     margin-left: -1rem;
     margin-right: 4rem;
     cursor: pointer;
@@ -176,5 +194,15 @@ const Styled = {
     margin-left: -1.5rem;
     transition: all 1s;
     transform: ${(props) => props.isOpened && 'translate(6%, 2%) rotate(90deg);'};
+  `,
+  MyPageWrapper: styled.div<{ isToggle: boolean }>`
+    display: none;
+    z-index: 10;
+    width: 27.2rem;
+    height: 35.4rem;
+    position: absolute;
+    right: 106.3px;
+    top: 7.4rem;
+    ${({ isToggle }) => isToggle && 'display:block;'}
   `,
 };
