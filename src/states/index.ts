@@ -57,6 +57,11 @@ export const openedSchedules = atom({
   default: new Set([]) as Set<string>,
 });
 
+export const checkedSchedules = atom({
+  key: 'checkedSchedules',
+  default: new Set([]) as Set<string>,
+});
+
 export const currentDraggintElement = atom({
   key: 'currentDraggintElement',
   default: {} as movePlanChipParams,

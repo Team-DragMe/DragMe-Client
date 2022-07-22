@@ -63,6 +63,7 @@ export const postScheduleTime = async ({ scheduleId, ...data }: ScheduleTimePost
 //   return post;
 // };
 
+// 계획 블록 완료
 export const patchCompleteScheduleData = async ({ scheduleId }: ScheduleId) => {
   console.log('==========================들어온 postId', scheduleId);
   const post = await client.patch(`/schedule/complete?scheduleId=${scheduleId}`);
@@ -77,7 +78,10 @@ export const getEmojiListData = async ({ startDate, endDate }: getEmojiQueryType
 };
 
 export const patchDayToRescheduleSchedules = async ({ scheduleId }: ScheduleId) => {
-  console.log('*********************scheduleId', scheduleId);
+  console.log(
+    'patchDayToRescheduleSchedulespatchDayToRescheduleSchedules*********scheduleId',
+    scheduleId,
+  );
   const post = await client.patch(`/schedule/day-reschedule?scheduleId=${scheduleId}`);
   console.log('*********************post', post);
   return post;
@@ -85,6 +89,7 @@ export const patchDayToRescheduleSchedules = async ({ scheduleId }: ScheduleId) 
 
 export const patchDayToRoutineSchedules = async ({ scheduleId }: ScheduleId) => {
   const post = await client.post(`/schedule/day-routine?scheduleId=${scheduleId}`);
+  console.log('>>day to routine', post);
   return post;
 };
 
@@ -101,3 +106,33 @@ export const patchRescheduleToDaySchedules = async ({ scheduleId, date }: Schedu
   });
   return post;
 };
+
+// 계획 블록 순서 변경
+export const patchOrderSchedules = async ({ scheduleId, scheduleList }) => {
+  const post = await client.patch(`/schedule/order?scheduleId=${scheduleId}`, {
+    objectIds: scheduleList,
+  });
+  return post;
+};
+
+// 계획 블록 생성
+export const postScheduleBlock = async ({ date, title, categoryColorCode, isRoutine }) => {
+  const post = await client.post('/schedule', {
+    date,
+    title,
+    categoryColorCode,
+    isRoutine,
+  });
+  return post;
+};
+// isRoutine == true/ false
+
+// 계획 블록 이름 수정
+export const patchScheduleBlock = async ({ scheduleId, title }) => {
+  const patch = await client.patch(`/schedule/title?scheduleId=${scheduleId}`, {
+    title,
+    scheduleId,
+  });
+};
+
+// 자주

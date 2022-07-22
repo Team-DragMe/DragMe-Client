@@ -21,7 +21,7 @@ const usePatchDayToReschedule = ({
     onMutate: async () => {
       const snapShotOfPreviousData = queryClient.getQueryData('reschedule');
       await queryClient.cancelQueries(['reschedule']);
-      //  미룰 계획에 추가 
+      //  미룰 계획에 추가
       await queryClient.setQueryData(['reschedule'], (oldSchedules: any) => {
         const optimisticData = [...oldSchedules?.data?.data?.schedules];
         optimisticData.push(schedule);
@@ -29,7 +29,7 @@ const usePatchDayToReschedule = ({
       });
 
       await queryClient.cancelQueries(['daily', date]);
-      //  기존 계획에서 삭제 
+      //  기존 계획에서 삭제
       await queryClient.setQueryData(['daily', date], (oldSchedules: any) => {
         const newData = oldSchedules?.data?.data?.schedules.filter(
           (o: Schedule) => o._id !== scheduleId,

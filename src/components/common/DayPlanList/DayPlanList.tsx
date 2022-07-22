@@ -244,14 +244,27 @@ function DayPlanList({ maxHeight = '46.2rem', flag, schedulesData, ...props }: D
     );
     const { index: hoverItemIndex, planChip: hoverItemObj } = findDailyIndex(hoverId as string);
 
-    setDailyScheduleData(
-      update(dailyscheduleData, {
-        $splice: [
-          [currentItemIndex, 1],
-          [hoverItemIndex, 0, currentItemObj as Schedule],
-        ],
-      }),
-    );
+    console.log('$$$$$$$$$$$$$$$$$$호버인덱스', hoverItemIndex);
+    // 일단 미리 업데이트 시키는 로직
+    const snapShotOfPreviousData = queryClient.getQueryData(['daily', currentDayDate])?.data?.data
+      ?.schedules;
+    console.log('>>>.snapShotData', snapShotOfPreviousData);
+    update(snapShotOfPreviousData, {
+      $splice: [
+        [currentItemIndex, 1],
+        [hoverItemIndex, 0, currentItemObj as Schedule],
+      ],
+    });
+    console.log('>>snapShotOfPreviousData', snapShotOfPreviousData);
+    // queryClient.setQueryData(['daily', currentDayDate], () => snapShotOfPreviousData);
+    // setDailyScheduleData(
+    //   update(dailyscheduleData, {
+    //     $splice: [
+    //       [currentItemIndex, 1],
+    //       [hoverItemIndex, 0, currentItemObj as Schedule],
+    //     ],
+    //   }),
+    // );
   };
 
   const handleAddClick = () => {

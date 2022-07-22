@@ -159,7 +159,11 @@ const DayPlan = React.memo(function DayPlan({
   };
   useEffect(() => {
     setCurrentHoverItem(flag);
-  }, [flag]);
+  }, [flag, setCurrentHoverItem]);
+
+  useEffect(() => {
+    setCurrentHoverItem(null);
+  }, [isOver, setCurrentHoverItem]);
 
   return (
     <Styled.Li

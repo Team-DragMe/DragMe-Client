@@ -24,7 +24,6 @@ const usePatchRoutineToDay = ({
       await queryClient.cancelQueries(['daily', date]);
       //  일정에 추가
       queryClient.setQueryData(['daily'], (oldSchedules: any) => {
-        console.log('>>oldSchedules', oldSchedules?.data?.data?.schedules);
         const optimisticData = [...oldSchedules?.data?.data?.schedules];
         optimisticData.push(schedule);
         return optimisticData;
