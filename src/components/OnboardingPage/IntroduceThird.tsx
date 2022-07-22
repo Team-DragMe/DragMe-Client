@@ -1,4 +1,5 @@
 import React from 'react';
+import RescheduleLottie from 'src/components/OnboardingPage/lotties/Reschedule';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
 
@@ -17,7 +18,9 @@ function IntroduceThird() {
           &#39;나만의 방향성&#39;을 찾도록 도와드릴게요.
         </Styled.Detail>
       </Styled.DescriptionSection>
-      <Styled.LottieWrapper>이건로티다</Styled.LottieWrapper>
+      <Styled.LottieWrapper>
+        <RescheduleLottie />
+      </Styled.LottieWrapper>
     </Styled.Root>
   );
 }
@@ -83,13 +86,17 @@ const Styled = {
   `,
   LottieWrapper: styled.div`
     position: absolute;
-    width: 66.4rem;
-    height: 41.6rem;
+    width: 67.5rem;
+    height: 42.3rem;
     left: 63.2rem;
     top: 50%;
     transform: translateY(-50%);
+    padding-top: 0.0245rem;
+    padding-left: 0.1rem;
 
     border: 0.5rem solid ${theme.colors.letter_black};
     border-radius: 1rem;
+    background: white;
+    color: white;
   `,
 };

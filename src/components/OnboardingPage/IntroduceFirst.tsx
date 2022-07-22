@@ -1,4 +1,5 @@
 import React from 'react';
+import DragLottie from 'src/components/OnboardingPage/lotties/Drag1';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
 
@@ -17,7 +18,9 @@ function IntroduceFirst() {
           시간 설정의 번거로움을 덜어드릴게요.
         </Styled.Detail>
       </Styled.DescriptionSection>
-      <Styled.LottieWrapper>이건로티다</Styled.LottieWrapper>
+      <Styled.LottieWrapper>
+        <DragLottie />
+      </Styled.LottieWrapper>
     </Styled.Root>
   );
 }
@@ -82,14 +85,16 @@ const Styled = {
     border-bottom: 0.2rem solid ${theme.colors.plan_grey};
   `,
   LottieWrapper: styled.div`
+    padding-left: 0.3rem;
     position: absolute;
-    width: 66.4rem;
-    height: 41.6rem;
+    width: 67rem;
+    height: 42rem;
     left: 63.2rem;
     top: 50%;
     transform: translateY(-50%);
-
+    background: white;
     border: 0.5rem solid ${theme.colors.letter_black};
     border-radius: 1rem;
+    color: white;
   `,
 };

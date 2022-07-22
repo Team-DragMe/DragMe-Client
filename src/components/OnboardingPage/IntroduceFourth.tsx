@@ -1,4 +1,5 @@
 import React from 'react';
+import RoutinRoadLottie from 'src/components/OnboardingPage/lotties/RoutineRoad';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
 
@@ -8,14 +9,16 @@ function IntroduceFourth() {
       <Styled.DescriptionSection>
         <Styled.Title>
           자주 세우는 계획을
-          <br /> Routin Road에 저장하다
+          <br /> Routine Road에 저장하다
         </Styled.Title>
         <Styled.SubTitle>
           자주 세우는 계획을 드래그 앤 드롭으로 간편하게 꺼내 쓰세요.
         </Styled.SubTitle>
-        <Styled.Detail>드래그미가 당신을 위한 Routin Road를 마련해 놓을게요.</Styled.Detail>
+        <Styled.Detail>드래그미가 당신을 위한 Routine Road를 마련해 놓을게요.</Styled.Detail>
       </Styled.DescriptionSection>
-      <Styled.LottieWrapper>이건로티다</Styled.LottieWrapper>
+      <Styled.LottieWrapper>
+        <RoutinRoadLottie />
+      </Styled.LottieWrapper>
     </Styled.Root>
   );
 }
@@ -81,13 +84,15 @@ const Styled = {
   `,
   LottieWrapper: styled.div`
     position: absolute;
-    width: 66.4rem;
-    height: 41.6rem;
+    width: 66.7rem;
+    height: 42.1rem;
     right: 63.2rem;
     top: 50%;
     transform: translateY(-50%);
-
+    padding-left: 0.1rem;
     border: 0.5rem solid ${theme.colors.letter_black};
     border-radius: 1rem;
+    background: white;
+    color: white;
   `,
 };

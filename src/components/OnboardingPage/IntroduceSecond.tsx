@@ -1,4 +1,5 @@
 import React from 'react';
+import DragLottie2 from 'src/components/OnboardingPage/lotties/Drag2';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
 
@@ -15,7 +16,9 @@ function IntroduceSecond() {
           당신의 계획 시간과 실제 이행 시간을 함께 기록해 <br /> 당신의 삶의 패턴을 확인해드릴게요.
         </Styled.Detail>
       </Styled.DescriptionSection>
-      <Styled.LottieWrapper>이건로티다</Styled.LottieWrapper>
+      <Styled.LottieWrapper>
+        <DragLottie2 />
+      </Styled.LottieWrapper>
     </Styled.Root>
   );
 }
@@ -80,14 +83,17 @@ const Styled = {
     border-bottom: 0.2rem solid ${theme.colors.plan_grey};
   `,
   LottieWrapper: styled.div`
+    padding-left: 0.3rem;
     position: absolute;
-    width: 66.4rem;
-    height: 41.6rem;
+    width: 67rem;
+    height: 42rem;
     right: 63.2rem;
     top: 50%;
     transform: translateY(-50%);
 
     border: 0.5rem solid ${theme.colors.letter_black};
     border-radius: 1rem;
+    background: white;
+    color: white;
   `,
 };
