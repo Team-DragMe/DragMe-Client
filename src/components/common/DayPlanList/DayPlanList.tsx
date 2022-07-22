@@ -57,6 +57,7 @@ interface DayPlanListProps {
   maxHeight?: string;
   schedulesData?: Schedule[];
   weekIndex?: number;
+  isWeek?: boolean;
   [key: string]: any;
 }
 
@@ -65,6 +66,7 @@ function DayPlanList({
   flag,
   schedulesData,
   weekIndex,
+  isWeek = false,
   ...props
 }: DayPlanListProps) {
   const [currentSection, setCurrentSection] = useState<dailyPlanFlag>(flag);
@@ -84,6 +86,8 @@ function DayPlanList({
   const [afterOrder, setAfterOrder] = useState(false);
   const [currentTargetPlan, setCurrentTargetPlan] = useRecoilState(currentModifyDayPlan);
   const weekRecoil = useRecoilValue(weekInfo);
+  const [canAddWeekChip, setCanAddWeekChip] = useState<boolean>(false);
+  const [weeklyPostData, setWeeklyPostData] = useState(false);
 
   const { mutate: DayToRescheduleMutate } = usePatchDayToReschedule({
     scheduleId: currentDraggingItem._id,
@@ -297,12 +301,19 @@ function DayPlanList({
 
   const handleWeekAddClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
-    weekIndex && setCurrentTargetPlan({ itemId: '', flag, date: weekRecoil[weekIndex] });
-    console.log('>>이거 클릭했을 때 current target', currentTargetPlan);
+    // setCurrentTargetPlan({ itemId: '', flag, date: weekRecoil[weekIndex] });
+    weekIndex &&
+      setWeeklyPostData({
+        scheduleId: schedulesData?._id,
+        date: weekRecoil[weekIndex],
+        flag: 'week',
+      });
+    console.log('>>이거 클릭했을 때 current target', weeklyPostData);
+    setCanAddWeekChip((prev) => !prev);
     // @TODO 할 일 등록 이후 false로 초기화
     setTimeout(() => {
       scrollEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }, 50);
+    }, 500);
   };
 
   const handleScroll = (e: React.WheelEvent<HTMLElement>) => {
@@ -318,10 +329,10 @@ function DayPlanList({
   const thorottleMoveItemInSection = useThrottle(moveItemInSection, 100);
 
   const handleMouseEnter = () => {
-    props?.setIsEnterBtn(true);
+    props?.setIsEnterBtn && props?.setIsEnterBtn(true);
   };
   const handleMouseLeave = () => {
-    props?.setIsEnterBtn(false);
+    props?.setIsEnterBtn && props?.setIsEnterBtn(false);
   };
 
   useEffect(() => {
@@ -377,13 +388,13 @@ function DayPlanList({
               <div ref={scrollEndRef} />
             </Styled.Li>
           )}
-          {weekIndex && (
+          {currentTargetPlan?.date !== '' && (
             <Styled.WeekAddBtnWrapper>
               <CommonDayPlanChip
                 color="#FFFFFF"
                 shape="rectangle"
                 flag={flag}
-                index={schedulesData?.length ? schedulesData?.length + 1 : 1}
+                index={schedulesData?.length ? schedulesData?.length + 2 : 2}
               />
               <div ref={scrollEndRef} />
             </Styled.WeekAddBtnWrapper>
@@ -397,7 +408,7 @@ function DayPlanList({
           <AddDayPlanChip onClick={handleAddClick} id={flag} weekIndex={weekIndex} />
         </Styled.AddDayPlanChipWrapper>
       )}
-      {weekIndex && (
+      {isWeek && (
         <Styled.AddBtnWrapper>
           <AddDayPlanChip onClick={handleWeekAddClick} id="addDayPlanChip" />
         </Styled.AddBtnWrapper>
@@ -416,6 +427,7 @@ const Styled = {
     align-items: center;
     width: 23rem;
     padding-top: 1.8rem;
+    position: relative;
     &:hover {
       #addDayPlanChip {
         display: block;
@@ -486,7 +498,7 @@ const Styled = {
     width: 21rem;
     height: 3.2rem;
     position: absolute;
-    bottom: 11.7rem;
+    top: 23.5rem;
     button {
       display: none;
     }

@@ -129,21 +129,22 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
         inputValue.current?.focus();
       }, 50);
       // 배타적이어야 하므로 현재 선택된 애를 리코일에 저장
-      setCurrentTargetPlan({ itemId, flag: props?.item?.flag });
+      setCurrentTargetPlan({ itemId, flag: props?.item?.flag, date: props?.item?.date });
     };
 
     const handleBlur = () => {
-      setCurrentTargetPlan({ itemId: '', flag: '' });
+      setCurrentTargetPlan({ itemId: '', flag: '', date: '' });
     };
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
+      console.log('>>서브밋 할 때 상황', currentTargetPlan);
       if (currentTargetPlan?.itemId === '') {
         postScheduleNameBlock();
       } else {
         patchScheduleNameBlock();
       }
-      setCurrentTargetPlan({ itemId: '', flag: '' });
+      setCurrentTargetPlan({ itemId: '', flag: '', date: '' });
     };
 
     useEffect(() => {
