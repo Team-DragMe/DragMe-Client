@@ -1,7 +1,8 @@
 import SemiArrow from 'public/assets/icons/SemiArrow8.svg';
 import React, { forwardRef, useEffect, useRef, useState } from 'react';
 import { useRecoilState } from 'recoil';
-import { currentModifyDayPlan } from 'src/states';
+import usePatchCompletedSchedules from 'src/hooks/query/usePatchCompletedSchedules';
+import { checkedSchedules, currentModifyDayPlan, openedSchedules } from 'src/states';
 import { theme } from 'src/styles/theme';
 import { dailyPlanFlag } from 'src/types';
 import styled, { css } from 'styled-components';
@@ -23,7 +24,7 @@ interface CommonDayPlanChipProps {
   onArrowBtnClick?: () => void;
   isCompleted?: boolean;
   itemId?: string;
-  flag?: dailyPlanFlag;
+  flag: dailyPlanFlag;
   index?: number;
   id?: string;
   [key: string]: any;
@@ -66,13 +67,40 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
     const inputValue = useRef<HTMLInputElement>(null);
     const [dayPlan, setDayPlan] = useState<string | undefined>(children);
     const [currentTargetPlan, setCurrentTargetPlan] = useRecoilState(currentModifyDayPlan);
+    const [openItem, setOpenItem] = useRecoilState(openedSchedules);
+    const [checkItem, setCheckItem] = useRecoilState(checkedSchedules);
+    const checkBoxRef = useRef(null);
+    const { mutate: mutateCompletedSchedules } = usePatchCompletedSchedules({
+      scheduleId: itemId,
+      flag,
+      date: props?.item?.date,
+      isCompleted: !isChecked,
+    });
 
     const handleChange = () => {
       setIsChecked((prev) => !prev);
-      // @TODO React query optimistic update로 완료된 계획 post
-      console.log('>>>체크 상태', isChecked);
-      console.log('체크된 애 아이디', itemId);
+      mutateCompletedSchedules();
+
+      if (flag !== 'daily') {
+        return;
+      }
+      /* 타임 블록 드래그에서 체크 여부를 추적하기 위해 리코일에 저장 - 삭제시 사라지도록 */
+      // 체크 안 된 경우
+      if (isChecked) {
+        const copyItem = new Set([...Array.from(checkItem)]);
+        copyItem.delete(itemId);
+        setCheckItem(copyItem);
+        //체크된 경우
+      } else {
+        const copyItem = new Set([...Array.from(checkItem)]);
+        copyItem.add(itemId);
+        setCheckItem(copyItem);
+      }
     };
+
+    useEffect(() => {
+      console.log('>>checkItem', checkItem);
+    }, [checkItem]);
 
     const handleDbClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
       e.preventDefault();
@@ -81,7 +109,7 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
         inputValue.current?.focus();
       }, 50);
       // 배타적이어야 하므로 현재 선택된 애를 리코일에 저장
-      setCurrentTargetPlan(e.currentTarget.id);
+      setCurrentTargetPlan(itemId);
     };
 
     const handleBlur = () => {
@@ -91,21 +119,36 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       // @TODO inputValue.current?.value 를 post
-      console.log(inputValue.current?.value);
+      // console.log(inputValue.current?.value);
       setDayPlan(inputValue.current?.value);
       setCurrentTargetPlan('');
       // @TODO 서버로 계획 생성 POST
     };
 
     useEffect(() => {
-      console.log('>>>여기 아이디,itemId', itemId);
-      console.log('>>>>currentTargetPlan', currentTargetPlan);
+      // console.log('>>>여기 아이디,itemId', itemId);
+      // console.log('>>>>currentTargetPlan', currentTargetPlan);
     }, [itemId, currentTargetPlan]);
+
+    useEffect(() => {
+      // Open된 상태 리코일에 저장
+      if (isOpened) {
+        // set 자료형에 대한 copy 필요
+        const coptItem = new Set([...Array.from(openItem)]);
+        coptItem.add(itemId);
+        setOpenItem(coptItem);
+      } else {
+        const coptItem = new Set([...Array.from(openItem)]);
+        coptItem.delete(itemId);
+        setOpenItem(coptItem);
+      }
+    }, [isOpened]);
+
     return (
       <Styled.Container {...props} shape={shape} ref={ref} index={index} flag={flag} id={itemId}>
         {color !== 'none' && <Styled.ColorChip color={color} />}
         <Styled.Box shape={shape}>
-          <CheckBox id="dayCheck" isChecked={isChecked} onChange={handleChange} />
+          <CheckBox id={itemId} isChecked={isChecked} onChange={handleChange} ref={checkBoxRef} />
           <Styled.ContentsWrapper onDoubleClick={handleDbClick} id={itemId}>
             <div>
               {color === 'none' ? (

@@ -1,19 +1,6 @@
-import { dailyPlanFlag, Schedule } from 'src/types';
+import { FlagedData } from 'src/types';
 
-interface SchedulDataWrapper {
-  schedules: Schedule[];
-}
-
-interface FloagedData {
-  data?: {
-    data: {
-      data: SchedulDataWrapper;
-    };
-  };
-  type: dailyPlanFlag;
-}
-
-export const getFlagedData = ({ data, type }: FloagedData) => {
-  const organizedData = data?.data?.data?.schedules.map((obj) => ({ ...obj, flag: type }));
+export const getFlagedData = ({ data, type }: FlagedData) => {
+  const organizedData = data?.data?.data?.schedules?.map((obj) => ({ ...obj, flag: type }));
   return organizedData;
 };

@@ -1,4 +1,4 @@
-import { dailyPlanFlag } from '.';
+import { categoryColorCodeType, dailyPlanFlag, Schedule } from '.';
 
 export interface CalendarQueryType {
   month: string;
@@ -41,4 +41,31 @@ export interface ScheduleTimeDeleteType {
 export interface deleteRefetching extends ScheduleId {
   flag: dailyPlanFlag;
   date?: string;
+}
+
+export interface ScheduleAndDate {
+  scheduleId: string;
+  date: string;
+}
+
+export interface ScheduleAndIsCompleted {
+  scheduleId: string;
+  isCompleted: boolean;
+}
+
+export interface PatchOrderSchedules {
+  scheduleId: string;
+  scheduleList: Schedule[];
+}
+
+export interface PostScheduleBlock {
+  date: string;
+  title: string;
+  categoryColorCode: categoryColorCodeType;
+  isRoutine: boolean;
+}
+
+export interface TitleAndScheduleId {
+  title: string;
+  scheduleId: string;
 }

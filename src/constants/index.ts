@@ -5,12 +5,12 @@ export const PLAN_CHIP = {
   CHILD: 'draggableChild',
 };
 
-type flagKeyType = 'DAILY' | 'ROUTINE' | 'RECHEDULE' | 'WEEKLY' | 'CHILD';
+type flagKeyType = 'DAILY' | 'ROUTINE' | 'reschedule' | 'WEEKLY' | 'CHILD';
 
 export const FLAG: Record<flagKeyType, dailyPlanFlag> = {
   DAILY: 'daily',
   ROUTINE: 'routine',
-  RECHEDULE: 'rechedule',
+  reschedule: 'reschedule',
   WEEKLY: 'weekly',
   CHILD: 'child',
 };
