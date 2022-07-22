@@ -1,8 +1,10 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import BackgroundFooter from 'public/assets/Background_footer.png';
 import YourDirection from 'public/assets/YourDirection.png';
 import React from 'react';
 import { theme } from 'src/styles/theme';
+import { getTodayDate } from 'src/utils/getDate';
 import styled from 'styled-components';
 
 function Footer() {
@@ -23,6 +25,9 @@ function Footer() {
           DRAG.ME를 통해
           <br />
           목표에 도달할 준비가 되셨나요?
+          <Link href={`/day/${getTodayDate(0)}`}>
+            <Styled.StartBtn>시작하기</Styled.StartBtn>
+          </Link>
         </Styled.Title>
       </Styled.GradientArea>
 
@@ -70,6 +75,22 @@ const Styled = {
     }
 
     color: ${theme.colors.letter_black};
+  `,
+  StartBtn: styled.button`
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 20rem;
+    height: 4.8rem;
+    background-color: ${theme.colors.main_color};
+    border: 0;
+    outline: 0;
+    color: ${theme.category.cate_white};
+    border-radius: 4px;
+    filter: drop-shadow(0px 0px 10px rgba(0, 36, 182, 0.5));
+    font-size: 2.2rem;
+    line-height: 140%;
+    transform: translateY(75%);
   `,
   GradientArea: styled.div`
     position: absolute;
