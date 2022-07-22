@@ -146,7 +146,6 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      console.log('>>서브밋 할 때 상황', currentTargetPlan);
       if (currentTargetPlan?.itemId === '') {
         postScheduleNameBlock();
       } else {

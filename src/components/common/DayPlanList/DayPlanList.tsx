@@ -159,7 +159,7 @@ function DayPlanList({
   // 드랍되었을 때 실행될 함수
   const endToMovePlanChip = ({ hoverFlag, hoverIndex, ...item }: movePlanChipParams) => {
     console.log('>드랍됫어!!', currentDraggingItem);
-    console.log('>currentHoverItem!!', currentHoverItem);
+
     // currentDragChipState를 서버로 요청
     // optimistic update
     switch (currentHoverItem) {
