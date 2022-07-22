@@ -46,6 +46,7 @@ interface BoxStyleProps {
 interface ContentsStyleProps {
   isChecked: boolean;
   haveChild?: boolean;
+  [key: string]: any;
 }
 
 const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
@@ -160,10 +161,6 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
     }, [isOpened]);
 
     useEffect(() => {
-      console.log('>>currentTargetPlan', currentTargetPlan);
-    }, [currentTargetPlan]);
-
-    useEffect(() => {
       console.log('>>inputValue.current?.value', inputValue.current?.value);
     }, [inputValue.current?.value]);
     return (
@@ -174,14 +171,21 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
           <Styled.ContentsWrapper onDoubleClick={handleDbClick} id={itemId}>
             <div>
               {color === 'none' ? (
-                <Styled.Contents isChecked={isChecked}>{children}</Styled.Contents>
+                <Styled.Contents
+                  isChecked={isChecked}
+                  haveChild={!!(props?.item?.subschedules?.length > 0)}
+                >
+                  {children}
+                </Styled.Contents>
               ) : (
                 // eslint-disable-next-line react/jsx-no-useless-fragment
                 <>
                   {currentTargetPlan.itemId !== itemId && dayPlan ? (
-                    <Styled.Contents isChecked={isChecked}>{children}</Styled.Contents>
+                    <Styled.Contents isChecked={isChecked} haveChild={haveChild}>
+                      {children}
+                    </Styled.Contents>
                   ) : (
-                    <Styled.Form onSubmit={handleSubmit}>
+                    <Styled.Form onSubmit={handleSubmit} haveChild={haveChild}>
                       <Styled.Input
                         type="text"
                         ref={inputValue}
@@ -283,13 +287,14 @@ const Styled = {
     justify-content: space-between;
     align-items: center;
   `,
-  Form: styled.form`
-    min-width: 16rem;
+  Form: styled.form<ContentsStyleProps>`
+    min-width: 11rem;
     /* width: 65%; */
     appearance: none;
     outline: none;
     margin-left: 0.8rem;
     /* font-size: 1.2rem; */
+    ${({ haveChild }) => (haveChild ? 'width: 65%;' : 'min-width: 14rem;')}
   `,
   Input: styled.input`
     width: 100%;
@@ -360,10 +365,10 @@ const Styled = {
     display: flex;
     align-items: center;
     margin-left: 0.8rem;
-    min-width: 11.3rem;
-    ${({ haveChild }) => haveChild && 'width: 65%;'}
-
-    max-width: 14rem;
+    /* max-width: 12rem; */
+    max-width: 11.3rem;
+    /* width: 65%; */
+    ${({ haveChild }) => (haveChild ? 'max-width: 11rem' : 'max-width: 13rem;')}
     color: ${({ isChecked }) => isChecked && theme.colors.plan_grey};
     overflow: hidden;
     text-overflow: ellipsis;

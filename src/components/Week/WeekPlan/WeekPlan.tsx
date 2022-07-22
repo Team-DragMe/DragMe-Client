@@ -18,7 +18,6 @@ interface WeekInfoType {
 function WeekPlan() {
   const router = useRouter();
   const weekRecoil = useRecoilValue(weekInfo);
-  console.log('weekRecoil>>>', weekRecoil);
   const startDate = weekRecoil[0];
   const endDate = weekRecoil[6];
   const { data: weeklySchedules } = useGetWeeklySchedules({ startDate, endDate });
@@ -27,9 +26,6 @@ function WeekPlan() {
   const weekInfoData: WeekInfoType[] = data?.data;
   const numberArray = [0, 1, 2, 3, 4, 5, 6];
   const week = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
-  useEffect(() => {
-    console.log('>>>>>>>>>>>>>>weeklySchedules', weeklySchedules?.data);
-  }, [data, weeklySchedules]);
 
   return (
     <Styled.Root>
@@ -41,6 +37,7 @@ function WeekPlan() {
             dayInfo={weekInfoData[number]}
             day={week[number]}
             schedulesData={weeklySchedules?.data[idx]?.schedules}
+            weekIndex={idx}
           />
         ))}
     </Styled.Root>

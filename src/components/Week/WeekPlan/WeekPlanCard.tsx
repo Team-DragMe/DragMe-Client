@@ -17,10 +17,12 @@ interface WeekPlanCardProps {
   };
   day: string;
   schedulesData: Schedule[];
+  weekIndex: number;
 }
 function WeekPlanCard(props: WeekPlanCardProps) {
-  const { dayInfo, day, schedulesData } = props;
+  const { dayInfo, day, schedulesData, weekIndex } = props;
   const [click, setClick] = useState<boolean>(false);
+  const [isEnterBtn, setIsEnterBtn] = useState(false);
 
   const useOutsideAlert = (ref: React.RefObject<HTMLDivElement>) => {
     useEffect(() => {
@@ -66,7 +68,14 @@ function WeekPlanCard(props: WeekPlanCardProps) {
         </Styled.DayWrapper>
         <p>{dateInfo}</p>
       </Styled.Header>
-      <DayPlanList maxHeight="21rem" schedulesData={schedulesData} flag={FLAG.DAILY} />
+      <DayPlanList
+        maxHeight={isEnterBtn ? '23rem' : '27rem'}
+        schedulesData={schedulesData}
+        flag={FLAG.DAILY}
+        weekIndex={weekIndex}
+        isEnterBtn={isEnterBtn}
+        setIsEnterBtn={setIsEnterBtn}
+      />
     </Styled.Root>
   );
 }
