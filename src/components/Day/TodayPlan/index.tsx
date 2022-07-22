@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import styled from 'styled-components';
 import { dayInfo } from 'src/states';
+import styled from 'styled-components';
 
 import ForwardEmojiPicker from './EmojiPicker';
 import TodayPlanInput from './TodayPlanInput';

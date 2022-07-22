@@ -1,9 +1,7 @@
 import { IEmojiData, IEmojiPickerProps } from 'emoji-picker-react';
 import dynamic from 'next/dynamic';
-import Image from 'next/image';
 import SmileEmoticon from 'public/assets/SmileEmoticon.svg';
 import React, { useState } from 'react';
-import { useRecoilValue } from 'recoil';
 import usePostInformationData from 'src/hooks/query/usePostInformationData';
 import styled from 'styled-components';
 
@@ -47,16 +45,16 @@ function EmojiPicker(
         ) : (
           <StyledEmojiPicker.DefaultEmoji>
             {emoji === '' ? (
-              <StyledEmojiPicker.SmileEmoticon></StyledEmojiPicker.SmileEmoticon>
+              <StyledEmojiPicker.SmileEmoticon />
             ) : (
               <StyledEmojiPicker.Emoji>{emoji}</StyledEmojiPicker.Emoji>
             )}
           </StyledEmojiPicker.DefaultEmoji>
         )}
+        <StyledEmojiPicker.Picker>
+          {click ? <Picker onEmojiClick={handleEmojiClick} /> : <div />}
+        </StyledEmojiPicker.Picker>
       </StyledEmojiPicker.Root>
-      <StyledEmojiPicker.Picker>
-        {click ? <Picker onEmojiClick={handleEmojiClick} /> : <div />}
-      </StyledEmojiPicker.Picker>
     </div>
   );
 }
@@ -65,9 +63,14 @@ const ForwardEmojiPicker = React.forwardRef<EmojiPickerElement, EmojiPickerProps
 export default ForwardEmojiPicker;
 
 const StyledEmojiPicker = {
-  Root: styled.div``,
+  Root: styled.div`
+    position: relative;
+    z-index: 1;
+  `,
   Picker: styled.div`
-    position: fixed;
+    position: absolute;
+    top: 3rem;
+    z-index: 3;
     cursor: pointer;
   `,
   Emoji: styled.a`
@@ -80,7 +83,6 @@ const StyledEmojiPicker = {
   `,
   DefaultEmoji: styled.a`
     font-size: 1.5rem;
-    padding: 0.5rem;
     cursor: pointer;
   `,
 };

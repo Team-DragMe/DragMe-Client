@@ -74,3 +74,13 @@ export const currentHoverFlag = atom({
 
 // 1. 내부 애들 확인, hover한 애들 전체적으로 확인
 // 이 값이 바뀌면 이걸 키로 useMutation 사용
+
+export const scrollY = atom({
+  key: 'scrollY',
+  default: 0,
+});
+
+export const modalClickXY = atom({
+  key: 'modalClickXY',
+  default: { posX: 0, posY: 0, scheduleId: '', flag: '', date: '' },
+});

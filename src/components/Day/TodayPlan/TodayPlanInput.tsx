@@ -35,11 +35,10 @@ function TodayPlanInput({ dailyGoal }: TodayPlanInputProps) {
   return (
     <StyledTodayPlanInput.Root>
       <StyledTodayPlanInput.Input
-        placeholder="오늘 하루 계획 및 다짐을 입력해주세요."
+        placeholder="일정 계획을 둘러보며 하루를 마무리 해보세요."
         onChange={changeHandler}
         value={value}
       />
-      <StyledTodayPlanInput.Hr />
     </StyledTodayPlanInput.Root>
   );
 }
@@ -54,23 +53,21 @@ const StyledTodayPlanInput = {
     justify-content: left;
   `,
   Input: styled.input`
-    margin-top: 0.4rem;
+    width: 42.3rem;
+    height: 2.2rem;
     border: none;
     padding: 0;
     font-size: 1.2rem;
     &::placeholder {
       color: ${theme.colors.letter_grey};
+      font-weight: 400;
+      font-size: 1.2rem;
+      line-height: 150%;
     }
     &:focus {
       color: ${theme.colors.letter_black};
       outline: 0;
     }
-  `,
-  Hr: styled.hr`
-    margin: 0;
-    border: 0.1rem solid;
-    padding: 0;
-    width: 47.3rem;
-    color: ${theme.colors.letter_grey};
+    border-bottom: 0.1rem solid ${theme.colors.letter_grey};
   `,
 };

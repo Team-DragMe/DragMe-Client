@@ -1,11 +1,13 @@
 import {
   CalendarQueryType,
   DateQueryType,
+  deleteRefetching,
   getEmojiQueryType,
   InformationRequestType,
   ScheduleAndDate,
   ScheduleAndIsCompleted,
   ScheduleId,
+  ScheduleTimeDeleteType,
   ScheduleTimePostType,
 } from 'src/types/day';
 
@@ -58,11 +60,16 @@ export const postScheduleTime = async ({ scheduleId, ...data }: ScheduleTimePost
   return post;
 };
 
-// export const deleteScheduleTime = async ({ scheduleId, ...data }: ScheduleTimePostType) => {
-//   const post = await client.delete(`/schedule/time/scheduleId=${scheduleId}`, { ...data });
+export const patchScheduleTime = async ({
+  scheduleId,
+  timeBlockNumbers,
+}: ScheduleTimeDeleteType) => {
+  const post = await client.patch(`/schedule/time?scheduleId=${scheduleId}`, {
+    timeBlockNumbers,
+  });
 
-//   return post;
-// };
+  return post;
+};
 
 // 계획 블록 완료
 export const patchCompleteScheduleData = async ({
@@ -142,3 +149,9 @@ export const patchScheduleBlock = async ({ scheduleId, title }) => {
 };
 
 // 자주
+
+export const deleteScheduleData = async ({ scheduleId }: ScheduleId) => {
+  const { data } = await client.delete(`/schedule?scheduleId=${scheduleId}`);
+
+  return data;
+};

@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from 'react-query';
 import { patchCompleteScheduleData } from 'src/lib/api/dayApi';
-import { dailyPlanFlag } from 'src/types';
+import { dailyPlanFlag, Schedule } from 'src/types';
 
 interface usePatchCompletedSchedulesParams {
   scheduleId: string;
