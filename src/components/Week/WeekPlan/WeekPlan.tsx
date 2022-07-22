@@ -1,11 +1,12 @@
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import { useRecoilValue } from 'recoil';
 import useEmojiListData from 'src/hooks/query/useEmojiListData';
+import { weekInfo } from 'src/states';
 import { DayStorage } from 'src/utils/getDate';
 import styled from 'styled-components';
+
 import WeekPlanCard from './WeekPlanCard';
-import { useRouter } from 'next/router';
-import { useRecoilValue } from 'recoil';
-import { weekInfo } from 'src/states';
-import { useEffect } from 'react';
 
 interface WeekInfoType {
   date: string;
@@ -30,11 +31,7 @@ function WeekPlan() {
     <Styled.Root>
       {weekInfoData &&
         numberArray.map((number: number) => (
-          <WeekPlanCard
-            key={number}
-            dayInfo={weekInfoData[number]}
-            day={week[number]}
-          ></WeekPlanCard>
+          <WeekPlanCard key={number} dayInfo={weekInfoData[number]} day={week[number]} />
         ))}
     </Styled.Root>
   );

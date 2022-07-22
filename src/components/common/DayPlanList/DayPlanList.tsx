@@ -3,9 +3,9 @@
 import update from 'immutability-helper';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDrop } from 'react-dnd';
-import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
-import DayPlanSettingModal from 'src/components/Day/DayPlanSettingModal';
 import { useQueryClient } from 'react-query';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import DayPlanSettingModal from 'src/components/Day/DayPlanSettingModal';
 import { FLAG } from 'src/constants';
 import usePatchDayToReschedule from 'src/hooks/query/usePatchDayToReschedule';
 import usePatchCompletedSchedules from 'src/hooks/query/usePatchDayToReschedule';
@@ -17,9 +17,9 @@ import {
   currentHoverFlag,
   dailyPlanList,
   dayInfo,
+  modalClickXY,
   reschedulePlanList,
   routinePlanList,
-  modalClickXY,
   scrollY,
 } from 'src/states';
 import { theme } from 'src/styles/theme';

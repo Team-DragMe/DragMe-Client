@@ -1,4 +1,4 @@
-import { categoryColorCodeType, Schedule, dailyPlanFlag } from '.';
+import { categoryColorCodeType, dailyPlanFlag, Schedule } from '.';
 
 export interface CalendarQueryType {
   month: string;

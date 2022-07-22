@@ -1,5 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
+import { useRecoilValue } from 'recoil';
+import DayPlanList from 'src/components/common/DayPlanList/DayPlanList';
 import ForwardEmojiPicker from 'src/components/Day/TodayPlan/EmojiPicker';
+import { FLAG } from 'src/constants';
+import useGetWeeklySchedules from 'src/hooks/query/useGetWeeklySchedules';
+import { weekInfo } from 'src/states';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
 
@@ -14,6 +19,11 @@ interface WeekPlanCardProps {
 function WeekPlanCard(props: WeekPlanCardProps) {
   const { dayInfo, day } = props;
   const [click, setClick] = useState<boolean>(false);
+  const week = useRecoilValue(weekInfo);
+  const startDate = week[0];
+  const endDate = week[6];
+  const { data } = useGetWeeklySchedules({ startDate, endDate });
+
   const useOutsideAlert = (ref: React.RefObject<HTMLDivElement>) => {
     useEffect(() => {
       function handleClickOutside(event: MouseEvent) {
@@ -54,6 +64,7 @@ function WeekPlanCard(props: WeekPlanCardProps) {
         </Styled.DayWrapper>
         <p>{dateInfo}</p>
       </Styled.Header>
+      <DayPlanList maxHeight="21rem" schedulesData={data} flag={FLAG.DAILY} />
     </Styled.Root>
   );
 }
