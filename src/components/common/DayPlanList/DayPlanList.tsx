@@ -232,7 +232,7 @@ function DayPlanList({ maxHeight = '45rem', flag, schedulesData, ...props }: Day
   const handleScroll = (e: React.WheelEvent<HTMLElement>) => {
     if (e.target instanceof HTMLElement) {
       setScrollData(e.currentTarget.scrollTop);
-      setPosXY({ posX: 0, posY: 0, scheduleId: '' });
+      setPosXY({ posX: 0, posY: 0, scheduleId: '', flag, date: '' });
     }
   };
 
@@ -286,6 +286,7 @@ function DayPlanList({ maxHeight = '45rem', flag, schedulesData, ...props }: Day
                 shape="rectangle"
                 flag={flag}
                 index={schedulesData.length + 1}
+                item={item}
               />
               <div ref={scrollEndRef} />
             </Styled.Li>

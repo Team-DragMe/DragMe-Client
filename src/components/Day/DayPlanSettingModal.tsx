@@ -6,6 +6,7 @@ import { useRecoilState } from 'recoil';
 import useDeleteSchedule from 'src/hooks/query/useDeleteSchedule';
 import { modalClickXY } from 'src/states';
 import { theme } from 'src/styles/theme';
+import { dailyPlanFlag } from 'src/types';
 import styled from 'styled-components';
 
 interface DayPlanSettingModalProps {
@@ -15,7 +16,12 @@ interface DayPlanSettingModalProps {
 function DayPlanSettingModal({ top, left }: DayPlanSettingModalProps) {
   const colors = theme.category;
   const [clickInfo, setClickInfo] = useRecoilState(modalClickXY);
-  const { mutate: deleteSchedule } = useDeleteSchedule();
+  const flag = clickInfo.flag as dailyPlanFlag;
+  const { mutate: deleteSchedule } = useDeleteSchedule({
+    scheduleId: clickInfo.scheduleId,
+    flag,
+    date: clickInfo.date,
+  });
 
   const colorCode = [
     { id: 0, color: `${colors.cate_mint}` },
@@ -33,8 +39,8 @@ function DayPlanSettingModal({ top, left }: DayPlanSettingModalProps) {
 
   const handleDelete = (e: React.MouseEvent<HTMLElement>) => {
     if (e.target instanceof HTMLElement) {
-      deleteSchedule({ scheduleId: clickInfo.scheduleId });
-      setClickInfo({ posX: 0, posY: 0, scheduleId: '' });
+      deleteSchedule();
+      setClickInfo({ posX: 0, posY: 0, scheduleId: '', flag, date: '' });
     }
   };
 

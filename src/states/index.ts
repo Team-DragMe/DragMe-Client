@@ -57,5 +57,5 @@ export const scrollY = atom({
 
 export const modalClickXY = atom({
   key: 'modalClickXY',
-  default: { posX: 0, posY: 0, scheduleId: '' },
+  default: { posX: 0, posY: 0, scheduleId: '', flag: '', date: '' },
 });
