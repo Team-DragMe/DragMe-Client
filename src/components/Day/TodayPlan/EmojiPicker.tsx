@@ -51,10 +51,10 @@ function EmojiPicker(
             )}
           </StyledEmojiPicker.DefaultEmoji>
         )}
+        <StyledEmojiPicker.Picker>
+          {click ? <Picker onEmojiClick={handleEmojiClick} /> : <div />}
+        </StyledEmojiPicker.Picker>
       </StyledEmojiPicker.Root>
-      <StyledEmojiPicker.Picker>
-        {click ? <Picker onEmojiClick={handleEmojiClick} /> : <div />}
-      </StyledEmojiPicker.Picker>
     </div>
   );
 }
@@ -63,9 +63,14 @@ const ForwardEmojiPicker = React.forwardRef<EmojiPickerElement, EmojiPickerProps
 export default ForwardEmojiPicker;
 
 const StyledEmojiPicker = {
-  Root: styled.div``,
+  Root: styled.div`
+    position: relative;
+    z-index: 1;
+  `,
   Picker: styled.div`
-    position: fixed;
+    position: absolute;
+    top: 3rem;
+    z-index: 3;
     cursor: pointer;
   `,
   Emoji: styled.a`
@@ -78,7 +83,6 @@ const StyledEmojiPicker = {
   `,
   DefaultEmoji: styled.a`
     font-size: 1.5rem;
-    padding: 0.5rem;
     cursor: pointer;
   `,
 };

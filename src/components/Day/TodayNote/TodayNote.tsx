@@ -35,7 +35,7 @@ function TodayNote({ memo }: TodayNoteProps) {
   return (
     <StyledTodayNote.Root>
       <StyledTodayNote.Textarea
-        placeholder="오늘 하루 노트를 작성해보세요."
+        placeholder="자유롭게 메모를 작성해보세요."
         value={value}
         onChange={changeHandler}
       />
