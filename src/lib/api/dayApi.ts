@@ -1,6 +1,7 @@
 import {
   CalendarQueryType,
   DateQueryType,
+  deleteRefetching,
   getEmojiQueryType,
   InformationRequestType,
   ScheduleId,
@@ -74,4 +75,10 @@ export const getEmojiListData = async ({ startDate, endDate }: getEmojiQueryType
   const { data } = await client.get(`/information/emoji?startDate=${startDate}&endDate=${endDate}`);
 
   return { data };
+};
+
+export const deleteScheduleData = async ({ scheduleId }: ScheduleId) => {
+  const { data } = await client.delete(`/schedule?scheduleId=${scheduleId}`);
+
+  return data;
 };

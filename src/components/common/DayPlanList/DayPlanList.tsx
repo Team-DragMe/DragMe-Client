@@ -3,9 +3,16 @@ import update from 'immutability-helper';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDrop } from 'react-dnd';
 import { useRecoilState, useSetRecoilState } from 'recoil';
+import DayPlanSettingModal from 'src/components/Day/DayPlanSettingModal';
 import { FLAG } from 'src/constants';
 import useThrottle from 'src/hooks/useThrottle';
-import { dailyPlanList, reschedulePlanList, routinePlanList, scrollY } from 'src/states';
+import {
+  dailyPlanList,
+  modalClickXY,
+  reschedulePlanList,
+  routinePlanList,
+  scrollY,
+} from 'src/states';
 import { theme } from 'src/styles/theme';
 import { dailyPlanFlag, Schedule } from 'src/types';
 import styled, { css } from 'styled-components';
@@ -46,6 +53,7 @@ function DayPlanList({ maxHeight = '45rem', flag, schedulesData, ...props }: Day
   const [rescheduleData, setRescheduleData] = useRecoilState(reschedulePlanList);
   const [routineScheduleData, setRoutineScheduleData] = useRecoilState(routinePlanList);
   const setScrollData = useSetRecoilState(scrollY);
+  const setPosXY = useSetRecoilState(modalClickXY);
   const [currentDragChipState, setCurrentDragChipState] = useState<movePlanChipParams | null>(null);
   const currentDragChip = useRef<movePlanChipParams | null>(null);
   const scrollEndRef = useRef<HTMLDivElement>(null);
@@ -223,8 +231,8 @@ function DayPlanList({ maxHeight = '45rem', flag, schedulesData, ...props }: Day
 
   const handleScroll = (e: React.WheelEvent<HTMLElement>) => {
     if (e.target instanceof HTMLElement) {
-      console.log(e.currentTarget.scrollTop);
       setScrollData(e.currentTarget.scrollTop);
+      setPosXY({ posX: 0, posY: 0, scheduleId: '', flag, date: '' });
     }
   };
 
@@ -242,6 +250,7 @@ function DayPlanList({ maxHeight = '45rem', flag, schedulesData, ...props }: Day
         isOver={isOver}
         onWheel={handleScroll}
       >
+        {/* <DayPlanSettingModal /> */}
         {/* {isOver && <Styled.DropWrapper canDrop={canDrop} maxHeight={maxHeight} />} */}
         <Styled.Ul maxHeight={maxHeight}>
           {schedulesData?.map((item, idx) => (
@@ -277,6 +286,7 @@ function DayPlanList({ maxHeight = '45rem', flag, schedulesData, ...props }: Day
                 shape="rectangle"
                 flag={flag}
                 index={schedulesData.length + 1}
+                item={item}
               />
               <div ref={scrollEndRef} />
             </Styled.Li>
@@ -311,6 +321,9 @@ const Styled = {
     justify-content: center;
     position: relative;
     overflow-y: scroll;
+    ::-webkit-scrollbar {
+      display: none;
+    }
   `,
   DropWrapper: styled.div<DropWrapperStyleProps>`
     height: 100%;

@@ -1,3 +1,5 @@
+import { dailyPlanFlag } from '.';
+
 export interface CalendarQueryType {
   month: string;
 }
@@ -34,4 +36,9 @@ export interface ScheduleTimePostType {
 export interface ScheduleTimeDeleteType {
   scheduleId: string;
   timeBlockNumbers: number[];
+}
+
+export interface deleteRefetching extends ScheduleId {
+  flag: dailyPlanFlag;
+  date?: string;
 }

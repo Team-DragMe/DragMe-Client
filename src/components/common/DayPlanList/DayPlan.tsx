@@ -181,6 +181,7 @@ const DayPlan = React.memo(function DayPlan({
         itemId={item?._id}
         index={idx}
         flag={flag}
+        item={item}
       >
         {item?.title}
       </CommonDayPlanChip>

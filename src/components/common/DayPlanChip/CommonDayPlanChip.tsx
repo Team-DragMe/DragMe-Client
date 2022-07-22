@@ -26,6 +26,7 @@ interface CommonDayPlanChipProps {
   flag?: dailyPlanFlag;
   index?: number;
   id?: string;
+  [key: string]: any;
 }
 
 interface ColorChipStyleProps {
@@ -123,7 +124,14 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
               )}
             </div>
             <Styled.BtnWrapper>
-              {(addon || haveChild) && <AddonBtn onClick={onAddonClick} />}
+              {(addon || haveChild) && (
+                <AddonBtn
+                  onClick={onAddonClick}
+                  scheduleId={itemId}
+                  flag={flag || 'daily'}
+                  date={props.item.date}
+                />
+              )}
               {haveChild && <CollapseArrow isOpened={isOpened} onClick={onArrowBtnClick} />}
             </Styled.BtnWrapper>
           </Styled.ContentsWrapper>
