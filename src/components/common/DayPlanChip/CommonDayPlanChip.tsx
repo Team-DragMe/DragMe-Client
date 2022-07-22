@@ -3,6 +3,8 @@ import SemiArrow from 'public/assets/icons/SemiArrow8.svg';
 import React, { forwardRef, useEffect, useRef, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import usePatchCompletedSchedules from 'src/hooks/query/usePatchCompletedSchedules';
+import usePatchScheduleBlock from 'src/hooks/query/usePatchScheduleBlock';
+import usePostScheduleBlock from 'src/hooks/query/usePostScheduleBlock';
 import { checkedSchedules, currentModifyDayPlan, openedSchedules } from 'src/states';
 import { theme } from 'src/styles/theme';
 import { dailyPlanFlag } from 'src/types';
@@ -77,6 +79,18 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
       date: props?.item?.date,
       isCompleted: !isChecked,
     });
+    const { mutate: postScheduleNameBlock } = usePostScheduleBlock({
+      date: props?.item?.date,
+      categoryColorCode: '#FFFFFF',
+      flag: props?.item?.flag,
+      title: inputValue.current?.value,
+    });
+    const { mutate: patchScheduleNameBlock } = usePatchScheduleBlock({
+      date: props?.item?.date,
+      flag: props?.item?.flag,
+      title: inputValue.current?.value,
+      scheduleId: props?.item?.scheduleId,
+    });
 
     const handleChange = () => {
       setIsChecked((prev) => !prev);
@@ -119,6 +133,11 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
+      if (dayPlan) {
+        postScheduleNameBlock();
+      } else {
+        patchScheduleNameBlock();
+      }
       // @TODO inputValue.current?.value 를 post
       // console.log(inputValue.current?.value);
       setDayPlan(inputValue.current?.value);
@@ -144,6 +163,10 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
         setOpenItem(coptItem);
       }
     }, [isOpened]);
+
+    useEffect(() => {
+      console.log('>>currentTargetPlan', currentTargetPlan);
+    }, [currentTargetPlan]);
 
     return (
       <Styled.Container {...props} shape={shape} ref={ref} index={index} flag={flag} id={itemId}>

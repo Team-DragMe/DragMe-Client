@@ -11,7 +11,7 @@ interface usePatchScheduleBlockParams extends TitleAndScheduleId {
 
 // 해당하는 flag에 대해서만 invalidated 시키도록
 const usePatchScheduleBlock = ({
-  title,
+  title = '',
   scheduleId,
   flag,
   date = '',
