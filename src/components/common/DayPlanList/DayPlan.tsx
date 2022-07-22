@@ -99,8 +99,6 @@ const DayPlan = React.memo(function DayPlan({
         const dragItemObj = item as dragItemType;
         const hoverFlag = flag;
         const hoverIndex = idx;
-        console.log('>>hoverFlag', dragItemObj);
-        console.log('>>hoverFlag', hoverFlag);
         endToMovePlanChip({
           hoverFlag,
           hoverIndex,

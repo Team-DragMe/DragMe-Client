@@ -34,3 +34,22 @@ export interface SubSchedules {
   parentId: string;
   subSchedules: Schedule[];
 }
+
+export interface SchedulDataWrapper {
+  schedules: Schedule[];
+}
+
+export interface FlagedData {
+  data?: {
+    data: {
+      data: SchedulDataWrapper;
+    };
+  };
+  type: dailyPlanFlag;
+}
+
+export interface UnWrappingData {
+  data?: {
+    data: SchedulDataWrapper;
+  };
+}

@@ -3,6 +3,7 @@ import {
   DateQueryType,
   getEmojiQueryType,
   InformationRequestType,
+  ScheduleAndDate,
   ScheduleId,
   ScheduleTimePostType,
 } from 'src/types/day';
@@ -22,8 +23,7 @@ export const getTodayNoteData = async ({ date }: DateQueryType) => {
 };
 
 export const getTodayScheduleData = async ({ date }: DateQueryType) => {
-  const tempdate = '2022-07-21';
-  const { data } = await client.get(`/schedule/days?date=${tempdate}`);
+  const { data } = await client.get(`/schedule/days?date=${date}`);
   console.log('>>>getTodayScheduleData', data);
   return { data };
 };
@@ -93,7 +93,9 @@ export const patchRoutineToDaySchedules = async ({ scheduleId }: ScheduleId) => 
   return post;
 };
 
-export const patchRescheduleToDaySchedules = async ({ scheduleId }: ScheduleId) => {
-  const post = await client.patch(`/schedule/reschedule-day?scheduleId=${scheduleId}`);
+export const patchRescheduleToDaySchedules = async ({ scheduleId, date }: ScheduleAndDate) => {
+  const post = await client.patch(`/schedule/reschedule-day?scheduleId=${scheduleId}`, {
+    date,
+  });
   return post;
 };

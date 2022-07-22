@@ -1,58 +1,55 @@
 import { useMutation, useQueryClient } from 'react-query';
-import { patchDayToRescheduleSchedules } from 'src/lib/api/dayApi';
-import { dailyPlanFlag, Schedule } from 'src/types';
+import { patchRescheduleToDaySchedules } from 'src/lib/api/dayApi';
+import { dailyPlanFlag, FlagedData, Schedule, UnWrappingData } from 'src/types';
 
-interface usePatchDayToRescheduleParams {
+interface usePatchRescheduleToDayParams {
   scheduleId: string;
   schedule: Schedule;
   date?: string;
   hoverFlag: dailyPlanFlag | null;
 }
 
-// 일간 -> 미룰계획 (미룰 계획에 추가 / 계획에서 삭제)
-const usePatchDayToReschedule = ({
+// 미룰계획 -> 일정 (일정에 추가 / 미룰계획에서 삭제)
+const usePatchRescheduleToDay = ({
   scheduleId,
   schedule,
   date,
   hoverFlag,
-}: usePatchDayToRescheduleParams) => {
+}: usePatchRescheduleToDayParams) => {
   const queryClient = useQueryClient();
-  return useMutation(async () => patchDayToRescheduleSchedules({ scheduleId }), {
+  return useMutation(async () => patchRescheduleToDaySchedules({ scheduleId, date }), {
     onMutate: async () => {
       console.log('>>>schedule', schedule);
       console.log('>>>scheduleId', scheduleId);
       console.log('>>>date', date);
       const snapShotOfPreviousData = queryClient.getQueryData('reschedule');
       await queryClient.cancelQueries(['reschedule']);
-      //  미룰 계획에 추가 - 잘 됨
-      await queryClient.setQueriesData(['reschedule'], (oldSchedules: any) => {
+      await queryClient.cancelQueries(['daily', date]);
+      console.log('>>>snapShotOfPreviousData', snapShotOfPreviousData);
+      //  일정에 추가 - 잘 됨
+      queryClient.setQueriesData(['daily'], (oldSchedules: any) => {
+        console.log('>>oldSchedules', oldSchedules?.data?.data?.schedules);
         const optimisticData = [...oldSchedules?.data?.data?.schedules];
         optimisticData.push(schedule);
-        console.log('>>optimisticData 미룰 계획에 추가', optimisticData);
         return optimisticData;
       });
-
-      await queryClient.cancelQueries(['daily', date]);
-      //  기존 계획에서 삭제 - 안 됨
-      await queryClient.setQueriesData(['daily', date], (oldSchedules: any) => {
+      //  미룬 계획 에서 삭제 - 안됨
+      queryClient.setQueriesData(['reschedule', date], (oldSchedules: any) => {
         const newData = oldSchedules?.data?.data?.schedules.filter(
           (o: Schedule) => o._id !== scheduleId,
         );
-        console.log('>>optimisticData 기존 계획에서 삭제', newData);
         return newData;
       });
-
       // 장애 발생 시 스냅샷을 반환
       return {
         snapShotOfPreviousData,
       };
     },
     onSuccess: () => {
-      // queryClient.invalidateQueries(['reschedule', 'daily', date]);
+      queryClient.invalidateQueries('reschedule');
       queryClient.invalidateQueries(['daily', date]);
-      queryClient.invalidateQueries(['reschedule']);
     },
   });
 };
 
-export default usePatchDayToReschedule;
+export default usePatchRescheduleToDay;

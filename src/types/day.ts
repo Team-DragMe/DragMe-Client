@@ -30,3 +30,8 @@ export interface ScheduleTimePostType {
   isUsed: boolean;
   timeBlockNumbers: number[];
 }
+
+export interface ScheduleAndDate{
+  scheduleId: string;
+  date: string;
+}

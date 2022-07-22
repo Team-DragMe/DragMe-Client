@@ -3,15 +3,18 @@
 import update from 'immutability-helper';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDrop } from 'react-dnd';
-import { useRecoilState } from 'recoil';
+import { useQueryClient } from 'react-query';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { FLAG } from 'src/constants';
 import usePatchDayToReschedule from 'src/hooks/query/usePatchDayToReschedule';
 import usePatchCompletedSchedules from 'src/hooks/query/usePatchDayToReschedule';
+import usePatchRescheduleToDay from 'src/hooks/query/usePatchRescheduleToDay';
 import useThrottle from 'src/hooks/useThrottle';
 import {
   currentDraggintElement,
   currentHoverFlag,
   dailyPlanList,
+  dayInfo,
   reschedulePlanList,
   routinePlanList,
 } from 'src/states';
@@ -60,8 +63,22 @@ function DayPlanList({ maxHeight = '46.2rem', flag, schedulesData, ...props }: D
   const [addPlan, setAddPlan] = useState(false);
   const [currentDraggingItem, setCurrentDraggingItem] = useRecoilState(currentDraggintElement);
   const [currentHoverItem, setCurrentHoverItem] = useRecoilState(currentHoverFlag);
+  const today = useRecoilValue(dayInfo);
+  const currentDayDate = today.slice(0, 10);
+  const queryClient = useQueryClient();
 
-  const { mutate } = usePatchDayToReschedule();
+  const { mutate: DayToRescheduleMutate } = usePatchDayToReschedule({
+    scheduleId: currentDraggingItem._id,
+    schedule: currentDraggingItem,
+    date: currentDayDate,
+    hoverFlag: currentHoverItem,
+  });
+  const { mutate: RescheduleToDayMutate } = usePatchRescheduleToDay({
+    scheduleId: currentDraggingItem._id,
+    schedule: currentDraggingItem,
+    date: currentDayDate,
+    hoverFlag: currentHoverItem,
+  });
 
   /* item flag에 따라 드롭할 수 있는 영역 수정 */
   const getAcceptableEl = (currentType: string) => {
@@ -76,21 +93,6 @@ function DayPlanList({ maxHeight = '46.2rem', flag, schedulesData, ...props }: D
         return [FLAG.DAILY];
     }
   };
-
-  /* 현재 스케줄 리스트의 데이터 반환 */
-  // const getCurrentTypeData = (currentType: string) => {
-  //   switch (currentType) {
-  //     case 'routine':
-  //       return { schedulesData: routineScheduleData, setSchedulesData: setRoutineScheduleData };
-  //     case 'rechedule':
-  //       return { schedulesData: rescheduleData, setSchedulesData: setRescheduleData };
-  //     default:
-  //       return { schedulesData: dailyscheduleData, setSchedulesData: setDailyScheduleData };
-  //   }
-  // };
-
-  // const { schedulesData, setSchedulesData } = getCurrentTypeData(flag);
-
   const [{ isOver, canDrop, isActive }, sectionDropRef] = useDrop(() => ({
     accept: getAcceptableEl(flag),
     collect: (monitor) => ({
@@ -100,16 +102,12 @@ function DayPlanList({ maxHeight = '46.2rem', flag, schedulesData, ...props }: D
     }),
     canDrop: (item) => {
       const { flag: itemFlag } = item;
-
       const availableArea = getAcceptableEl(itemFlag);
       return availableArea.includes(currentSection);
     },
     hover(item, monitor) {
-      // console.log('item', item);
-      // console.log('flag of dropArea', flag);
-      // console.log('item', item);
       throttleChangeCurrentSection(flag);
-      // flag, _id, date, index
+      setCurrentHoverItem(flag);
     },
   }));
 
@@ -138,17 +136,22 @@ function DayPlanList({ maxHeight = '46.2rem', flag, schedulesData, ...props }: D
         // 일간 계획 요청 api post
         // 자주 사용 -> 일간 (복사)
         // 미룰 -> 일간 (삭제)
+        RescheduleToDayMutate();
+
         break;
       case 'rechedule':
         // 계획 미루기 api post
         // 일간 -> 미룰 (삭제)
         console.log('>>>>rechedule', currentHoverItem);
-        mutate({
-          scheduleId: currentDraggingItem._id,
-          schedule: currentDraggingItem,
-          date: currentDraggingItem.date,
-          hoverFlag: currentHoverItem,
-        });
+        DayToRescheduleMutate();
+
+        // queryClient.setQueriesData(['daily', currentDayDate], (oldSchedules: any) => {
+        //   const newData = oldSchedules?.data?.data?.schedules.filter(
+        //     (o: Schedule) => o._id !== currentDraggingItem._id,
+        //   );
+        //   console.log('>>optimisticData 일간 -> 미룰 (삭제)', newData);
+        //   return newData;
+        // });
         break;
       case 'routine':
         // 자주 사용하는 계획 api post
@@ -273,11 +276,11 @@ function DayPlanList({ maxHeight = '46.2rem', flag, schedulesData, ...props }: D
               thorottleMoveItemInSection={thorottleMoveItemInSection}
             />
           ))}
-          {isActive && currentDragChipState && (
+          {isActive && currentDraggingItem && (
             <Styled.ScrollEnd>
               <DayPlan
-                item={currentDragChipState}
-                idx={schedulesData.length}
+                item={currentDraggingItem}
+                idx={schedulesData?.length ? schedulesData.length : 0}
                 movePlanChip={throttleMovePlanChip}
                 endToMovePlanChip={endToMovePlanChip}
                 thorottleMoveItemInSection={thorottleMoveItemInSection}
@@ -292,7 +295,7 @@ function DayPlanList({ maxHeight = '46.2rem', flag, schedulesData, ...props }: D
                 color="#FFFFFF"
                 shape="rectangle"
                 flag={flag}
-                index={schedulesData.length + 1}
+                index={schedulesData?.length ? schedulesData.length + 1 : 1}
               />
               <div ref={scrollEndRef} />
             </Styled.Li>
