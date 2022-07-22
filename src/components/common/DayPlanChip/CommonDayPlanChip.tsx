@@ -1,11 +1,11 @@
 /* eslint-disable jsx-a11y/no-autofocus */
 import SemiArrow from 'public/assets/icons/SemiArrow8.svg';
 import React, { forwardRef, useEffect, useRef, useState } from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import usePatchCompletedSchedules from 'src/hooks/query/usePatchCompletedSchedules';
 import usePatchScheduleBlock from 'src/hooks/query/usePatchScheduleBlock';
 import usePostScheduleBlock from 'src/hooks/query/usePostScheduleBlock';
-import { checkedSchedules, currentModifyDayPlan, openedSchedules } from 'src/states';
+import { checkedSchedules, currentModifyDayPlan, dayInfo, openedSchedules } from 'src/states';
 import { theme } from 'src/styles/theme';
 import { dailyPlanFlag } from 'src/types';
 import styled, { css } from 'styled-components';
@@ -69,10 +69,13 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
     const [isChecked, setIsChecked] = useState(isCompleted);
     const inputValue = useRef<HTMLInputElement>(null);
     const [dayPlan, setDayPlan] = useState<string | undefined>(children);
+    const [inputValueState, setInputValueState] = useState<string>('');
     const [currentTargetPlan, setCurrentTargetPlan] = useRecoilState(currentModifyDayPlan);
     const [openItem, setOpenItem] = useRecoilState(openedSchedules);
     const [checkItem, setCheckItem] = useRecoilState(checkedSchedules);
     const checkBoxRef = useRef(null);
+    const today = useRecoilValue(dayInfo);
+    const currentTodayDate = today.slice(0, 10);
     const { mutate: mutateCompletedSchedules } = usePatchCompletedSchedules({
       scheduleId: itemId,
       flag,
@@ -80,16 +83,16 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
       isCompleted: !isChecked,
     });
     const { mutate: postScheduleNameBlock } = usePostScheduleBlock({
-      date: props?.item?.date,
+      date: currentTodayDate,
       categoryColorCode: '#FFFFFF',
-      flag: props?.item?.flag,
+      flag,
       title: inputValue.current?.value,
     });
     const { mutate: patchScheduleNameBlock } = usePatchScheduleBlock({
       date: props?.item?.date,
-      flag: props?.item?.flag,
+      flag,
       title: inputValue.current?.value,
-      scheduleId: props?.item?.scheduleId,
+      scheduleId: itemId,
     });
 
     const handleChange = () => {
@@ -113,9 +116,9 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
       }
     };
 
-    useEffect(() => {
-      console.log('>>checkItem', checkItem);
-    }, [checkItem]);
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setInputValueState(e.target.value);
+    };
 
     const handleDbClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
       e.preventDefault();
@@ -124,25 +127,21 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
         inputValue.current?.focus();
       }, 50);
       // 배타적이어야 하므로 현재 선택된 애를 리코일에 저장
-      setCurrentTargetPlan(itemId);
+      setCurrentTargetPlan({ itemId, flag: props?.item?.flag });
     };
 
     const handleBlur = () => {
-      setCurrentTargetPlan('');
+      setCurrentTargetPlan({ itemId: '', flag: '' });
     };
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      if (dayPlan) {
+      if (currentTargetPlan?.itemId === '') {
         postScheduleNameBlock();
       } else {
         patchScheduleNameBlock();
       }
-      // @TODO inputValue.current?.value 를 post
-      // console.log(inputValue.current?.value);
-      setDayPlan(inputValue.current?.value);
-      setCurrentTargetPlan('');
-      // @TODO 서버로 계획 생성 POST
+      setCurrentTargetPlan({ itemId: '', flag: '' });
     };
 
     useEffect(() => {
@@ -168,6 +167,9 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
       console.log('>>currentTargetPlan', currentTargetPlan);
     }, [currentTargetPlan]);
 
+    useEffect(() => {
+      console.log('>>inputValue.current?.value', inputValue.current?.value);
+    }, [inputValue.current?.value]);
     return (
       <Styled.Container {...props} shape={shape} ref={ref} index={index} flag={flag} id={itemId}>
         {color !== 'none' && <Styled.ColorChip color={color} />}
@@ -180,11 +182,17 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
               ) : (
                 // eslint-disable-next-line react/jsx-no-useless-fragment
                 <>
-                  {currentTargetPlan !== itemId && dayPlan ? (
+                  {currentTargetPlan.itemId !== itemId && dayPlan ? (
                     <Styled.Contents isChecked={isChecked}>{children}</Styled.Contents>
                   ) : (
                     <Styled.Form onSubmit={handleSubmit}>
-                      <Styled.Input type="text" ref={inputValue} onBlur={handleBlur} autoFocus />
+                      <Styled.Input
+                        type="text"
+                        ref={inputValue}
+                        onChange={handleInputChange}
+                        onBlur={handleBlur}
+                        autoFocus
+                      />
                     </Styled.Form>
                   )}
                 </>

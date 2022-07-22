@@ -28,6 +28,7 @@ const usePostScheduleBlock = ({
       onMutate: async () => {
         await queryClient.cancelQueries(queryKeys);
         const snapShotOfPreviousData = queryClient.getQueryData(queryKeys);
+        console.log('>>>들어온 것', date, title, categoryColorCode, flag);
 
         // 캐싱된 일정데이터에 접근하여 일정에 추가
         queryClient.setQueryData(queryKeys, (oldSchedules: any) => {

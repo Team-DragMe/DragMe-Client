@@ -16,6 +16,7 @@ import useThrottle from 'src/hooks/useThrottle';
 import {
   currentDraggintElement,
   currentHoverFlag,
+  currentModifyDayPlan,
   dailyPlanList,
   dayInfo,
   modalClickXY,
@@ -67,13 +68,13 @@ function DayPlanList({ maxHeight = '45rem', flag, schedulesData, ...props }: Day
   const [currentDragChipState, setCurrentDragChipState] = useState<movePlanChipParams | null>(null);
   const currentDragChip = useRef<movePlanChipParams | null>(null);
   const scrollEndRef = useRef<HTMLDivElement>(null);
-  const [addPlan, setAddPlan] = useState(false);
   const [currentDraggingItem, setCurrentDraggingItem] = useRecoilState(currentDraggintElement);
   const [currentHoverItem, setCurrentHoverItem] = useRecoilState(currentHoverFlag);
   const today = useRecoilValue(dayInfo);
   const currentDayDate = today.slice(0, 10);
   const queryClient = useQueryClient();
   const [afterOrder, setAfterOrder] = useState(false);
+  const [currentTargetPlan, setCurrentTargetPlan] = useRecoilState(currentModifyDayPlan);
 
   const { mutate: DayToRescheduleMutate } = usePatchDayToReschedule({
     scheduleId: currentDraggingItem._id,
@@ -275,7 +276,7 @@ function DayPlanList({ maxHeight = '45rem', flag, schedulesData, ...props }: Day
   };
 
   const handleAddClick = () => {
-    setAddPlan(true);
+    setCurrentTargetPlan({ itemId: '', flag });
     // @TODO 할 일 등록 이후 false로 초기화
     setTimeout(() => {
       scrollEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -332,7 +333,7 @@ function DayPlanList({ maxHeight = '45rem', flag, schedulesData, ...props }: Day
               />
             </Styled.ScrollEnd>
           )}
-          {addPlan && (
+          {currentTargetPlan?.flag === flag && currentTargetPlan?.itemId === '' && (
             <Styled.Li>
               <CommonDayPlanChip
                 color="#FFFFFF"
@@ -349,7 +350,7 @@ function DayPlanList({ maxHeight = '45rem', flag, schedulesData, ...props }: Day
       </Styled.UlWrapper>
       {flag !== FLAG.reschedule && (
         <Styled.AddDayPlanChipWrapper>
-          <AddDayPlanChip onClick={handleAddClick} />
+          <AddDayPlanChip onClick={handleAddClick} id={flag} />
         </Styled.AddDayPlanChipWrapper>
       )}
     </Styled.Root>

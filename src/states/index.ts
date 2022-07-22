@@ -25,9 +25,13 @@ export const dayCount = atom({
   default: 0,
 });
 
+export interface tempData {
+  itemId?: string;
+  flag?: string;
+}
 export const currentModifyDayPlan = atom({
   key: 'currentModifyDayPlan',
-  default: '' as string,
+  default: { itemId: '', flag: '' } as tempData,
 });
 
 // 기본적으로 업데이트 시킬 때 이 atom에 임시 저장 -> cache값 optimistic update (mutation 시에)
