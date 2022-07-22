@@ -1,6 +1,7 @@
 import React from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import RoutineBox from 'src/components/common/RoutineBox/index';
 import MonthlyGoalBox from 'src/components/Week/MonthlyGoal/MonthlyGoalBox';
 import WeekChange from 'src/components/Week/WeekChange';
 import WeekInfo from 'src/components/Week/WeekInfo';
@@ -23,6 +24,9 @@ function Week() {
             <WeeklyGoalBox />
           </Styled.MainLeftWrapper>
         </Styled.MainWrapper>
+        <Styled.RoutineboxWrapper>
+          <RoutineBox />
+        </Styled.RoutineboxWrapper>
       </Styled.Root>
     </DndProvider>
   );
@@ -54,5 +58,11 @@ const Styled = {
     flex-direction: column;
     gap: 3rem;
     margin-top: 0.7rem;
+  `,
+  RoutineboxWrapper: styled.div`
+    z-index: 10;
+    position: absolute;
+    top: 6.4rem;
+    right: 0;
   `,
 };

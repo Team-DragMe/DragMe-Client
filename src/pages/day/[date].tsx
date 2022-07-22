@@ -1,6 +1,7 @@
 import React from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import RoutineBox from 'src/components/common/RoutineBox/index';
 import DayChange from 'src/components/Day/DayInfoSection/DayChange';
 import DayInfo from 'src/components/Day/DayInfoSection/DayInfo';
 import MainDayPlan from 'src/components/Day/MainDayPlanList';
@@ -30,6 +31,9 @@ function Day() {
           <TodayNoteSection />
         </Styled.BottomWrapper>
       </Styled.Root>
+      <Styled.RoutineboxWrapper>
+        <RoutineBox />
+      </Styled.RoutineboxWrapper>
     </DndProvider>
   );
 }
@@ -64,5 +68,11 @@ const Styled = {
     padding: 0 4.4rem;
     gap: 4.7rem;
     margin-bottom: 6.1rem;
+  `,
+  RoutineboxWrapper: styled.div`
+    z-index: 10;
+    position: absolute;
+    top: 6.4rem;
+    right: 0;
   `,
 };
