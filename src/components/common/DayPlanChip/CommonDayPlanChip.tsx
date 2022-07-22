@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-autofocus */
 import SemiArrow from 'public/assets/icons/SemiArrow8.svg';
 import React, { forwardRef, useEffect, useRef, useState } from 'react';
 import { useRecoilState } from 'recoil';
@@ -35,9 +36,9 @@ interface ColorChipStyleProps {
 }
 
 interface BoxStyleProps {
-  shape: shapeType;
-  flag: dailyPlanFlag;
-  index: number;
+  shape?: shapeType;
+  flag?: dailyPlanFlag;
+  index?: number;
 }
 
 interface ContentsStyleProps {

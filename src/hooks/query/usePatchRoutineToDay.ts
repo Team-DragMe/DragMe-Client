@@ -1,11 +1,11 @@
 import { useMutation, useQueryClient } from 'react-query';
-import { patchRoutineToDaySchedules, patchroutineToDaySchedules } from 'src/lib/api/dayApi';
-import { dailyPlanFlag, FlagedData, Schedule, UnWrappingData } from 'src/types';
+import { patchRoutineToDaySchedules } from 'src/lib/api/dayApi';
+import { dailyPlanFlag, Schedule, UnWrappingData } from 'src/types';
 
 interface usePatchRoutineToDayParams {
   scheduleId: string;
   schedule: Schedule;
-  date?: string;
+  date: string;
   hoverFlag: dailyPlanFlag | null;
 }
 
@@ -13,7 +13,7 @@ interface usePatchRoutineToDayParams {
 const usePatchRoutineToDay = ({
   scheduleId,
   schedule,
-  date,
+  date = '',
   hoverFlag,
 }: usePatchRoutineToDayParams) => {
   const queryClient = useQueryClient();

@@ -13,7 +13,7 @@ interface usePatchRescheduleToDayParams {
 const usePatchRescheduleToDay = ({
   scheduleId,
   schedule,
-  date,
+  date = '',
   hoverFlag,
 }: usePatchRescheduleToDayParams) => {
   const queryClient = useQueryClient();

@@ -10,6 +10,7 @@ interface AddonBtnProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   scheduleId: string;
   flag: dailyPlanFlag;
   date: string;
+  [key: string]: any;
 }
 
 function AddonBtn(props: AddonBtnProps) {

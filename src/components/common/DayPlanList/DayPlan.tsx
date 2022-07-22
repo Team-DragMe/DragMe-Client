@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useRef, useState } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
-import ReactDOM from 'react-dom';
 import { useRecoilState } from 'recoil';
 import { FLAG } from 'src/constants';
 import useGetSubSchedules from 'src/hooks/query/useGetSubSchedules';
@@ -194,7 +193,7 @@ const DayPlan = React.memo(function DayPlan({
         {item?.title}
       </CommonDayPlanChip>
 
-      {subSchedules?.length > 0 && (
+      {subSchedules && subSchedules?.length > 0 && (
         <Styled.SubDayPlanWrapper isOpen={isOpen} ref={subscheduleRef} id="subSchedule-wrapper">
           <SubDayPlan subschedules={subSchedules} categoryColorCode={item?.categoryColorCode} />
         </Styled.SubDayPlanWrapper>

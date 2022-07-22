@@ -106,7 +106,7 @@ export const patchDayToRoutineSchedules = async ({ scheduleId }: ScheduleId) => 
   return post;
 };
 
-export const patchRoutineToDaySchedules = async ({ scheduleId, date }: ScheduleId) => {
+export const patchRoutineToDaySchedules = async ({ scheduleId, date }: ScheduleAndDate) => {
   const post = await client.post(`/schedule/routine-day?scheduleId=${scheduleId}`, {
     date,
   });
@@ -121,32 +121,32 @@ export const patchRescheduleToDaySchedules = async ({ scheduleId, date }: Schedu
 };
 
 // 계획 블록 순서 변경
-export const patchOrderSchedules = async ({ scheduleId, scheduleList }) => {
-  const post = await client.patch(`/schedule/order?scheduleId=${scheduleId}`, {
-    objectIds: scheduleList,
-  });
-  return post;
-};
+// export const patchOrderSchedules = async ({ scheduleId, scheduleList }) => {
+//   const post = await client.patch(`/schedule/order?scheduleId=${scheduleId}`, {
+//     objectIds: scheduleList,
+//   });
+//   return post;
+// };
 
 // 계획 블록 생성
-export const postScheduleBlock = async ({ date, title, categoryColorCode, isRoutine }) => {
-  const post = await client.post('/schedule', {
-    date,
-    title,
-    categoryColorCode,
-    isRoutine,
-  });
-  return post;
-};
+// export const postScheduleBlock = async ({ date, title, categoryColorCode, isRoutine }) => {
+//   const post = await client.post('/schedule', {
+//     date,
+//     title,
+//     categoryColorCode,
+//     isRoutine,
+//   });
+//   return post;
+// };
 // isRoutine == true/ false
 
 // 계획 블록 이름 수정
-export const patchScheduleBlock = async ({ scheduleId, title }) => {
-  const patch = await client.patch(`/schedule/title?scheduleId=${scheduleId}`, {
-    title,
-    scheduleId,
-  });
-};
+// export const patchScheduleBlock = async ({ scheduleId, title }) => {
+//   const patch = await client.patch(`/schedule/title?scheduleId=${scheduleId}`, {
+//     title,
+//     scheduleId,
+//   });
+// };
 
 // 자주
 

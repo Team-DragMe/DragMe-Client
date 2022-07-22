@@ -5,7 +5,7 @@ import { dailyPlanFlag, Schedule } from 'src/types';
 interface usePatchCompletedSchedulesParams {
   scheduleId: string;
   flag: dailyPlanFlag;
-  isCompleted?: boolean;
+  isCompleted: boolean;
   date?: string;
 }
 // 해당하는 flag에 대해서만 invalidated 시키도록

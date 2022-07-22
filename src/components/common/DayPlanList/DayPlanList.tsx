@@ -1,8 +1,9 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable no-case-declarations */
 import update from 'immutability-helper';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useDrop } from 'react-dnd';
+import React, { useCallback, useRef, useState } from 'react';
+// eslint-disable-next-line import/named
+import { ConnectDropTarget, useDrop } from 'react-dnd';
 import { useQueryClient } from 'react-query';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import DayPlanSettingModal from 'src/components/Day/DayPlanSettingModal';
@@ -114,7 +115,7 @@ function DayPlanList({ maxHeight = '45rem', flag, schedulesData, ...props }: Day
       isActive: monitor.canDrop() && monitor.isOver(),
     }),
     canDrop: (item) => {
-      const { flag: itemFlag } = item;
+      const { flag: itemFlag } = item as any;
       const availableArea = getAcceptableEl(itemFlag);
       return availableArea.includes(currentSection);
     },
@@ -251,6 +252,7 @@ function DayPlanList({ maxHeight = '45rem', flag, schedulesData, ...props }: Day
 
     console.log('$$$$$$$$$$$$$$$$$$호버인덱스', hoverItemIndex);
     // 일단 미리 업데이트 시키는 로직
+    /* @TODO 순서 변경할 때 살리기
     const snapShotOfPreviousData = queryClient.getQueryData(['daily', currentDayDate])?.data?.data
       ?.schedules;
     console.log('>>>.snapShotData', snapShotOfPreviousData);
@@ -260,7 +262,7 @@ function DayPlanList({ maxHeight = '45rem', flag, schedulesData, ...props }: Day
         [hoverItemIndex, 0, currentItemObj as Schedule],
       ],
     });
-    console.log('>>snapShotOfPreviousData', snapShotOfPreviousData);
+    console.log('>>snapShotOfPreviousData', snapShotOfPreviousData);*/
     // queryClient.setQueryData(['daily', currentDayDate], () => snapShotOfPreviousData);
     // setDailyScheduleData(
     //   update(dailyscheduleData, {
@@ -336,7 +338,6 @@ function DayPlanList({ maxHeight = '45rem', flag, schedulesData, ...props }: Day
                 color="#FFFFFF"
                 shape="rectangle"
                 flag={flag}
-                item={item}
                 index={schedulesData?.length ? schedulesData?.length + 1 : 1}
               />
               <div ref={scrollEndRef} />
