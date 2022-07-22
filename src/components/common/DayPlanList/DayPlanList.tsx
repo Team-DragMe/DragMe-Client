@@ -312,7 +312,7 @@ function DayPlanList({ maxHeight = '45rem', flag, schedulesData, ...props }: Day
               movePlanChip={throttleMovePlanChip}
               endToMovePlanChip={endToMovePlanChip}
               flag={flag}
-              dataLength={schedulesData.length}
+              dataLength={schedulesData?.length}
               isDragMode={isActive}
               thorottleMoveItemInSection={thorottleMoveItemInSection}
             />
@@ -337,7 +337,7 @@ function DayPlanList({ maxHeight = '45rem', flag, schedulesData, ...props }: Day
                 shape="rectangle"
                 flag={flag}
                 item={item}
-                index={schedulesData?.length ? schedulesData.length + 1 : 1}
+                index={schedulesData?.length ? schedulesData?.length + 1 : 1}
               />
               <div ref={scrollEndRef} />
             </Styled.Li>

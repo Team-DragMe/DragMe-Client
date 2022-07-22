@@ -12,7 +12,7 @@ const useGetWeeklySchedules = ({ startDate, endDate }: startAndEndDate) =>
         endDate,
       }),
     {
-      select: (data) => getFlagedData({ data, type: 'daily' }),
+      select: (data) => data?.data,
       keepPreviousData: true,
       useErrorBoundary: true,
       retry: 3,

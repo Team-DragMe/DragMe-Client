@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
 import useEmojiListData from 'src/hooks/query/useEmojiListData';
+import useGetWeeklySchedules from 'src/hooks/query/useGetWeeklySchedules';
 import { weekInfo } from 'src/states';
 import { DayStorage } from 'src/utils/getDate';
 import styled from 'styled-components';
@@ -18,20 +19,29 @@ function WeekPlan() {
   const router = useRouter();
   const weekRecoil = useRecoilValue(weekInfo);
   console.log('weekRecoil>>>', weekRecoil);
+  const startDate = weekRecoil[0];
+  const endDate = weekRecoil[6];
+  const { data: weeklySchedules } = useGetWeeklySchedules({ startDate, endDate });
+  const { data } = useEmojiListData({ startDate, endDate });
 
-  const { data } = useEmojiListData({ startDate: weekRecoil[0], endDate: weekRecoil[6] });
-  console.log(data);
   const weekInfoData: WeekInfoType[] = data?.data;
   const numberArray = [0, 1, 2, 3, 4, 5, 6];
   const week = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
   useEffect(() => {
-    console.log('>>>data', data);
-  }, [data]);
+    console.log('>>>>>>>>>>>>>>weeklySchedules', weeklySchedules?.data);
+  }, [data, weeklySchedules]);
+
   return (
     <Styled.Root>
       {weekInfoData &&
-        numberArray.map((number: number) => (
-          <WeekPlanCard key={number} dayInfo={weekInfoData[number]} day={week[number]} />
+        weeklySchedules?.data &&
+        numberArray.map((number: number, idx: number) => (
+          <WeekPlanCard
+            key={number}
+            dayInfo={weekInfoData[number]}
+            day={week[number]}
+            schedulesData={weeklySchedules?.data[idx]?.schedules}
+          />
         ))}
     </Styled.Root>
   );
