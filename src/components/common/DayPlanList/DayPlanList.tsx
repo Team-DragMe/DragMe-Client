@@ -8,6 +8,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { FLAG } from 'src/constants';
 import usePatchDayToReschedule from 'src/hooks/query/usePatchDayToReschedule';
 import usePatchCompletedSchedules from 'src/hooks/query/usePatchDayToReschedule';
+import usePatchDayToRoutine from 'src/hooks/query/usePatchDayToRoutine';
 import usePatchRescheduleToDay from 'src/hooks/query/usePatchRescheduleToDay';
 import useThrottle from 'src/hooks/useThrottle';
 import {
@@ -66,6 +67,7 @@ function DayPlanList({ maxHeight = '46.2rem', flag, schedulesData, ...props }: D
   const today = useRecoilValue(dayInfo);
   const currentDayDate = today.slice(0, 10);
   const queryClient = useQueryClient();
+  const [afterOrder, setAfterOrder] = useState(false);
 
   const { mutate: DayToRescheduleMutate } = usePatchDayToReschedule({
     scheduleId: currentDraggingItem._id,
@@ -80,6 +82,12 @@ function DayPlanList({ maxHeight = '46.2rem', flag, schedulesData, ...props }: D
     hoverFlag: currentHoverItem,
   });
 
+  const { mutate: DayToRoutineMutate } = usePatchDayToRoutine({
+    scheduleId: currentDraggingItem._id,
+    schedule: currentDraggingItem,
+    date: currentDayDate,
+    hoverFlag: currentHoverItem,
+  });
   /* item flag에 따라 드롭할 수 있는 영역 수정 */
   const getAcceptableEl = (currentType: string) => {
     switch (currentType) {
@@ -156,6 +164,7 @@ function DayPlanList({ maxHeight = '46.2rem', flag, schedulesData, ...props }: D
       case 'routine':
         // 자주 사용하는 계획 api post
         // 일간 -> 자주 (복사)
+        DayToRoutineMutate();
         break;
       default:
         break;
@@ -301,6 +310,7 @@ function DayPlanList({ maxHeight = '46.2rem', flag, schedulesData, ...props }: D
             </Styled.Li>
           )}
           {isOver && <div ref={scrollEndRef} />}
+          <div ref={scrollEndRef} />
         </Styled.Ul>
       </Styled.UlWrapper>
       {flag !== FLAG.RECHEDULE && (
