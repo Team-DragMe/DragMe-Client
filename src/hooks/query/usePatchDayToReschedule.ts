@@ -1,32 +1,34 @@
 import { useMutation, useQueryClient } from 'react-query';
-import { patchCompleteScheduleData } from 'src/lib/api/dayApi';
+import { patchDayToRescheduleSchedules } from 'src/lib/api/dayApi';
 import { dailyPlanFlag, Schedule } from 'src/types';
 
-interface usePatchCompletedSchedulesParams {
+interface usePatchDayToRescheduleParams {
   scheduleId: string;
   schedule: Schedule;
-  date: string;
+  date?: string;
+  hoverFlag: dailyPlanFlag;
 }
 
-// 계획 -> 미룰계획 (미룰 계획에 추가 / 계획에서 삭제)
-const usePatchCompletedSchedules = ({
-  scheduleId,
-  schedule,
-  date,
-}: usePatchCompletedSchedulesParams) => {
+// 일간 -> 미룰계획 (미룰 계획에 추가 / 계획에서 삭제)
+const usePatchDayToReschedule = () => {
   const queryClient = useQueryClient();
-  return useMutation(patchCompleteScheduleData, {
-    onMutate: async () => {
-      await queryClient.cancelQueries('reschedule' as dailyPlanFlag);
+  return useMutation(patchDayToRescheduleSchedules, {
+    onMutate: async ({ scheduleId, schedule, date, hoverFlag }: usePatchDayToRescheduleParams) => {
+      console.log('>>>schedule', schedule);
+      console.log('>>>scheduleId', scheduleId);
+      console.log('>>>date', date);
       const snapShotOfPreviousData = queryClient.getQueryData('reschedule');
+      // await queryClient.cancelQueries('reschedule' as dailyPlanFlag);
+      console.log('>>>snapShotOfPreviousData', snapShotOfPreviousData);
       //  미룰 계획에 추가
-      queryClient.setQueryData('reschedule', (oldSchedules: any) => {
+      queryClient.setQueriesData(['reschedule'], (oldSchedules: any) => {
         const optimisticData = [...oldSchedules];
         optimisticData.push(schedule);
         return optimisticData;
       });
       //  기존 계획에서 삭제
-      queryClient.setQueryData(['daily', date], (oldSchedules: any) => {
+      queryClient.setQueriesData(['daily', date], (oldSchedules: any) => {
+        console.log('>>daily의 옛날 쿼리', oldSchedules);
         const newData = oldSchedules.filter((o: Schedule) => o._id !== scheduleId);
         return newData;
       });
@@ -42,4 +44,4 @@ const usePatchCompletedSchedules = ({
   });
 };
 
-export default usePatchCompletedSchedules;
+export default usePatchDayToReschedule;

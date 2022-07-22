@@ -70,8 +70,8 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
     const handleChange = () => {
       setIsChecked((prev) => !prev);
       // @TODO React query optimistic update로 완료된 계획 post
-      console.log('>>>체크 상태', isChecked);
-      console.log('체크된 애 아이디', itemId);
+      // console.log('>>>체크 상태', isChecked);
+      // console.log('체크된 애 아이디', itemId);
     };
 
     const handleDbClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -91,15 +91,15 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       // @TODO inputValue.current?.value 를 post
-      console.log(inputValue.current?.value);
+      // console.log(inputValue.current?.value);
       setDayPlan(inputValue.current?.value);
       setCurrentTargetPlan('');
       // @TODO 서버로 계획 생성 POST
     };
 
     useEffect(() => {
-      console.log('>>>여기 아이디,itemId', itemId);
-      console.log('>>>>currentTargetPlan', currentTargetPlan);
+      // console.log('>>>여기 아이디,itemId', itemId);
+      // console.log('>>>>currentTargetPlan', currentTargetPlan);
     }, [itemId, currentTargetPlan]);
 
     useEffect(() => {
@@ -115,9 +115,6 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
       }
     }, [isOpened]);
 
-    useEffect(() => {
-      console.log('>>>openItem', openItem);
-    }, [openItem]);
     return (
       <Styled.Container {...props} shape={shape} ref={ref} index={index} flag={flag} id={itemId}>
         {color !== 'none' && <Styled.ColorChip color={color} />}

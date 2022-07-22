@@ -16,9 +16,9 @@ const RESCHEDULE = {
 function Reschedule() {
   const reschedulePlanData = useSetRecoilState(reschedulePlanList);
   const { data } = useGetDelaySchedules();
-  useEffect(() => {
-    data && reschedulePlanData(data);
-  }, [data, reschedulePlanData]);
+  // useEffect(() => {
+  //   data && reschedulePlanData(data);
+  // }, [data, reschedulePlanData]);
   return (
     <Styled.Root>
       <Styled.TitleArea>

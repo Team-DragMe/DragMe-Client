@@ -64,7 +64,9 @@ export const postScheduleTime = async ({ scheduleId, ...data }: ScheduleTimePost
 // };
 
 export const patchCompleteScheduleData = async ({ scheduleId }: ScheduleId) => {
+  console.log('==========================들어온 postId', scheduleId);
   const post = await client.patch(`/schedule/complete?scheduleId=${scheduleId}`);
+  console.log('==========================post', post);
   return post;
 };
 
@@ -75,7 +77,9 @@ export const getEmojiListData = async ({ startDate, endDate }: getEmojiQueryType
 };
 
 export const patchDayToRescheduleSchedules = async ({ scheduleId }: ScheduleId) => {
+  console.log('*********************scheduleId', scheduleId);
   const post = await client.patch(`/schedule/day-reschedule?scheduleId=${scheduleId}`);
+  console.log('*********************post', post);
   return post;
 };
 

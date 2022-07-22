@@ -1,11 +1,20 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable no-case-declarations */
 import update from 'immutability-helper';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDrop } from 'react-dnd';
 import { useRecoilState } from 'recoil';
 import { FLAG } from 'src/constants';
+import usePatchDayToReschedule from 'src/hooks/query/usePatchDayToReschedule';
+import usePatchCompletedSchedules from 'src/hooks/query/usePatchDayToReschedule';
 import useThrottle from 'src/hooks/useThrottle';
-import { dailyPlanList, reschedulePlanList, routinePlanList } from 'src/states';
+import {
+  currentDraggintElement,
+  currentHoverFlag,
+  dailyPlanList,
+  reschedulePlanList,
+  routinePlanList,
+} from 'src/states';
 import { theme } from 'src/styles/theme';
 import { dailyPlanFlag, Schedule } from 'src/types';
 import styled, { css } from 'styled-components';
@@ -49,6 +58,11 @@ function DayPlanList({ maxHeight = '46.2rem', flag, schedulesData, ...props }: D
   const currentDragChip = useRef<movePlanChipParams | null>(null);
   const scrollEndRef = useRef<HTMLDivElement>(null);
   const [addPlan, setAddPlan] = useState(false);
+  const [currentDraggingItem, setCurrentDraggingItem] = useRecoilState(currentDraggintElement);
+  const [currentHoverItem, setCurrentHoverItem] = useRecoilState(currentHoverFlag);
+
+  const { mutate } = usePatchDayToReschedule();
+
   /* item flag에 따라 드롭할 수 있는 영역 수정 */
   const getAcceptableEl = (currentType: string) => {
     switch (currentType) {
@@ -62,6 +76,7 @@ function DayPlanList({ maxHeight = '46.2rem', flag, schedulesData, ...props }: D
         return [FLAG.DAILY];
     }
   };
+
   /* 현재 스케줄 리스트의 데이터 반환 */
   // const getCurrentTypeData = (currentType: string) => {
   //   switch (currentType) {
@@ -110,25 +125,40 @@ function DayPlanList({ maxHeight = '46.2rem', flag, schedulesData, ...props }: D
     [dailyscheduleData],
   );
 
+  // hover =
+
   // 드랍되었을 때 실행될 함수
   const endToMovePlanChip = ({ hoverFlag, hoverIndex, ...item }: movePlanChipParams) => {
-    currentDragChip.current = null;
-    setCurrentDragChipState(null);
+    console.log('>드랍됫어!!', currentDraggingItem);
+    console.log('>currentHoverItem!!', currentHoverItem);
     // currentDragChipState를 서버로 요청
     // optimistic update
-    switch (currentDragChipState?.hoverFlag) {
+    switch (currentHoverItem) {
       case 'daily':
         // 일간 계획 요청 api post
+        // 자주 사용 -> 일간 (복사)
+        // 미룰 -> 일간 (삭제)
         break;
       case 'rechedule':
         // 계획 미루기 api post
+        // 일간 -> 미룰 (삭제)
+        console.log('>>>>rechedule', currentHoverItem);
+        mutate({
+          scheduleId: currentDraggingItem._id,
+          schedule: currentDraggingItem,
+          date: currentDraggingItem.date,
+          hoverFlag: currentHoverItem,
+        });
         break;
       case 'routine':
         // 자주 사용하는 계획 api post
+        // 일간 -> 자주 (복사)
         break;
       default:
         break;
     }
+    currentDragChip.current = null;
+    setCurrentDragChipState(null);
   };
 
   // move planBlock section to section
