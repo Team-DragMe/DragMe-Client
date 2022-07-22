@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import BackgroundFooter from 'public/assets/Background_footer.png';
+import StartBtn from 'public/assets/StartBtn.svg';
 import YourDirection from 'public/assets/YourDirection.png';
 import React from 'react';
 import { theme } from 'src/styles/theme';
@@ -25,12 +26,12 @@ function Footer() {
           DRAG.ME를 통해
           <br />
           목표에 도달할 준비가 되셨나요?
-          <Link href={`/day/${getTodayDate(0)}`}>
-            <Styled.StartBtn>시작하기</Styled.StartBtn>
-          </Link>
+          <Styled.StartButton />
         </Styled.Title>
       </Styled.GradientArea>
-
+      <Link href={`/day/${getTodayDate(0)}`}>
+        <Styled.BtnText>시작하기</Styled.BtnText>
+      </Link>
       <Styled.Sign>
         <Image src={YourDirection} alt="이정표" width={'480'} height={'630'} />
       </Styled.Sign>
@@ -59,7 +60,7 @@ const Styled = {
     top: 40%;
     left: 338px;
     font-weight: 700;
-    font-size: 32px;
+    font-size: 3.2rem;
     line-height: 140%;
     text-transform: uppercase;
     &:before {
@@ -76,22 +77,26 @@ const Styled = {
 
     color: ${theme.colors.letter_black};
   `,
-  StartBtn: styled.button`
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 20rem;
-    height: 4.8rem;
-    background-color: ${theme.colors.main_color};
-    border: 0;
-    outline: 0;
+  StartButton: styled(StartBtn)`
     color: ${theme.category.cate_white};
-    border-radius: 4px;
-    filter: drop-shadow(0px 0px 10px rgba(0, 36, 182, 0.5));
-    font-size: 2.2rem;
-    line-height: 140%;
-    transform: translateY(75%);
+    position: absolute;
+    left: -0.5rem;
+    top: 11rem;
   `,
+  BtnText: styled.div`
+    width: 21.4rem;
+    height: 5.4rem;
+    position: absolute;
+    z-index: 999;
+    color: ${theme.category.cate_white};
+    left: 27.7%;
+    bottom: 11%;
+    font-weight: 500;
+    font-size: 22px;
+    line-height: 140%;
+    cursor: pointer;
+  `,
+
   GradientArea: styled.div`
     position: absolute;
     width: 100%;

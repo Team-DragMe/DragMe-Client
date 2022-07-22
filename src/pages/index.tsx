@@ -25,5 +25,6 @@ export default OnboardingPage;
 const Styled = {
   Root: styled.div`
     width: 100%;
+    overflow-x: hidden;
   `,
 };
