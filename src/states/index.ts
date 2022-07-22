@@ -1,4 +1,5 @@
 import { atom } from 'recoil';
+import { Schedule } from 'src/types';
 
 import { getTodayDate } from '../utils/getDate';
 import { getCurrentWeek } from '../utils/getWeek';
@@ -19,6 +20,37 @@ export const weekCount = atom({
 });
 
 export const dayCount = atom({
-  key: 'weekInfo',
+  key: 'dayCount',
+  default: 0,
+});
+
+export const currentModifyDayPlan = atom({
+  key: 'currentModifyDayPlan',
+  default: '' as string,
+});
+
+// 기본적으로 업데이트 시킬 때 이 atom에 임시 저장 -> cache값 optimistic update (mutation 시에)
+export const dailyPlanList = atom({
+  key: 'dailyPlanList',
+  default: [] as Schedule[],
+});
+
+export const reschedulePlanList = atom({
+  key: 'reschedulePlanList',
+  default: [] as Schedule[],
+});
+
+export const routinePlanList = atom({
+  key: 'routinePlanList',
+  default: [] as Schedule[],
+});
+
+export const menuCount = atom({
+  key: 'menuCount',
+  default: 'Today',
+});
+
+export const scrollY = atom({
+  key: 'scrollY',
   default: 0,
 });

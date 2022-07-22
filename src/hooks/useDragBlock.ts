@@ -22,14 +22,13 @@ function useDragBlock({ isDragging, handleDragState, handleSubmit }: DragBlockHo
   const onMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (isDragging) {
       if (e.target instanceof HTMLElement) {
-        !isNaN(parseInt(e.target.id)) &&
+        e.target.id.length < 3 &&
           handleDragState({ isDragging: true, startBlock: '', endBlock: e.target.id });
       }
     }
   };
 
   const onMouseUp = (e: React.MouseEvent<HTMLDivElement>) => {
-    //서버처리
     handleSubmit();
     if (e.target instanceof HTMLElement) {
       handleDragState({ isDragging: false, startBlock: '-1', endBlock: '-1' });

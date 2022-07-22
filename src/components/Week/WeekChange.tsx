@@ -16,8 +16,11 @@ function WeekChange() {
   const [week, setWeek] = useRecoilState(weekInfo);
   const [count, setCount] = useRecoilState(weekCount);
   const thisWeek = getCurrentWeek(0);
+  console.log('thisweek', thisWeek);
   const changedWeek = getCurrentWeek(count);
-  const weekDomain = `${week[0]}-${week[6]}`;
+  console.log('changedweek', changedWeek);
+  const weekDomain = `${thisWeek[0]}-${thisWeek[6]}`;
+  console.log('weekdomain', weekDomain);
 
   const goThisWeek = () => {
     setCount(0);
@@ -35,11 +38,11 @@ function WeekChange() {
   };
 
   useEffect(() => {
-    console.log('>>>>thisWeek', thisWeek);
-    console.log('>>>>weekCount', count);
-    console.log('>>>>ChangedWeek', changedWeek);
-    console.log('&&&&recoil', week);
-  }, [thisWeek, count, week, changedWeek]);
+    if (week !== undefined) {
+      setWeek(getCurrentWeek(count));
+      router.push(`/week/${changedWeek[0]}-${changedWeek[6]}`);
+    }
+  }, []);
 
   useEffect(() => {
     if (weekDomain !== undefined) {
@@ -86,6 +89,7 @@ const Styled = {
     font-weight: bold;
     color: ${theme.colors.letter_black};
     margin-left: 2rem;
+    margin-top: -2.8rem;
   `,
   GoThisWeek: styled.div`
     width: 4.2rem;

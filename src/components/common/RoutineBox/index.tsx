@@ -1,5 +1,9 @@
-import React from 'react';
-import { schedules } from 'src/mock-data/schedules';
+import React, { useEffect } from 'react';
+import { useSetRecoilState } from 'recoil';
+import { FLAG } from 'src/constants';
+import useGetRoutineSchedules from 'src/hooks/query/useGetRoutineSchedules';
+import { routineSchedules } from 'src/mock-data/schedules';
+import { routinePlanList } from 'src/states';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
 
@@ -11,6 +15,11 @@ const ROUTINE_BOX = {
 };
 
 function RoutineBox() {
+  const routinePlanData = useSetRecoilState(routinePlanList);
+  const { data } = useGetRoutineSchedules();
+  useEffect(() => {
+    data && routinePlanData(data);
+  }, [data, routinePlanData]);
   return (
     <Styled.Root>
       <Styled.ContentsWrapper>
@@ -18,7 +27,7 @@ function RoutineBox() {
           <Styled.Title>{ROUTINE_BOX.EN}</Styled.Title>
           <Styled.SubTitle>{ROUTINE_BOX.KO}</Styled.SubTitle>
         </Styled.TitleArea>
-        <DayPlanList schedules={schedules} className="routine-plan-list" />
+        <DayPlanList className="routine-plan-list" flag={FLAG.ROUTINE} schedulesData={data} />
       </Styled.ContentsWrapper>
       <Styled.Footer>
         <button>DRAG.ME</button>

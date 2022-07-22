@@ -3,7 +3,16 @@ import ForwardEmojiPicker from 'src/components/Day/TodayPlan/EmojiPicker';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
 
-function WeekPlanCard() {
+interface WeekPlanCardProps {
+  dayInfo: {
+    date: string;
+    type: string;
+    value: string;
+  };
+  day: string;
+}
+function WeekPlanCard(props: WeekPlanCardProps) {
+  const { dayInfo, day } = props;
   const [click, setClick] = useState<boolean>(false);
   const useOutsideAlert = (ref: React.RefObject<HTMLDivElement>) => {
     useEffect(() => {
@@ -26,14 +35,24 @@ function WeekPlanCard() {
   const refPicker = useRef<HTMLDivElement>(null);
   useOutsideAlert(refPicker);
 
+  const parsedMonth = dayInfo.date.slice(5, 7);
+  const parsedDate = dayInfo.date.slice(8, 10);
+  const dateInfo = parsedMonth + '.' + parsedDate;
+
   return (
     <Styled.Root>
       <Styled.Header>
         <Styled.DayWrapper>
-          <span>MON</span>
-          <ForwardEmojiPicker ref={refPicker} click={click} setClick={handleClick} emoji="🔥" />
+          <span>{day}</span>
+          <ForwardEmojiPicker
+            ref={refPicker}
+            click={click}
+            setClick={handleClick}
+            emoji={dayInfo.value}
+            date={dayInfo.date}
+          />
         </Styled.DayWrapper>
-        <p>07.03</p>
+        <p>{dateInfo}</p>
       </Styled.Header>
     </Styled.Root>
   );
@@ -66,6 +85,7 @@ const Styled = {
   `,
   DayWrapper: styled.div`
     display: flex;
+    align-items: center;
     & > span {
       color: ${theme.colors.letter_black};
       font-weight: 900;

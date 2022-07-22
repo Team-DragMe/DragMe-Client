@@ -1,28 +1,34 @@
 import DotIcon from 'public/assets/ic_dot.svg';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import usePostInformationData from 'src/hooks/query/usePostInformationData';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
 
 interface WeeklyGoalInputProps {
   idx: number;
   content: string;
+  date: string;
 }
 
 function WeeklyGoalInput(props: WeeklyGoalInputProps) {
-  const { idx, content } = props;
+  const { idx, content, date } = props;
   const [value, setValue] = useState(content);
   const inputRef = useRef<HTMLInputElement>(null);
-  const goalType = `weeklyGoal${idx + 1}`;
-
+  const goalType = `weeklyGoal${idx}`;
+  const { mutate: postInformation } = usePostInformationData();
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    //@TODO goalType, inputRef.current?.value
-    console.log(goalType, inputRef.current?.value);
+    postInformation({ date, type: goalType, value: inputRef.current?.value || '' });
   };
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
   };
+
+  useEffect(() => {
+    setValue(content);
+  }, [props]);
+
   return (
     <Styled.Root onSubmit={handleSubmit}>
       <DotIcon />

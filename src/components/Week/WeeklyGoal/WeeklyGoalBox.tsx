@@ -1,25 +1,29 @@
 import React from 'react';
+import { useRecoilValue } from 'recoil';
+import useGetWeeklyGoalData from 'src/hooks/query/useGetWeeklyGoalData';
+import { weekInfo } from 'src/states';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
 
 import WeeklyGoalInput from './WeeklyGoalInput';
 
+interface weeklyGoalType {
+  date: string;
+  type: string;
+  value: string;
+}
+
 function WeeklyGoalBox() {
-  const testData = [
-    { type: 'weeklyGoal1', value: '' },
-    { type: 'weeklyGoal2', value: '' },
-    { type: 'weeklyGoal3', value: '' },
-    { type: 'weeklyGoal4', value: '' },
-    { type: 'weeklyGoal5', value: '' },
-    { type: 'weeklyGoal6', value: '' },
-    { type: 'weeklyGoal7', value: '' },
-  ];
+  const week = useRecoilValue(weekInfo);
+  const startDate = week[0];
+  const { data } = useGetWeeklyGoalData({ startDate });
+
   return (
     <Styled.Root>
       <span>WEEKLY GOAL</span>
       <Styled.Wrapper>
-        {testData?.map((el, idx) => (
-          <WeeklyGoalInput key={el.type} idx={idx} content={el.value} />
+        {data?.data.map((el: weeklyGoalType, idx: number) => (
+          <WeeklyGoalInput key={el.type} idx={idx} content={el.value} date={startDate} />
         ))}
       </Styled.Wrapper>
     </Styled.Root>
@@ -32,6 +36,8 @@ const Styled = {
   Root: styled.div`
     display: flex;
     flex-direction: column;
+    width: 24.3rem;
+    align-items: center;
     & > span {
       font-size: 1.6rem;
       font-weight: 800;
@@ -43,7 +49,7 @@ const Styled = {
   Wrapper: styled.div`
     display: flex;
     flex-direction: column;
-    width: 20.6rem;
+    width: 100%;
     & > input {
       display: none;
     }

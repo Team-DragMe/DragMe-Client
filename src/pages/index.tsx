@@ -7,5 +7,7 @@ function Home() {
 export default Home;
 
 const Styled = {
-  Root: styled.div``,
+  Root: styled.div`
+    color: ${theme.colors.main_color};
+  `,
 };

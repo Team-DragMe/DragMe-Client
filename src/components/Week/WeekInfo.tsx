@@ -6,11 +6,11 @@ import styled from 'styled-components';
 
 function WeekInfo() {
   const weekData = useRecoilValue(weekInfo);
-  const monthOfThisWeek = weekData[0].slice(5, 7);
-  const yearOfThisWeek = weekData[0].slice(0, 4);
-  const firstDayInThisWeek = weekData[0].slice(8, 10);
-  const lastDayInThisWeek = weekData[6].slice(8, 10);
 
+  const monthOfThisWeek = weekData[0]?.slice(5, 7);
+  const yearOfThisWeek = weekData[0]?.slice(0, 4);
+  const firstDayInThisWeek = weekData[0]?.slice(8, 10);
+  const lastDayInThisWeek = weekData[6]?.slice(8, 10);
   return (
     <Styled.Root>
       <Styled.YearAndMonth>
@@ -33,9 +33,6 @@ const Styled = {
     height: 110px;
     font-size: 5rem;
     font-weight: 900;
-    margin-top: 2rem;
-    margin-left: 2rem;
-    /* 임시 마진 푸쉬시 삭제*/
   `,
   YearAndMonth: styled.div`
     display: flex;

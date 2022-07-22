@@ -1,18 +1,24 @@
-export const getCurrentWeek = (count: number) => {
-  const day = new Date();
-  const countDay = new Date(day.setDate(day.getDate() + 7 * count));
-  const sunday = countDay.getTime() - 86400000 * countDay.getDay();
+export function getCurrentWeek(count: number) {
+  const currentDay = new Date();
+  const countDay = new Date(currentDay.setDate(currentDay.getDate() + 7 * count));
+  const theYear = countDay.getFullYear();
+  const theMonth = countDay.getMonth();
+  const theDate = countDay.getDate();
+  const theDayOfWeek = countDay.getDay();
 
-  countDay.setTime(sunday);
+  const thisWeek = [];
 
-  const result = [countDay.toISOString().slice(0, 10)];
+  for (let i = 0; i < 7; i++) {
+    const resultDay = new Date(theYear, theMonth, theDate + (i - theDayOfWeek + 1));
+    const yyyy = resultDay.getFullYear();
+    let mm: number | string = Number(resultDay.getMonth()) + 1;
+    let dd: number | string = resultDay.getDate();
 
-  for (let i = 1; i < 7; i++) {
-    countDay.setTime(countDay.getTime() + 86400000);
-    result.push(countDay.toISOString().slice(0, 10));
+    mm = String(mm).length === 1 ? '0' + mm : mm;
+    dd = String(dd).length === 1 ? '0' + dd : dd;
+
+    thisWeek[i] = yyyy + '-' + mm + '-' + dd;
   }
 
-  return result;
-};
-
-console.log(getCurrentWeek(1));
+  return thisWeek;
+}

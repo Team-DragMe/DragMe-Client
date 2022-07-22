@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { theme } from 'src/styles/theme';
 import styled, { css } from 'styled-components';
 
@@ -13,7 +13,6 @@ const ONE_HOUR_WIDTH = 91;
 const SCROLL_END_VAL = 1200;
 
 function TimeLine() {
-  const [plans] = useState(['tempId1', 'tempId2', 'tempId3']);
   const ref = useRef<HTMLDivElement>(null);
   const nowHour = new Date().getHours();
 
@@ -53,7 +52,7 @@ function TimeLine() {
             </Styled.LineWrapper>
           ))}
         </Styled.TimeLineWrapper>
-        <TimeBlockSection plans={plans} />
+        <TimeBlockSection />
       </Styled.Root>
       <Styled.Shadow direction="right" />
     </Styled.Wrapper>
@@ -84,6 +83,7 @@ const Styled = {
 
   Wrapper: styled.div`
     display: flex;
+    margin-bottom: 6.5rem;
   `,
 
   TimeLineWrapper: styled.div`
