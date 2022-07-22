@@ -1,4 +1,4 @@
-type categoryColorCodeType =
+export type categoryColorCodeType =
   | '#7B8DD8'
   | '#DCADC8'
   | '#EAC96E'
@@ -7,7 +7,7 @@ type categoryColorCodeType =
   | '#FFFFFF'
   | '#96CCC9';
 
-export type dailyPlanFlag = 'daily' | 'routine' | 'rechedule' | 'weekly' | 'child';
+export type dailyPlanFlag = 'daily' | 'routine' | 'reschedule' | 'weekly' | 'child';
 
 export interface Schedule {
   _id: string;
@@ -33,4 +33,23 @@ export interface Schedule {
 export interface SubSchedules {
   parentId: string;
   subSchedules: Schedule[];
+}
+
+export interface SchedulDataWrapper {
+  schedules: Schedule[];
+}
+
+export interface FlagedData {
+  data?: {
+    data: {
+      data: SchedulDataWrapper;
+    };
+  };
+  type: dailyPlanFlag;
+}
+
+export interface UnWrappingData {
+  data?: {
+    data: SchedulDataWrapper;
+  };
 }

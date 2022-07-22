@@ -14,7 +14,7 @@ export const CalendarStyle = {
     position: absolute;
     right: 0;
     margin-top: 1.1rem;
-    z-index: 100;
+    z-index: 7;
 
     .react-calendar__navigation {
       display: flex;

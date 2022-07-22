@@ -76,7 +76,7 @@ const Styled = {
     height: 1.8rem;
     padding: 0;
     margin-bottom: 0.2rem;
-    input {
+    & > input {
       font-size: 1.2rem;
       border: none;
       padding: 0;

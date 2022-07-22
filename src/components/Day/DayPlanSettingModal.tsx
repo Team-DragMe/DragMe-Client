@@ -1,12 +1,27 @@
 import Image from 'next/image';
-import icon_doubleArrow from 'public/assets/icon_doubleArrow.png';
+import RescheduleIC from 'public/assets/ic_Reschedule.svg';
 import icon_trashCan from 'public/assets/icon_trashCan.png';
 import React from 'react';
+import { useRecoilState } from 'recoil';
+import useDeleteSchedule from 'src/hooks/query/useDeleteSchedule';
+import { modalClickXY } from 'src/states';
 import { theme } from 'src/styles/theme';
+import { dailyPlanFlag } from 'src/types';
 import styled from 'styled-components';
 
-function DayPlanSettingModal() {
+interface DayPlanSettingModalProps {
+  top: number;
+  left: number;
+}
+function DayPlanSettingModal({ top, left }: DayPlanSettingModalProps) {
   const colors = theme.category;
+  const [clickInfo, setClickInfo] = useRecoilState(modalClickXY);
+  const flag = clickInfo.flag as dailyPlanFlag;
+  const { mutate: deleteSchedule } = useDeleteSchedule({
+    scheduleId: clickInfo.scheduleId,
+    flag,
+    date: clickInfo.date,
+  });
 
   const colorCode = [
     { id: 0, color: `${colors.cate_mint}` },
@@ -22,19 +37,26 @@ function DayPlanSettingModal() {
     <Styled.ColorPicker onClick={() => console.log(code.color)} key={code.id} color={code.color} />
   ));
 
+  const handleDelete = (e: React.MouseEvent<HTMLElement>) => {
+    if (e.target instanceof HTMLElement) {
+      deleteSchedule();
+      setClickInfo({ posX: 0, posY: 0, scheduleId: '', flag, date: '' });
+    }
+  };
+
   return (
-    <Styled.Root>
+    <Styled.Root top={top} left={left}>
       <Styled.ColorPickerSection>
         <Styled.ColorContainer>{colorCodes}</Styled.ColorContainer>
       </Styled.ColorPickerSection>
       <Styled.ButtonSection>
         <Styled.MenuBox>
           <Styled.ImgWrapper>
-            <Image src={icon_doubleArrow} alt="로고이미지" width={'20'} height={'20'} />
+            <RescheduleIC />
           </Styled.ImgWrapper>
           <Styled.ButtonLetter>우회하기</Styled.ButtonLetter>
         </Styled.MenuBox>
-        <Styled.MenuBox>
+        <Styled.MenuBox onClick={handleDelete}>
           <Styled.ImgWrapper>
             <Image src={icon_trashCan} alt="로고이미지" width={'20'} height={'20'} />
           </Styled.ImgWrapper>
@@ -48,13 +70,16 @@ function DayPlanSettingModal() {
 export default DayPlanSettingModal;
 
 const Styled = {
-  Root: styled.div`
+  Root: styled.div<{ top: number; left: number }>`
+    position: absolute;
+    z-index: 6;
+    top: ${({ top }) => top + 'px'};
+    left: ${({ left }) => left + 'px'};
     width: 10.2rem;
     height: 12rem;
     background-color: ${theme.category.cate_white};
     display: flex;
     flex-direction: column;
-
     box-shadow: 1px 1px 20px -5px ${theme.colors.letter_grey};
   `,
   ColorPickerSection: styled.div`
@@ -82,6 +107,7 @@ const Styled = {
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
   `,
   ImgWrapper: styled.div`
     display: flex;
@@ -109,5 +135,6 @@ const Styled = {
     border-radius: 1rem;
     background-color: ${({ color }) => color};
     border: ${({ color }) => color === '#FFFFFF' && '0.5px solid #B6BEC9'};
+    cursor: pointer;
   `,
 };

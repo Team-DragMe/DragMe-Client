@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useRef, useState } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
-import ReactDOM from 'react-dom';
+import { useRecoilState } from 'recoil';
 import { FLAG } from 'src/constants';
 import useGetSubSchedules from 'src/hooks/query/useGetSubSchedules';
 import useLatestState from 'src/hooks/useLatestState';
+import { currentDraggintElement, currentHoverFlag } from 'src/states';
 import { dailyPlanFlag, Schedule } from 'src/types';
 import styled, { css } from 'styled-components';
 
@@ -14,8 +15,8 @@ import SubDayPlan from './SubDayPlanList';
 
 export type positionType = 'top' | 'bottom';
 export interface movePlanChipParams extends Schedule {
-  hoverFlag: dailyPlanFlag;
-  hoverIndex: number;
+  hoverFlag?: dailyPlanFlag;
+  hoverIndex?: number;
   liType?: 'haveChild' | 'notChild';
 }
 
@@ -47,7 +48,7 @@ interface subDayPlanStyleProps {
   haveChild?: boolean;
 }
 
-type FlagType = 'daily' | 'routine' | 'rechedule' | 'weekly' | 'child';
+type FlagType = 'daily' | 'routine' | 'reschedule' | 'weekly' | 'child';
 
 interface dragItemType extends Schedule {
   _id: string;
@@ -70,9 +71,12 @@ const DayPlan = React.memo(function DayPlan({
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [currentDraggingEl, setCurrentDraggingEl, latestDraggingEl] =
     useLatestState<FlagType | null>(null);
+  const [currentDraggingItem, setCurrentDraggingItem] = useRecoilState(currentDraggintElement);
+  const [currentHoverItem, setCurrentHoverItem] = useRecoilState(currentHoverFlag);
   const { data: subSchedules } = useGetSubSchedules({
     scheduleId: item?._id,
     isAbled: item?.subSchedules?.length > 0,
+    flag,
   });
   const onArrowBtnClick = () => {
     setIsOpen((prev) => !prev);
@@ -112,7 +116,7 @@ const DayPlan = React.memo(function DayPlan({
 
   const [{ isOver, canDrop, isActive }, dropRef] = useDrop(
     () => ({
-      accept: [FLAG.DAILY, FLAG.RECHEDULE, FLAG.ROUTINE],
+      accept: [FLAG.DAILY, FLAG.reschedule, FLAG.ROUTINE],
       collect: (monitor) => ({
         isOver: monitor.isOver(),
         canDrop: monitor.canDrop(),
@@ -122,11 +126,16 @@ const DayPlan = React.memo(function DayPlan({
       hover(item) {
         const dragItemObj = item as dragItemType;
         setCurrentDraggingEl(dragItemObj.flag);
-
+        // console.log('?>>>>>>>>dragItemObj', dragItemObj);
+        // console.log('?>>>>>>>>flag', flag);
         const hoverFlag = flag;
         const hoverIndex = idx;
         movePlanChip({
           hoverFlag,
+          hoverIndex,
+          ...dragItemObj,
+        });
+        setCurrentDraggingItem({
           hoverIndex,
           ...dragItemObj,
         });
@@ -148,22 +157,20 @@ const DayPlan = React.memo(function DayPlan({
       ...(item as Schedule),
     });
   };
+  useEffect(() => {
+    setCurrentHoverItem(flag);
+  }, [flag, setCurrentHoverItem]);
 
   useEffect(() => {
-    // if (!isOpen) {
-    //   setTimeout(() => {
-    //     subscheduleRef && subscheduleRef.current?.style = 'display: none;';
-    //   }, 150);
-    // } else {
-    //   subscheduleRef && subscheduleRef.current?.style = 'display: block;';
-    // }
-  }, [isOpen]);
+    setCurrentHoverItem(null);
+  }, [isOver, setCurrentHoverItem]);
+
   return (
     <Styled.Li
       key={item?._id}
       haveChild={item?.subSchedules?.length > 0}
       ref={isOpen ? (item) => dragRef(dropRef(item)) : null}
-      id={flag}
+      flag={flag}
       isDragging={isDragging}
       currentDraggingEl={currentDraggingEl}
       index={idx}
@@ -179,38 +186,42 @@ const DayPlan = React.memo(function DayPlan({
         isCompleted={item?.isCompleted}
         ref={(item) => dragRef(dropRef(item))}
         itemId={item?._id}
+        item={item}
         index={idx}
         flag={flag}
       >
         {item?.title}
       </CommonDayPlanChip>
 
-      {subSchedules?.length > 0 && (
+      {subSchedules && subSchedules?.length > 0 && (
         <Styled.SubDayPlanWrapper isOpen={isOpen} ref={subscheduleRef} id="subSchedule-wrapper">
           <SubDayPlan subschedules={subSchedules} categoryColorCode={item?.categoryColorCode} />
         </Styled.SubDayPlanWrapper>
       )}
       {/* 브라우저 리플로우 방지를 위한 이벤트 핸들용 가상돔 */}
-      {currentDraggingEl === 'daily' && flag === 'daily' && !isDragging && isDragMode && (
-        <div>
-          <Styled.EventHandleTopDom
-            key={item?._id}
-            index={idx * 3.8}
-            id={item?._id}
-            onDragEnter={() => {
-              handleDragEnter('top', idx, item?._id);
-            }}
-          />
-          <Styled.EventHandleBottomDom
-            key={item?._id}
-            index={idx * 3.8}
-            id={item?._id}
-            onDragEnter={() => {
-              handleDragEnter('bottom', idx, item?._id);
-            }}
-          />
-        </div>
-      )}
+      {currentHoverItem === 'daily' &&
+        currentDraggingItem?.flag === 'daily' &&
+        !isDragging &&
+        isDragMode && (
+          <div>
+            <Styled.EventHandleTopDom
+              key={item?._id}
+              index={idx * 3.8}
+              id={item?._id}
+              onDragEnter={() => {
+                handleDragEnter('top', idx, item?._id);
+              }}
+            />
+            <Styled.EventHandleBottomDom
+              key={item?._id}
+              index={idx * 3.8}
+              id={item?._id}
+              onDragEnter={() => {
+                handleDragEnter('bottom', idx, item?._id);
+              }}
+            />
+          </div>
+        )}
     </Styled.Li>
   );
 });
@@ -287,7 +298,7 @@ const Styled = {
     height: 1.6rem;
     position: absolute;
     z-index: 5;
-    /* background: blue;  */
+    /* background: blue; */
     opacity: 0.3;
     top: 0;
   `,

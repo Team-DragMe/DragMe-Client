@@ -1,11 +1,28 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable no-case-declarations */
 import update from 'immutability-helper';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useDrop } from 'react-dnd';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import React, { useCallback, useRef, useState } from 'react';
+// eslint-disable-next-line import/named
+import { ConnectDropTarget, useDrop } from 'react-dnd';
+import { useQueryClient } from 'react-query';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import DayPlanSettingModal from 'src/components/Day/DayPlanSettingModal';
 import { FLAG } from 'src/constants';
+import usePatchDayToReschedule from 'src/hooks/query/usePatchDayToReschedule';
+import usePatchCompletedSchedules from 'src/hooks/query/usePatchDayToReschedule';
+import usePatchDayToRoutine from 'src/hooks/query/usePatchDayToRoutine';
+import usePatchRescheduleToDay from 'src/hooks/query/usePatchRescheduleToDay';
 import useThrottle from 'src/hooks/useThrottle';
-import { dailyPlanList, reschedulePlanList, routinePlanList, scrollY } from 'src/states';
+import {
+  currentDraggintElement,
+  currentHoverFlag,
+  dailyPlanList,
+  dayInfo,
+  modalClickXY,
+  reschedulePlanList,
+  routinePlanList,
+  scrollY,
+} from 'src/states';
 import { theme } from 'src/styles/theme';
 import { dailyPlanFlag, Schedule } from 'src/types';
 import styled, { css } from 'styled-components';
@@ -46,37 +63,50 @@ function DayPlanList({ maxHeight = '45rem', flag, schedulesData, ...props }: Day
   const [rescheduleData, setRescheduleData] = useRecoilState(reschedulePlanList);
   const [routineScheduleData, setRoutineScheduleData] = useRecoilState(routinePlanList);
   const setScrollData = useSetRecoilState(scrollY);
+  const setPosXY = useSetRecoilState(modalClickXY);
   const [currentDragChipState, setCurrentDragChipState] = useState<movePlanChipParams | null>(null);
   const currentDragChip = useRef<movePlanChipParams | null>(null);
   const scrollEndRef = useRef<HTMLDivElement>(null);
   const [addPlan, setAddPlan] = useState(false);
+  const [currentDraggingItem, setCurrentDraggingItem] = useRecoilState(currentDraggintElement);
+  const [currentHoverItem, setCurrentHoverItem] = useRecoilState(currentHoverFlag);
+  const today = useRecoilValue(dayInfo);
+  const currentDayDate = today.slice(0, 10);
+  const queryClient = useQueryClient();
+  const [afterOrder, setAfterOrder] = useState(false);
+
+  const { mutate: DayToRescheduleMutate } = usePatchDayToReschedule({
+    scheduleId: currentDraggingItem._id,
+    schedule: currentDraggingItem,
+    date: currentDayDate,
+    hoverFlag: currentHoverItem,
+  });
+  const { mutate: RescheduleToDayMutate } = usePatchRescheduleToDay({
+    scheduleId: currentDraggingItem._id,
+    schedule: currentDraggingItem,
+    date: currentDayDate,
+    hoverFlag: currentHoverItem,
+  });
+
+  const { mutate: DayToRoutineMutate } = usePatchDayToRoutine({
+    scheduleId: currentDraggingItem._id,
+    schedule: currentDraggingItem,
+    date: currentDayDate,
+    hoverFlag: currentHoverItem,
+  });
   /* item flag에 따라 드롭할 수 있는 영역 수정 */
   const getAcceptableEl = (currentType: string) => {
     switch (currentType) {
       case 'daily':
-        return [FLAG.DAILY, FLAG.RECHEDULE, FLAG.ROUTINE];
+        return [FLAG.DAILY, FLAG.reschedule, FLAG.ROUTINE];
       case 'routine':
         return [FLAG.DAILY];
-      case 'rechedule':
+      case 'reschedule':
         return [FLAG.DAILY];
       default:
         return [FLAG.DAILY];
     }
   };
-  /* 현재 스케줄 리스트의 데이터 반환 */
-  // const getCurrentTypeData = (currentType: string) => {
-  //   switch (currentType) {
-  //     case 'routine':
-  //       return { schedulesData: routineScheduleData, setSchedulesData: setRoutineScheduleData };
-  //     case 'rechedule':
-  //       return { schedulesData: rescheduleData, setSchedulesData: setRescheduleData };
-  //     default:
-  //       return { schedulesData: dailyscheduleData, setSchedulesData: setDailyScheduleData };
-  //   }
-  // };
-
-  // const { schedulesData, setSchedulesData } = getCurrentTypeData(flag);
-
   const [{ isOver, canDrop, isActive }, sectionDropRef] = useDrop(() => ({
     accept: getAcceptableEl(flag),
     collect: (monitor) => ({
@@ -85,17 +115,13 @@ function DayPlanList({ maxHeight = '45rem', flag, schedulesData, ...props }: Day
       isActive: monitor.canDrop() && monitor.isOver(),
     }),
     canDrop: (item) => {
-      const { flag: itemFlag } = item;
-
+      const { flag: itemFlag } = item as any;
       const availableArea = getAcceptableEl(itemFlag);
       return availableArea.includes(currentSection);
     },
     hover(item, monitor) {
-      // console.log('item', item);
-      // console.log('flag of dropArea', flag);
-      // console.log('item', item);
       throttleChangeCurrentSection(flag);
-      // flag, _id, date, index
+      setCurrentHoverItem(flag);
     },
   }));
 
@@ -111,25 +137,46 @@ function DayPlanList({ maxHeight = '45rem', flag, schedulesData, ...props }: Day
     [dailyscheduleData],
   );
 
+  // hover =
+
   // 드랍되었을 때 실행될 함수
   const endToMovePlanChip = ({ hoverFlag, hoverIndex, ...item }: movePlanChipParams) => {
-    currentDragChip.current = null;
-    setCurrentDragChipState(null);
+    console.log('>드랍됫어!!', currentDraggingItem);
+    console.log('>currentHoverItem!!', currentHoverItem);
     // currentDragChipState를 서버로 요청
     // optimistic update
-    switch (currentDragChipState?.hoverFlag) {
+    switch (currentHoverItem) {
       case 'daily':
         // 일간 계획 요청 api post
+        // 자주 사용 -> 일간 (복사)
+        // 미룰 -> 일간 (삭제)
+        RescheduleToDayMutate();
+
         break;
-      case 'rechedule':
+      case 'reschedule':
         // 계획 미루기 api post
+        // 일간 -> 미룰 (삭제)
+        console.log('>>>>reschedule', currentHoverItem);
+        DayToRescheduleMutate();
+
+        // queryClient.setQueryData(['daily', currentDayDate], (oldSchedules: any) => {
+        //   const newData = oldSchedules?.data?.data?.schedules.filter(
+        //     (o: Schedule) => o._id !== currentDraggingItem._id,
+        //   );
+        //   console.log('>>optimisticData 일간 -> 미룰 (삭제)', newData);
+        //   return newData;
+        // });
         break;
       case 'routine':
         // 자주 사용하는 계획 api post
+        // 일간 -> 자주 (복사)
+        DayToRoutineMutate();
         break;
       default:
         break;
     }
+    currentDragChip.current = null;
+    setCurrentDragChipState(null);
   };
 
   // move planBlock section to section
@@ -163,7 +210,7 @@ function DayPlanList({ maxHeight = '45rem', flag, schedulesData, ...props }: Day
             setRoutineScheduleData([...copyRoutineData]);
           }
           break;
-        case 'rechedule':
+        case 'reschedule':
           const copyReschedule = [...rescheduleData];
           const lastRescheduleItem = copyReschedule.pop();
 
@@ -203,14 +250,28 @@ function DayPlanList({ maxHeight = '45rem', flag, schedulesData, ...props }: Day
     );
     const { index: hoverItemIndex, planChip: hoverItemObj } = findDailyIndex(hoverId as string);
 
-    setDailyScheduleData(
-      update(dailyscheduleData, {
-        $splice: [
-          [currentItemIndex, 1],
-          [hoverItemIndex, 0, currentItemObj as Schedule],
-        ],
-      }),
-    );
+    console.log('$$$$$$$$$$$$$$$$$$호버인덱스', hoverItemIndex);
+    // 일단 미리 업데이트 시키는 로직
+    /* @TODO 순서 변경할 때 살리기
+    const snapShotOfPreviousData = queryClient.getQueryData(['daily', currentDayDate])?.data?.data
+      ?.schedules;
+    console.log('>>>.snapShotData', snapShotOfPreviousData);
+    update(snapShotOfPreviousData, {
+      $splice: [
+        [currentItemIndex, 1],
+        [hoverItemIndex, 0, currentItemObj as Schedule],
+      ],
+    });
+    console.log('>>snapShotOfPreviousData', snapShotOfPreviousData);*/
+    // queryClient.setQueryData(['daily', currentDayDate], () => snapShotOfPreviousData);
+    // setDailyScheduleData(
+    //   update(dailyscheduleData, {
+    //     $splice: [
+    //       [currentItemIndex, 1],
+    //       [hoverItemIndex, 0, currentItemObj as Schedule],
+    //     ],
+    //   }),
+    // );
   };
 
   const handleAddClick = () => {
@@ -223,8 +284,8 @@ function DayPlanList({ maxHeight = '45rem', flag, schedulesData, ...props }: Day
 
   const handleScroll = (e: React.WheelEvent<HTMLElement>) => {
     if (e.target instanceof HTMLElement) {
-      console.log(e.currentTarget.scrollTop);
       setScrollData(e.currentTarget.scrollTop);
+      setPosXY({ posX: 0, posY: 0, scheduleId: '', flag, date: '' });
     }
   };
 
@@ -242,6 +303,7 @@ function DayPlanList({ maxHeight = '45rem', flag, schedulesData, ...props }: Day
         isOver={isOver}
         onWheel={handleScroll}
       >
+        {/* <DayPlanSettingModal /> */}
         {/* {isOver && <Styled.DropWrapper canDrop={canDrop} maxHeight={maxHeight} />} */}
         <Styled.Ul maxHeight={maxHeight}>
           {schedulesData?.map((item, idx) => (
@@ -252,16 +314,16 @@ function DayPlanList({ maxHeight = '45rem', flag, schedulesData, ...props }: Day
               movePlanChip={throttleMovePlanChip}
               endToMovePlanChip={endToMovePlanChip}
               flag={flag}
-              dataLength={schedulesData.length}
+              dataLength={schedulesData?.length}
               isDragMode={isActive}
               thorottleMoveItemInSection={thorottleMoveItemInSection}
             />
           ))}
-          {isActive && currentDragChipState && (
+          {isActive && currentDraggingItem && (
             <Styled.ScrollEnd>
               <DayPlan
-                item={currentDragChipState}
-                idx={schedulesData.length}
+                item={currentDraggingItem}
+                idx={schedulesData?.length ? schedulesData.length : 0}
                 movePlanChip={throttleMovePlanChip}
                 endToMovePlanChip={endToMovePlanChip}
                 thorottleMoveItemInSection={thorottleMoveItemInSection}
@@ -276,15 +338,16 @@ function DayPlanList({ maxHeight = '45rem', flag, schedulesData, ...props }: Day
                 color="#FFFFFF"
                 shape="rectangle"
                 flag={flag}
-                index={schedulesData.length + 1}
+                index={schedulesData?.length ? schedulesData?.length + 1 : 1}
               />
               <div ref={scrollEndRef} />
             </Styled.Li>
           )}
           {isOver && <div ref={scrollEndRef} />}
+          <div ref={scrollEndRef} />
         </Styled.Ul>
       </Styled.UlWrapper>
-      {flag !== FLAG.RECHEDULE && (
+      {flag !== FLAG.reschedule && (
         <Styled.AddDayPlanChipWrapper>
           <AddDayPlanChip onClick={handleAddClick} />
         </Styled.AddDayPlanChipWrapper>
@@ -311,6 +374,9 @@ const Styled = {
     justify-content: center;
     position: relative;
     overflow-y: scroll;
+    ::-webkit-scrollbar {
+      display: none;
+    }
   `,
   DropWrapper: styled.div<DropWrapperStyleProps>`
     height: 100%;

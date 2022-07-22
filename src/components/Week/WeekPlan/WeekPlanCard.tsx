@@ -1,6 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
+import { useRecoilValue } from 'recoil';
+import DayPlanList from 'src/components/common/DayPlanList/DayPlanList';
 import ForwardEmojiPicker from 'src/components/Day/TodayPlan/EmojiPicker';
+import { FLAG } from 'src/constants';
+import useGetWeeklySchedules from 'src/hooks/query/useGetWeeklySchedules';
+import { weekInfo } from 'src/states';
 import { theme } from 'src/styles/theme';
+import { Schedule } from 'src/types';
 import styled from 'styled-components';
 
 interface WeekPlanCardProps {
@@ -10,10 +16,12 @@ interface WeekPlanCardProps {
     value: string;
   };
   day: string;
+  schedulesData: Schedule[];
 }
 function WeekPlanCard(props: WeekPlanCardProps) {
-  const { dayInfo, day } = props;
+  const { dayInfo, day, schedulesData } = props;
   const [click, setClick] = useState<boolean>(false);
+
   const useOutsideAlert = (ref: React.RefObject<HTMLDivElement>) => {
     useEffect(() => {
       function handleClickOutside(event: MouseEvent) {
@@ -35,9 +43,13 @@ function WeekPlanCard(props: WeekPlanCardProps) {
   const refPicker = useRef<HTMLDivElement>(null);
   useOutsideAlert(refPicker);
 
-  const parsedMonth = dayInfo.date.slice(5, 7);
-  const parsedDate = dayInfo.date.slice(8, 10);
+  const parsedMonth = dayInfo?.date.slice(5, 7);
+  const parsedDate = dayInfo?.date.slice(8, 10);
   const dateInfo = parsedMonth + '.' + parsedDate;
+
+  useEffect(() => {
+    console.log('>>schedulesData', schedulesData);
+  }, [schedulesData]);
 
   return (
     <Styled.Root>
@@ -48,12 +60,13 @@ function WeekPlanCard(props: WeekPlanCardProps) {
             ref={refPicker}
             click={click}
             setClick={handleClick}
-            emoji={dayInfo.value}
-            date={dayInfo.date}
+            emoji={dayInfo?.value}
+            date={dayInfo?.date}
           />
         </Styled.DayWrapper>
         <p>{dateInfo}</p>
       </Styled.Header>
+      <DayPlanList maxHeight="21rem" schedulesData={schedulesData} flag={FLAG.DAILY} />
     </Styled.Root>
   );
 }

@@ -47,12 +47,13 @@ const Styled = {
   Input: styled.input`
     width: 19.2rem;
     border: none;
-    font-size: 1.2rem;
     padding: 0;
+    font-size: 1rem;
     &::placeholder {
       font-size: 1rem;
       line-height: 1.5rem;
       color: ${theme.colors.letter_grey};
+      font-weight: 500;
     }
     &:focus {
       outline: none;

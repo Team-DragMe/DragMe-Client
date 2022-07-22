@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { FLAG } from 'src/constants';
 import useGetTodaySchedule from 'src/hooks/query/useGetTodaySchedules';
 import { schedules } from 'src/mock-data/schedules';
-import { dailyPlanList, dayInfo } from 'src/states';
+import { dailyPlanList, dayInfo, modalClickXY } from 'src/states';
 
 import DayPlanList from '../common/DayPlanList/DayPlanList';
+import DayPlanSettingModal from './DayPlanSettingModal';
 
 function MainDayPlanList() {
   // 일간 리스트에서 뿌릴 데이터는 여기에서 보냄 -> query key를 DailyTodos
@@ -16,12 +17,20 @@ function MainDayPlanList() {
   const dailyPlanData = useSetRecoilState(dailyPlanList);
   const date = useRecoilValue(dayInfo).slice(0, 10);
   const { data } = useGetTodaySchedule({ date });
+  const pageXY = useRecoilValue(modalClickXY);
 
   useEffect(() => {
     data && dailyPlanData(data);
   }, [data, dailyPlanData]);
 
-  return <DayPlanList flag={FLAG.DAILY} schedulesData={data} />;
+  return (
+    <>
+      <DayPlanList flag={FLAG.DAILY} schedulesData={data} />
+      {pageXY.posX !== 0 && pageXY.posY !== 0 && (
+        <DayPlanSettingModal top={pageXY.posY} left={pageXY.posX} />
+      )}
+    </>
+  );
 }
 
 export default MainDayPlanList;
