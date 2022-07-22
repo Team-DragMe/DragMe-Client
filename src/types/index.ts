@@ -22,7 +22,7 @@ export interface Schedule {
   // @TODO timeSets 형식 수정
   estimatedTime: number[];
   usedTime: number[];
-  subSchedules: Schedule[];
+  subSchedules: string[];
   createdAt: string;
   updatedAt: string;
   // react Query에서 데이터 가공해서 넣기
