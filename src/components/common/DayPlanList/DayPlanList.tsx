@@ -284,8 +284,10 @@ function DayPlanList({ maxHeight = '45rem', flag, schedulesData, ...props }: Day
 
   const handleScroll = (e: React.WheelEvent<HTMLElement>) => {
     if (e.target instanceof HTMLElement) {
-      setScrollData(e.currentTarget.scrollTop);
-      setPosXY({ posX: 0, posY: 0, scheduleId: '', flag, date: '' });
+      if (flag === 'daily') {
+        setScrollData(e.currentTarget.scrollTop);
+        setPosXY({ posX: 0, posY: 0, scheduleId: '', flag, date: '' });
+      }
     }
   };
 

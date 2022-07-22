@@ -33,14 +33,14 @@ function TimeBlockSection() {
         if (openedList.has(el._id) && el.subSchedules.length > 0) {
           return (
             <>
-              <TimeBlocks key={el._id} schedule={el} subScheduleId={undefined} idx={idx} />
+              <TimeBlocks key={el._id} schedule={el} subScheduleId={''} idx={idx} />
               {el.subSchedules.map((subEl, subIdx) => (
                 <TimeBlocks key={subEl} schedule={el} subScheduleId={subEl} idx={subIdx} />
               ))}
             </>
           );
         }
-        return <TimeBlocks key={el._id} schedule={el} subScheduleId={undefined} idx={idx} />;
+        return <TimeBlocks key={el._id} schedule={el} subScheduleId={''} idx={idx} />;
       })}
     </Styled.Root>
   );

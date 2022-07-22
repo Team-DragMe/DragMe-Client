@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useRecoilValue } from 'recoil';
 import useGetSubSchedules from 'src/hooks/query/useGetSubSchedules';
 import usePatchScheduleTime from 'src/hooks/query/usePatchScheduleTime';
 import usePostScheduleTime from 'src/hooks/query/usePostScheduleTime';
 import useDragBlock from 'src/hooks/useDragBlock';
+import { checkedSchedules } from 'src/states';
 import { Schedule } from 'src/types';
 import { getTimeArray } from 'src/utils/dateUtil';
 import styled from 'styled-components';
@@ -16,13 +18,14 @@ interface DragStateArg {
 }
 
 interface TimeBlocksProps {
-  schedule: Schedule | undefined;
-  subScheduleId: string | undefined;
+  schedule: Schedule;
+  subScheduleId: string;
   idx: number;
 }
 
 function TimeBlocks({ schedule, subScheduleId, idx }: TimeBlocksProps) {
   const { timeArr } = getTimeArray();
+  const checkedList = useRecoilValue(checkedSchedules);
   const { mutate: postScheduleTime } = usePostScheduleTime();
   const { mutate: patchScheduleTime } = usePatchScheduleTime();
   const [isDragging, setIsDragging] = useState(false);
@@ -34,8 +37,15 @@ function TimeBlocks({ schedule, subScheduleId, idx }: TimeBlocksProps) {
     isAbled: subScheduleId !== undefined,
     flag: 'daily',
   });
-  const scheduleInfo =
-    subScheduleId === undefined ? schedule : subSchedule ? subSchedule[idx] : schedule;
+  const scheduleInfo = subScheduleId === '' ? schedule : subSchedule ? subSchedule[idx] : schedule;
+  // const scheduleInfo =
+  //   subScheduleId === undefined ? schedule : subSchedule ? subSchedule[idx] : schedule;
+
+  const [isUsed, setIsUsed] = useState(scheduleInfo?.isCompleted);
+
+  useEffect(() => {
+    setIsUsed((prev) => !prev);
+  }, [checkedList.has(scheduleInfo?._id)]);
 
   const handleDragState = ({ isDragging, startBlock, endBlock }: DragStateArg) => {
     setIsDragging(isDragging);
@@ -46,6 +56,7 @@ function TimeBlocks({ schedule, subScheduleId, idx }: TimeBlocksProps) {
       setEndBlock(endBlock);
     }
   };
+
   // console.log(scheduleInfo?.isCompleted);
   //배열 만들어서 서버에 전송
   const handleSubmit = () => {
@@ -61,7 +72,7 @@ function TimeBlocks({ schedule, subScheduleId, idx }: TimeBlocksProps) {
       console.log('생성 배열', blockList);
       postScheduleTime({
         scheduleId: scheduleInfo?._id || '',
-        isUsed: scheduleInfo?.isCompleted || false,
+        isUsed: isUsed || false,
         timeBlockNumbers: blockList,
       });
     } else if (start > end) {
@@ -76,7 +87,7 @@ function TimeBlocks({ schedule, subScheduleId, idx }: TimeBlocksProps) {
         console.log('클릭 하나 생성', blockList);
         postScheduleTime({
           scheduleId: scheduleInfo?._id || '',
-          isUsed: scheduleInfo?.isCompleted || false,
+          isUsed: isUsed || false,
           timeBlockNumbers: blockList,
         });
       } else {
@@ -106,7 +117,7 @@ function TimeBlocks({ schedule, subScheduleId, idx }: TimeBlocksProps) {
         <TimeBlock
           id={el}
           key={el}
-          isUsed={scheduleInfo?.isCompleted || false}
+          isUsed={isUsed || false}
           startBlock={startBlock}
           endBlock={endBlock}
           isDraged={isDraged(el)}
