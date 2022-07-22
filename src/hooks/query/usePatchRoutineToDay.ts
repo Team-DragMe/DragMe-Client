@@ -1,38 +1,36 @@
 import { useMutation, useQueryClient } from 'react-query';
-import { patchRescheduleToDaySchedules } from 'src/lib/api/dayApi';
+import { patchRoutineToDaySchedules, patchroutineToDaySchedules } from 'src/lib/api/dayApi';
 import { dailyPlanFlag, FlagedData, Schedule, UnWrappingData } from 'src/types';
 
-interface usePatchRescheduleToDayParams {
+interface usePatchRoutineToDayParams {
   scheduleId: string;
   schedule: Schedule;
   date?: string;
   hoverFlag: dailyPlanFlag | null;
 }
 
-// 미룰계획 -> 일정 (일정에 추가 / 미룰계획에서 삭제)
-const usePatchRescheduleToDay = ({
+// 자주 사용하는 계획 -> 일정 (일정에 추가 / 자주 사용하는 계획에서 삭제)
+const usePatchRoutineToDay = ({
   scheduleId,
   schedule,
   date,
   hoverFlag,
-}: usePatchRescheduleToDayParams) => {
+}: usePatchRoutineToDayParams) => {
   const queryClient = useQueryClient();
-  return useMutation(async () => patchRescheduleToDaySchedules({ scheduleId, date }), {
+  return useMutation(async () => patchRoutineToDaySchedules({ scheduleId, date }), {
     onMutate: async () => {
-      const snapShotOfPreviousData = queryClient.getQueryData('reschedule');
-      await queryClient.cancelQueries(['reschedule']);
+      const snapShotOfPreviousData = queryClient.getQueryData('routine');
+      await queryClient.cancelQueries(['routine']);
       await queryClient.cancelQueries(['daily', date]);
-
       //  일정에 추가
-      queryClient.setQueryData(['daily', date], (oldSchedules: any) => {
-        console.log('>>일정 추가 예옝oldSchedules', oldSchedules?.data?.data?.schedules);
+      queryClient.setQueryData(['daily'], (oldSchedules: any) => {
+        console.log('>>oldSchedules', oldSchedules?.data?.data?.schedules);
         const optimisticData = [...oldSchedules?.data?.data?.schedules];
         optimisticData.push(schedule);
         return optimisticData;
       });
-      //  미룬 계획 에서 삭제
-      queryClient.setQueryData(['reschedule'], (oldSchedules: any) => {
-        console.log('>>미룬 계획 삭제 예옝oldSchedules', oldSchedules?.data?.data?.schedules);
+      //  자주 사용하는 계획 에서 삭제
+      queryClient.setQueryData(['routine', date], (oldSchedules: any) => {
         const newData = oldSchedules?.data?.data?.schedules.filter(
           (o: Schedule) => o._id !== scheduleId,
         );
@@ -44,10 +42,10 @@ const usePatchRescheduleToDay = ({
       };
     },
     onSuccess: () => {
-      queryClient.invalidateQueries('reschedule');
+      queryClient.invalidateQueries('routine');
       queryClient.invalidateQueries(['daily', date]);
     },
   });
 };
 
-export default usePatchRescheduleToDay;
+export default usePatchRoutineToDay;

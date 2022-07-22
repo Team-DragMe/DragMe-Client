@@ -88,8 +88,10 @@ export const patchDayToRoutineSchedules = async ({ scheduleId }: ScheduleId) => 
   return post;
 };
 
-export const patchRoutineToDaySchedules = async ({ scheduleId }: ScheduleId) => {
-  const post = await client.post(`/schedule/routine-day?scheduleId=${scheduleId}`);
+export const patchRoutineToDaySchedules = async ({ scheduleId, date }: ScheduleId) => {
+  const post = await client.post(`/schedule/routine-day?scheduleId=${scheduleId}`, {
+    date,
+  });
   return post;
 };
 

@@ -92,10 +92,10 @@ function DayPlanList({ maxHeight = '46.2rem', flag, schedulesData, ...props }: D
   const getAcceptableEl = (currentType: string) => {
     switch (currentType) {
       case 'daily':
-        return [FLAG.DAILY, FLAG.RECHEDULE, FLAG.ROUTINE];
+        return [FLAG.DAILY, FLAG.reschedule, FLAG.ROUTINE];
       case 'routine':
         return [FLAG.DAILY];
-      case 'rechedule':
+      case 'reschedule':
         return [FLAG.DAILY];
       default:
         return [FLAG.DAILY];
@@ -147,13 +147,13 @@ function DayPlanList({ maxHeight = '46.2rem', flag, schedulesData, ...props }: D
         RescheduleToDayMutate();
 
         break;
-      case 'rechedule':
+      case 'reschedule':
         // 계획 미루기 api post
         // 일간 -> 미룰 (삭제)
-        console.log('>>>>rechedule', currentHoverItem);
+        console.log('>>>>reschedule', currentHoverItem);
         DayToRescheduleMutate();
 
-        // queryClient.setQueriesData(['daily', currentDayDate], (oldSchedules: any) => {
+        // queryClient.setQueryData(['daily', currentDayDate], (oldSchedules: any) => {
         //   const newData = oldSchedules?.data?.data?.schedules.filter(
         //     (o: Schedule) => o._id !== currentDraggingItem._id,
         //   );
@@ -204,7 +204,7 @@ function DayPlanList({ maxHeight = '46.2rem', flag, schedulesData, ...props }: D
             setRoutineScheduleData([...copyRoutineData]);
           }
           break;
-        case 'rechedule':
+        case 'reschedule':
           const copyReschedule = [...rescheduleData];
           const lastRescheduleItem = copyReschedule.pop();
 
@@ -313,7 +313,7 @@ function DayPlanList({ maxHeight = '46.2rem', flag, schedulesData, ...props }: D
           <div ref={scrollEndRef} />
         </Styled.Ul>
       </Styled.UlWrapper>
-      {flag !== FLAG.RECHEDULE && (
+      {flag !== FLAG.reschedule && (
         <Styled.AddDayPlanChipWrapper>
           <AddDayPlanChip onClick={handleAddClick} />
         </Styled.AddDayPlanChipWrapper>

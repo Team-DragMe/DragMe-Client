@@ -7,7 +7,7 @@ type categoryColorCodeType =
   | '#FFFFFF'
   | '#96CCC9';
 
-export type dailyPlanFlag = 'daily' | 'routine' | 'rechedule' | 'weekly' | 'child';
+export type dailyPlanFlag = 'daily' | 'routine' | 'reschedule' | 'weekly' | 'child';
 
 export interface Schedule {
   _id: string;

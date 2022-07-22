@@ -25,10 +25,9 @@ const usePatchDayToRoutine = ({
       const snapShotOfPreviousData = queryClient.getQueryData('routine');
       await queryClient.cancelQueries(['routine']);
       //  자주 사용하는 계획에 추가 - 잘 됨
-      await queryClient.setQueriesData(['routine'], (oldSchedules: any) => {
+      await queryClient.setQueryData(['routine'], (oldSchedules: any) => {
         const optimisticData = [...oldSchedules?.data?.data?.schedules];
         optimisticData.push(schedule);
-        console.log('>>optimisticData 자주 사용하는 계획에 추가', optimisticData);
         return optimisticData;
       });
 

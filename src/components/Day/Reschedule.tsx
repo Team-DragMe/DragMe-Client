@@ -25,7 +25,7 @@ function Reschedule() {
         <Styled.Title>{RESCHEDULE.EN}</Styled.Title>
         <Styled.SubTitle>{RESCHEDULE.KO}</Styled.SubTitle>
       </Styled.TitleArea>
-      <DayPlanList maxHeight="13.3rem" flag={FLAG.RECHEDULE} schedulesData={data} />
+      <DayPlanList maxHeight="13.3rem" flag={FLAG.reschedule} schedulesData={data} />
     </Styled.Root>
   );
 }

@@ -49,7 +49,7 @@ interface subDayPlanStyleProps {
   haveChild?: boolean;
 }
 
-type FlagType = 'daily' | 'routine' | 'rechedule' | 'weekly' | 'child';
+type FlagType = 'daily' | 'routine' | 'reschedule' | 'weekly' | 'child';
 
 interface dragItemType extends Schedule {
   _id: string;
@@ -116,7 +116,7 @@ const DayPlan = React.memo(function DayPlan({
 
   const [{ isOver, canDrop, isActive }, dropRef] = useDrop(
     () => ({
-      accept: [FLAG.DAILY, FLAG.RECHEDULE, FLAG.ROUTINE],
+      accept: [FLAG.DAILY, FLAG.reschedule, FLAG.ROUTINE],
       collect: (monitor) => ({
         isOver: monitor.isOver(),
         canDrop: monitor.canDrop(),
