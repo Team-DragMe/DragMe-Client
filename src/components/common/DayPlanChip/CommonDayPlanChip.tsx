@@ -1,6 +1,7 @@
 import SemiArrow from 'public/assets/icons/SemiArrow8.svg';
 import React, { forwardRef, useEffect, useRef, useState } from 'react';
 import { useRecoilState } from 'recoil';
+import usePatchCompletedSchedules from 'src/hooks/query/usePatchCompletedSchedules';
 import { checkedSchedules, currentModifyDayPlan, openedSchedules } from 'src/states';
 import { theme } from 'src/styles/theme';
 import { dailyPlanFlag } from 'src/types';
@@ -23,9 +24,10 @@ interface CommonDayPlanChipProps {
   onArrowBtnClick?: () => void;
   isCompleted?: boolean;
   itemId?: string;
-  flag?: dailyPlanFlag;
+  flag: dailyPlanFlag;
   index?: number;
   id?: string;
+  [key: string]: any;
 }
 
 interface ColorChipStyleProps {
@@ -68,10 +70,17 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
     const [openItem, setOpenItem] = useRecoilState(openedSchedules);
     const [checkItem, setCheckItem] = useRecoilState(checkedSchedules);
     const checkBoxRef = useRef(null);
+    const { mutate: mutateCompletedSchedules } = usePatchCompletedSchedules({
+      scheduleId: itemId,
+      flag,
+      date: props.item.date,
+      isCompleted: !isChecked,
+    });
 
-    const handleChange = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const handleChange = () => {
       setIsChecked((prev) => !prev);
-      // @TODO React query optimistic update로 완료된 계획 post
+      mutateCompletedSchedules();
+
       if (flag !== 'daily') {
         return;
       }

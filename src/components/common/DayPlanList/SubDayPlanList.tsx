@@ -1,13 +1,14 @@
 import React from 'react';
 import { useDrag } from 'react-dnd';
 import { PLAN_CHIP } from 'src/constants';
+import { Schedule } from 'src/types';
 import styled from 'styled-components';
 
 import CommonDayPlanChip from '../DayPlanChip/CommonDayPlanChip';
 
 interface SubDayPlanListProps {
   // @TODO 실제 데이터 타입에 맞춰서 타이핑 수정
-  subschedules: any;
+  subschedules: Schedule[];
   categoryColorCode: string;
 }
 
@@ -25,10 +26,10 @@ function SubDayPlanList({ subschedules, categoryColorCode, ...props }: SubDayPla
   }));
   return (
     <Styled.SubUl>
-      {subschedules?.map((item) => (
+      {subschedules?.map((item: Schedule) => (
         <Styled.SubLi key={item?._id} categoryColorCode={categoryColorCode}>
           {/* @TODO 하위 아이템 데이터 오면 넘길 인자 정하기 */}
-          <CommonDayPlanChip itemId={item._id} ref={dragRef}>
+          <CommonDayPlanChip itemId={item._id} ref={dragRef} item={item} flag={item.flag}>
             {item.title}
           </CommonDayPlanChip>
         </Styled.SubLi>

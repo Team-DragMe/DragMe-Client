@@ -77,6 +77,7 @@ const DayPlan = React.memo(function DayPlan({
   const { data: subSchedules } = useGetSubSchedules({
     scheduleId: item?._id,
     isAbled: item?.subSchedules?.length > 0,
+    flag,
   });
   const onArrowBtnClick = () => {
     setIsOpen((prev) => !prev);
@@ -186,6 +187,7 @@ const DayPlan = React.memo(function DayPlan({
         isCompleted={item?.isCompleted}
         ref={(item) => dragRef(dropRef(item))}
         itemId={item?._id}
+        item={item}
         index={idx}
         flag={flag}
       >

@@ -1,12 +1,15 @@
 import { useQuery } from 'react-query';
 import { getSubScheduleData } from 'src/lib/api/dayApi';
+import { dailyPlanFlag } from 'src/types';
+import { getFlagedData } from 'src/utils/getFlagedData';
 
 interface UseGetSubSchedules {
   scheduleId: string;
   isAbled: boolean;
+  flag: dailyPlanFlag;
 }
 
-const useGetSubSchedules = ({ scheduleId, isAbled }: UseGetSubSchedules) =>
+const useGetSubSchedules = ({ scheduleId, isAbled, flag }: UseGetSubSchedules) =>
   useQuery(
     ['child', scheduleId],
     async () =>
@@ -14,7 +17,7 @@ const useGetSubSchedules = ({ scheduleId, isAbled }: UseGetSubSchedules) =>
         scheduleId,
       }),
     {
-      select: (data) => data?.data?.data?.schedules,
+      select: (data) => getFlagedData({ data, type: flag }),
       keepPreviousData: true,
       useErrorBoundary: true,
       retry: 3,

@@ -31,7 +31,12 @@ export interface ScheduleTimePostType {
   timeBlockNumbers: number[];
 }
 
-export interface ScheduleAndDate{
+export interface ScheduleAndDate {
   scheduleId: string;
   date: string;
+}
+
+export interface ScheduleAndIsCompleted {
+  scheduleId: string;
+  isCompleted: boolean;
 }

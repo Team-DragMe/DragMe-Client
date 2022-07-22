@@ -4,6 +4,7 @@ import {
   getEmojiQueryType,
   InformationRequestType,
   ScheduleAndDate,
+  ScheduleAndIsCompleted,
   ScheduleId,
   ScheduleTimePostType,
 } from 'src/types/day';
@@ -64,9 +65,14 @@ export const postScheduleTime = async ({ scheduleId, ...data }: ScheduleTimePost
 // };
 
 // 계획 블록 완료
-export const patchCompleteScheduleData = async ({ scheduleId }: ScheduleId) => {
-  console.log('==========================들어온 postId', scheduleId);
-  const post = await client.patch(`/schedule/complete?scheduleId=${scheduleId}`);
+export const patchCompleteScheduleData = async ({
+  scheduleId,
+  isCompleted,
+}: ScheduleAndIsCompleted) => {
+  console.log('==========================들어온 postId', scheduleId, isCompleted);
+  const post = await client.patch(
+    `/schedule/complete?scheduleId=${scheduleId}&isCompleted=${isCompleted}`,
+  );
   console.log('==========================post', post);
   return post;
 };
