@@ -14,6 +14,7 @@ import usePatchDayToRoutine from 'src/hooks/query/usePatchDayToRoutine';
 import usePatchRescheduleToDay from 'src/hooks/query/usePatchRescheduleToDay';
 import useThrottle from 'src/hooks/useThrottle';
 import {
+  currentClickParent,
   currentDraggintElement,
   currentHoverFlag,
   dailyPlanList,

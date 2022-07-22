@@ -1,5 +1,7 @@
 import { useMutation, useQueryClient } from 'react-query';
+import { useRecoilValue } from 'recoil';
 import { patchCompleteScheduleData } from 'src/lib/api/dayApi';
+import { openedSchedules } from 'src/states';
 import { dailyPlanFlag, Schedule } from 'src/types';
 
 interface usePatchCompletedSchedulesParams {
@@ -25,8 +27,23 @@ const usePatchCompletedSchedules = ({
     onMutate: async () => {
       await queryClient.cancelQueries(flag);
       await queryClient.cancelQueries(['child', scheduleId]);
-      const snapShotOfPreviousData = queryClient.getQueryData(flag);
-
+      const snapShotOfPreviousData = queryClient.getQueryData(['child', scheduleId]);
+      // flag === 'daily' scheduleId
+      // console.log(scheduleId);
+      // console.log(snapShotOfPreviousData);
+      // if (flag === 'daily') {
+      //   queryClient.setQueryData(['daily', date], (oldSchedules: any) => {
+      //     const newData = oldSchedules?.data?.data?.schedules.map((o: Schedule) => {
+      //       if (o._id !== scheduleId) {
+      //         o.isCompleted = !o.isCompleted;
+      //       }
+      //     });
+      //     return newData;
+      //   });
+      //   queryClient.setQueryData(['child', scheduleId], (oldSchedules: any) => {
+      //     console.log(oldSchedules);
+      //   });
+      // }
       // 장애 발생 시 스냅샷을 반환
       return {
         snapShotOfPreviousData,
