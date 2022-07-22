@@ -45,6 +45,7 @@ interface BoxStyleProps {
 
 interface ContentsStyleProps {
   isChecked: boolean;
+  haveChild?: boolean;
 }
 
 const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
@@ -143,11 +144,6 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
       }
       setCurrentTargetPlan({ itemId: '', flag: '' });
     };
-
-    useEffect(() => {
-      // console.log('>>>여기 아이디,itemId', itemId);
-      // console.log('>>>>currentTargetPlan', currentTargetPlan);
-    }, [itemId, currentTargetPlan]);
 
     useEffect(() => {
       // Open된 상태 리코일에 저장
@@ -288,8 +284,8 @@ const Styled = {
     align-items: center;
   `,
   Form: styled.form`
-    min-width: 11.3rem;
-    width: 65%;
+    min-width: 16rem;
+    /* width: 65%; */
     appearance: none;
     outline: none;
     margin-left: 0.8rem;
@@ -303,6 +299,11 @@ const Styled = {
     padding: 0px 0px;
     /* font-size: 1.2rem; */
     font: inherit;
+    /* width: 70px;
+    padding: 0 5px; */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   `,
   BtnWrapper: styled.div`
     display: flex;
@@ -360,7 +361,13 @@ const Styled = {
     align-items: center;
     margin-left: 0.8rem;
     min-width: 11.3rem;
-    width: 65%;
+    ${({ haveChild }) => haveChild && 'width: 65%;'}
+
+    max-width: 14rem;
     color: ${({ isChecked }) => isChecked && theme.colors.plan_grey};
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
   `,
 };
