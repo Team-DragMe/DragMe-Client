@@ -364,7 +364,7 @@ const Styled = {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 23rem;
+    width: 24rem;
   `,
 
   UlWrapper: styled.article<UlWrapperStyleProps>`
