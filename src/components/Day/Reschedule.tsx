@@ -16,16 +16,16 @@ const RESCHEDULE = {
 function Reschedule() {
   const reschedulePlanData = useSetRecoilState(reschedulePlanList);
   const { data } = useGetDelaySchedules();
-  useEffect(() => {
-    data && reschedulePlanData(data);
-  }, [data, reschedulePlanData]);
+  // useEffect(() => {
+  //   data && reschedulePlanData(data);
+  // }, [data, reschedulePlanData]);
   return (
     <Styled.Root>
       <Styled.TitleArea>
         <Styled.Title>{RESCHEDULE.EN}</Styled.Title>
         <Styled.SubTitle>{RESCHEDULE.KO}</Styled.SubTitle>
       </Styled.TitleArea>
-      <DayPlanList maxHeight="13.3rem" flag={FLAG.RECHEDULE} schedulesData={data} />
+      <DayPlanList maxHeight="13.3rem" flag={FLAG.reschedule} schedulesData={data} />
     </Styled.Root>
   );
 }

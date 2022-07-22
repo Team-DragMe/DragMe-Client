@@ -1,5 +1,6 @@
 import { atom } from 'recoil';
-import { Schedule } from 'src/types';
+import { movePlanChipParams } from 'src/components/common/DayPlanList/DayPlan';
+import { dailyPlanFlag, Schedule } from 'src/types';
 
 import { getTodayDate } from '../utils/getDate';
 import { getCurrentWeek } from '../utils/getWeek';
@@ -49,6 +50,30 @@ export const menuCount = atom({
   key: 'menuCount',
   default: 'Today',
 });
+
+// 체크한 애들 관리 / 열린 애들 관리
+export const openedSchedules = atom({
+  key: 'openedSchedules',
+  default: new Set([]) as Set<string>,
+});
+
+export const checkedSchedules = atom({
+  key: 'checkedSchedules',
+  default: new Set([]) as Set<string>,
+});
+
+export const currentDraggintElement = atom({
+  key: 'currentDraggintElement',
+  default: {} as movePlanChipParams,
+});
+
+export const currentHoverFlag = atom({
+  key: 'currentHoverFlag',
+  default: null as null | dailyPlanFlag,
+});
+
+// 1. 내부 애들 확인, hover한 애들 전체적으로 확인
+// 이 값이 바뀌면 이걸 키로 useMutation 사용
 
 export const scrollY = atom({
   key: 'scrollY',
