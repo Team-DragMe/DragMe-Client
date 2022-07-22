@@ -5,7 +5,13 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import usePatchCompletedSchedules from 'src/hooks/query/usePatchCompletedSchedules';
 import usePatchScheduleBlock from 'src/hooks/query/usePatchScheduleBlock';
 import usePostScheduleBlock from 'src/hooks/query/usePostScheduleBlock';
-import { checkedSchedules, currentModifyDayPlan, dayInfo, openedSchedules } from 'src/states';
+import {
+  checkedSchedules,
+  currentModifyDayPlan,
+  dayInfo,
+  openedSchedules,
+  weeklyPostData,
+} from 'src/states';
 import { theme } from 'src/styles/theme';
 import { dailyPlanFlag } from 'src/types';
 import styled, { css } from 'styled-components';
@@ -78,6 +84,8 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
     const checkBoxRef = useRef(null);
     const today = useRecoilValue(dayInfo);
     const currentTodayDate = today.slice(0, 10);
+    const [weeklyPostState, setWeeklyPostState] = useRecoilState(weeklyPostData);
+
     const { mutate: mutateCompletedSchedules } = usePatchCompletedSchedules({
       scheduleId: itemId,
       flag,
@@ -85,14 +93,14 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
       isCompleted: !isChecked,
     });
     const { mutate: postScheduleNameBlock } = usePostScheduleBlock({
-      date: currentTodayDate,
+      date: weeklyPostState ? weeklyPostState : currentTodayDate,
       categoryColorCode: '#FFFFFF',
-      flag,
+      flag: flag ? flag : 'daily',
       title: inputValue.current?.value,
     });
     const { mutate: patchScheduleNameBlock } = usePatchScheduleBlock({
       date: props?.item?.date,
-      flag,
+      flag: flag ? flag : 'daily',
       title: inputValue.current?.value,
       scheduleId: itemId,
     });
@@ -145,6 +153,12 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
         patchScheduleNameBlock();
       }
       setCurrentTargetPlan({ itemId: '', flag: '', date: '' });
+      setWeeklyPostState(null);
+      if (!flag || weeklyPostState) {
+        setTimeout(() => {
+          location.reload();
+        }, 50);
+      }
     };
 
     useEffect(() => {

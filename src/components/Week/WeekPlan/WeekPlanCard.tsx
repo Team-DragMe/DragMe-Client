@@ -59,6 +59,7 @@ function WeekPlanCard(props: WeekPlanCardProps) {
   const parsedMonth = dayInfoProps?.date.slice(5, 7);
   const parsedDate = dayInfoProps?.date.slice(8, 10);
   const dateInfo = parsedMonth + '.' + parsedDate;
+  const weekRecoil = useRecoilValue(weekInfo);
 
   useEffect(() => {
     console.log('>>schedulesData', schedulesData);
@@ -80,13 +81,15 @@ function WeekPlanCard(props: WeekPlanCardProps) {
         <p>{dateInfo}</p>
       </Styled.Header>
       <DayPlanList
-        maxHeight={isEnterBtn ? '23rem' : '26rem'}
+        // maxHeight={isEnterBtn ? '23rem' : '26rem'}
+        maxHeight="22rem"
         schedulesData={schedulesData}
         flag="daily"
         weekIndex={weekIndex}
         isEnterBtn={isEnterBtn}
         setIsEnterBtn={setIsEnterBtn}
         isWeek
+        currentDay={weekRecoil[weekIndex]}
       />
       {pageXY.posX !== 0 && pageXY.posY !== 0 && (
         <DayPlanSettingModal top={pageXY.posY} left={pageXY.posX} />

@@ -25,14 +25,12 @@ const usePatchRescheduleToDay = ({
 
       //  일정에 추가
       queryClient.setQueryData(['daily', date], (oldSchedules: any) => {
-        console.log('>>일정 추가 예옝oldSchedules', oldSchedules?.data?.data?.schedules);
         const optimisticData = [...oldSchedules?.data?.data?.schedules];
         optimisticData.push(schedule);
         return optimisticData;
       });
       //  미룬 계획 에서 삭제
       queryClient.setQueryData(['reschedule'], (oldSchedules: any) => {
-        console.log('>>미룬 계획 삭제 예옝oldSchedules', oldSchedules?.data?.data?.schedules);
         const newData = oldSchedules?.data?.data?.schedules.filter(
           (o: Schedule) => o._id !== scheduleId,
         );

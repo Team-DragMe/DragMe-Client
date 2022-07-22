@@ -93,5 +93,5 @@ export const modalClickXY = atom({
 // week post할 땐 변수 따로쓰자
 export const weeklyPostData = atom({
   key: 'weeklyPostData',
-  default: { scheduleId: '', date: '', flag: '' },
+  default: null,
 });

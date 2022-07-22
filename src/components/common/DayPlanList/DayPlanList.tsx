@@ -24,6 +24,7 @@ import {
   routinePlanList,
   scrollY,
   weekInfo,
+  weeklyPostData,
 } from 'src/states';
 import { theme } from 'src/styles/theme';
 import { dailyPlanFlag, Schedule } from 'src/types';
@@ -58,6 +59,7 @@ interface DayPlanListProps {
   schedulesData?: Schedule[];
   weekIndex?: number;
   isWeek?: boolean;
+  currentDayDate?: string;
   [key: string]: any;
 }
 
@@ -67,6 +69,7 @@ function DayPlanList({
   schedulesData,
   weekIndex,
   isWeek = false,
+  currentDay = '',
   ...props
 }: DayPlanListProps) {
   const [currentSection, setCurrentSection] = useState<dailyPlanFlag>(flag);
@@ -87,7 +90,7 @@ function DayPlanList({
   const [currentTargetPlan, setCurrentTargetPlan] = useRecoilState(currentModifyDayPlan);
   const weekRecoil = useRecoilValue(weekInfo);
   const [canAddWeekChip, setCanAddWeekChip] = useState<boolean>(false);
-  const [weeklyPostData, setWeeklyPostData] = useState(false);
+  const [weeklyPostState, setWeeklyPostState] = useRecoilState(weeklyPostData);
 
   const { mutate: DayToRescheduleMutate } = usePatchDayToReschedule({
     scheduleId: currentDraggingItem._id,
@@ -290,7 +293,7 @@ function DayPlanList({
 
   const handleAddClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
-    console.log('>>>flag', flag);
+
     setCurrentTargetPlan({ itemId: '', flag });
     console.log('>>이거 클릭했을 때 current target', currentTargetPlan);
     // @TODO 할 일 등록 이후 false로 초기화
@@ -299,22 +302,22 @@ function DayPlanList({
     }, 50);
   };
 
+  // weekIndex를 부름
+  // 클릭할 때마다 해당 인덱스와 같으면
   const handleWeekAddClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
-    // setCurrentTargetPlan({ itemId: '', flag, date: weekRecoil[weekIndex] });
-    weekIndex &&
-      setWeeklyPostData({
-        scheduleId: schedulesData?._id,
-        date: weekRecoil[weekIndex],
-        flag: 'week',
-      });
-    console.log('>>이거 클릭했을 때 current target', weeklyPostData);
-    setCanAddWeekChip((prev) => !prev);
+    console.log('>>e.currentTarget.id', e.currentTarget.id);
+    setWeeklyPostState(e.currentTarget.id);
+    // setCanAddWeekChip((prev) => !prev);
     // @TODO 할 일 등록 이후 false로 초기화
     setTimeout(() => {
       scrollEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }, 500);
+    }, 150);
   };
+
+  // const handleBlur = () => {
+  //   setWeeklyPostState(null);
+  // };
 
   const handleScroll = (e: React.WheelEvent<HTMLElement>) => {
     if (e.target instanceof HTMLElement) {
@@ -334,10 +337,6 @@ function DayPlanList({
   const handleMouseLeave = () => {
     props?.setIsEnterBtn && props?.setIsEnterBtn(false);
   };
-
-  useEffect(() => {
-    console.log('>>weekIndex', weekIndex);
-  }, [weekIndex]);
 
   return (
     <Styled.Root {...props} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
@@ -388,7 +387,18 @@ function DayPlanList({
               <div ref={scrollEndRef} />
             </Styled.Li>
           )}
-          {currentTargetPlan?.date !== '' && (
+          {weeklyPostState !== null && weeklyPostState === currentDay && (
+            <Styled.Li2>
+              <CommonDayPlanChip
+                color="#FFFFFF"
+                shape="rectangle"
+                flag={flag}
+                index={schedulesData?.length ? schedulesData?.length + 1 : 1}
+              />
+              <div ref={scrollEndRef} />
+            </Styled.Li2>
+          )}
+          {/* {currentTargetPlan?.date !== '' && (
             <Styled.WeekAddBtnWrapper>
               <CommonDayPlanChip
                 color="#FFFFFF"
@@ -398,7 +408,7 @@ function DayPlanList({
               />
               <div ref={scrollEndRef} />
             </Styled.WeekAddBtnWrapper>
-          )}
+          )} */}
           {isOver && <div ref={scrollEndRef} />}
           <div ref={scrollEndRef} />
         </Styled.Ul>
@@ -410,7 +420,7 @@ function DayPlanList({
       )}
       {isWeek && (
         <Styled.AddBtnWrapper>
-          <AddDayPlanChip onClick={handleWeekAddClick} id="addDayPlanChip" />
+          <AddDayPlanChip onClick={handleWeekAddClick} id={currentDay} />
         </Styled.AddBtnWrapper>
       )}
     </Styled.Root>
@@ -428,11 +438,11 @@ const Styled = {
     width: 23rem;
     padding-top: 1.8rem;
     position: relative;
-    &:hover {
+    /* &:hover {
       #addDayPlanChip {
         display: block;
       }
-    }
+    } */
   `,
 
   UlWrapper: styled.article<UlWrapperStyleProps>`
@@ -468,6 +478,15 @@ const Styled = {
     list-style-type: none;
     position: relative;
   `,
+  Li2: styled.li`
+    margin: 0;
+    padding: 0;
+    width: 21rem;
+    height: fit-content;
+    list-style-type: none;
+    position: relative;
+    padding-bottom: 1.6rem;
+  `,
   WeekAddBtnWrapper: styled.li`
     margin: 0;
     padding: 0;
@@ -499,9 +518,9 @@ const Styled = {
     height: 3.2rem;
     position: absolute;
     top: 23.5rem;
-    button {
+    /* button {
       display: none;
-    }
+    } */
   `,
   ScrollEnd: styled.div`
     width: 100%;
