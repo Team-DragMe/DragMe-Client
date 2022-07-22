@@ -54,3 +54,8 @@ export const scrollY = atom({
   key: 'scrollY',
   default: 0,
 });
+
+export const RoutineBoxIsOpened = atom({
+  key: 'RoutineboxIsOpened',
+  default: false,
+});

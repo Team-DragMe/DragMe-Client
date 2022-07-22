@@ -1,15 +1,14 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Logo from 'public/assets/DragmeLogo.svg';
-import MenuBar from 'public/assets/MenuBar.png';
+import HamburgerMenu from 'public/assets/icons/HamburgerMenu.svg';
 import React, { useEffect, useState } from 'react';
-import { useRecoilValue } from 'recoil';
-import { dayInfo, weekInfo } from 'src/states';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { dayInfo, RoutineBoxIsOpened, weekInfo } from 'src/states';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
 
-type isMenuType = 'Today' | 'Week' | 'Mypage';
+type isMenuType = 'Today' | 'Week';
 
 interface LiStyle {
   pickedMenu: isMenuType;
@@ -22,11 +21,22 @@ function NavBar() {
   const weekPeriod = useRecoilValue(weekInfo);
   const [pickedMenu, setPickedMenu] = useState<isMenuType>('Today');
   const weekDomain = `${weekPeriod[0]}-${weekPeriod[6]}`;
+  const [myPageIsOpened, setMyPageIsOpened] = useState(false);
+  const [hamburgerMenu, setHamburgerMenu] = useRecoilState(RoutineBoxIsOpened);
 
   useEffect(() => {
-    if (router.pathname === '/mypage') {
-      setPickedMenu('Mypage');
-    } else if (router.pathname === '/day/[data]') {
+    setHamburgerMenu(false);
+  }, []);
+
+  const handleHamburgerMenu = () => {
+    if (hamburgerMenu === true) {
+      setHamburgerMenu(false);
+    } else {
+      setHamburgerMenu(true);
+    }
+  };
+  useEffect(() => {
+    if (router.pathname === '/day/[data]') {
       setPickedMenu('Today');
     } else if (router.pathname === '/week/[week]') {
       setPickedMenu('Week');
@@ -34,19 +44,15 @@ function NavBar() {
   }, [router.pathname]);
 
   const handleClick = (count: string) => {
-    if (count === 'Mypage') {
-      setPickedMenu('Mypage');
-    } else if (count === 'Today') {
+    if (count === 'Today') {
       setPickedMenu('Today');
     } else if (count === 'Week') {
       setPickedMenu('Week');
     }
   };
-
   const periodData = [
     { id: '1', name: 'TODAY PLAN', path: '/day/', term: dayPeriod, symbol: 'Today' },
     { id: '2', name: 'WEEK PLAN', path: '/week/', term: weekDomain, symbol: 'Week' },
-    { id: '3', name: 'MY PAGE', path: '/mypage', term: '', symbol: 'Mypage' },
   ];
 
   return (
@@ -66,14 +72,19 @@ function NavBar() {
               onClick={() => handleClick(period.symbol)}
             >
               <Link href={`${period.path}${encodeURIComponent(period.term)}`}>
-                <Styled.Link id={period.id}>{period.name}</Styled.Link>
+                <Styled.Link id={period.id} onClick={() => setHamburgerMenu(false)}>
+                  {period.name}
+                </Styled.Link>
               </Link>
             </Styled.List>
           ))}
+          {myPageIsOpened ? (
+            <Styled.MyPageOn onClick={() => setMyPageIsOpened(false)}>MY PAGE</Styled.MyPageOn>
+          ) : (
+            <Styled.MyPageOff onClick={() => setMyPageIsOpened(true)}>MY PAGE</Styled.MyPageOff>
+          )}
         </Styled.MenuList>
-        <Styled.MenuWrapper>
-          <Image src={MenuBar} alt="로고" width={'24'} height={'18'} />
-        </Styled.MenuWrapper>
+        <Styled.HamburgerMenu isOpened={hamburgerMenu} onClick={handleHamburgerMenu} />
       </Styled.Contents>
     </Styled.Root>
   );
@@ -114,6 +125,24 @@ const Styled = {
       margin-right: 0.2rem;
     }
   `,
+  MyPageOff: styled.div`
+    color: ${theme.colors.plan_grey};
+    font-weight: bold;
+    margin-left: -1rem;
+    margin-right: 4rem;
+    cursor: pointer;
+  `,
+
+  MyPageOn: styled.div`
+    color: ${theme.colors.letter_black};
+    font-weight: bold;
+    margin-left: -1rem;
+    margin-right: 4rem;
+    cursor: pointer;
+    padding-bottom: 0.1rem;
+    border-bottom: 1px solid ${theme.colors.letter_black};
+  `,
+
   List: styled.li<LiStyle>`
     &:nth-child(2) {
       margin-right: 1.8rem;
@@ -140,5 +169,12 @@ const Styled = {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+  `,
+  HamburgerMenu: styled(HamburgerMenu)`
+    width: 4rem;
+    height: 4rem;
+    margin-left: -1.5rem;
+    transition: all 1s;
+    transform: ${(props) => props.isOpened && 'translate(6%, 2%) rotate(90deg);'};
   `,
 };
