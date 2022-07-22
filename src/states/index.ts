@@ -54,3 +54,8 @@ export const scrollY = atom({
   key: 'scrollY',
   default: 0,
 });
+
+export const modalClickXY = atom({
+  key: 'modalClickXY',
+  default: { posX: 0, posY: 0, scheduleId: '' },
+});

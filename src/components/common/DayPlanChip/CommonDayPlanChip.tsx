@@ -123,7 +123,7 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
               )}
             </div>
             <Styled.BtnWrapper>
-              {(addon || haveChild) && <AddonBtn onClick={onAddonClick} />}
+              {(addon || haveChild) && <AddonBtn onClick={onAddonClick} scheduleId={itemId} />}
               {haveChild && <CollapseArrow isOpened={isOpened} onClick={onArrowBtnClick} />}
             </Styled.BtnWrapper>
           </Styled.ContentsWrapper>

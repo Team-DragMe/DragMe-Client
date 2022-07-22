@@ -75,3 +75,9 @@ export const getEmojiListData = async ({ startDate, endDate }: getEmojiQueryType
 
   return { data };
 };
+
+export const deleteScheduleData = async ({ scheduleId }: ScheduleId) => {
+  const { data } = await client.delete(`/schedule?scheduleId=${scheduleId}`);
+
+  return data;
+};

@@ -1,7 +1,6 @@
 import { useMutation, useQueryClient } from 'react-query';
 import { patchCompleteScheduleData } from 'src/lib/api/dayApi';
 import { dailyPlanFlag, Schedule } from 'src/types';
-import { ScheduleId } from 'src/types/day';
 
 interface usePostInformationDataParams {
   scheduleId: string;
