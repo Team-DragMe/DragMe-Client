@@ -1,4 +1,4 @@
-type categoryColorCodeType =
+export type categoryColorCodeType =
   | '#7B8DD8'
   | '#DCADC8'
   | '#EAC96E'

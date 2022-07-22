@@ -73,7 +73,7 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
     const { mutate: mutateCompletedSchedules } = usePatchCompletedSchedules({
       scheduleId: itemId,
       flag,
-      date: props.item.date,
+      date: props?.item?.date,
       isCompleted: !isChecked,
     });
 

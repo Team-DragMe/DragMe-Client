@@ -1,3 +1,5 @@
+import { categoryColorCodeType, Schedule } from '.';
+
 export interface CalendarQueryType {
   month: string;
 }
@@ -39,4 +41,21 @@ export interface ScheduleAndDate {
 export interface ScheduleAndIsCompleted {
   scheduleId: string;
   isCompleted: boolean;
+}
+
+export interface PatchOrderSchedules {
+  scheduleId: string;
+  scheduleList: Schedule[];
+}
+
+export interface PostScheduleBlock {
+  date: string;
+  title: string;
+  categoryColorCode: categoryColorCodeType;
+  isRoutine: boolean;
+}
+
+export interface TitleAndScheduleId {
+  title: string;
+  scheduleId: string;
 }

@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from 'react-query';
 import { patchCompleteScheduleData } from 'src/lib/api/dayApi';
-import { dailyPlanFlag, Schedule } from 'src/types';
+import { dailyPlanFlag } from 'src/types';
 
 interface usePatchCompletedSchedulesParams {
   scheduleId: string;
@@ -23,22 +23,10 @@ const usePatchCompletedSchedules = ({
 
   return useMutation(async () => patchCompleteScheduleData({ scheduleId, isCompleted }), {
     onMutate: async () => {
-      console.log('>뮤테이션 훅으로 들어왓는지', scheduleId, flag);
       await queryClient.cancelQueries(flag);
+      await queryClient.cancelQueries(['child', scheduleId]);
       const snapShotOfPreviousData = queryClient.getQueryData(flag);
-      // // optimistic update
-      // queryClient.setQueryData(queryKeys, (oldSchedules: any) => {
-      //   const newResult = oldSchedules?.data?.data?.schedules.map((schedule: Schedule) => {
-      //     if (schedule._id === scheduleId) {
-      //       return {
-      //         ...schedule,
-      //         isCompleted,
-      //       };
-      //     }
-      //     return schedule;
-      //   });
-      //   return newResult;
-      // });
+
       // 장애 발생 시 스냅샷을 반환
       return {
         snapShotOfPreviousData,
@@ -46,6 +34,7 @@ const usePatchCompletedSchedules = ({
     },
     onSuccess: () => {
       queryClient.invalidateQueries(flag);
+      queryClient.invalidateQueries(['child', scheduleId]);
     },
   });
 };
