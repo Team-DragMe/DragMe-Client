@@ -4,11 +4,14 @@ import {
   deleteRefetching,
   getEmojiQueryType,
   InformationRequestType,
+  PatchOrderSchedules,
+  PostScheduleBlock,
   ScheduleAndDate,
   ScheduleAndIsCompleted,
   ScheduleId,
   ScheduleTimeDeleteType,
   ScheduleTimePostType,
+  TitleAndScheduleId,
 } from 'src/types/day';
 
 import { client } from './api';
@@ -120,33 +123,39 @@ export const patchRescheduleToDaySchedules = async ({ scheduleId, date }: Schedu
   return post;
 };
 
-// 계획 블록 순서 변경
-// export const patchOrderSchedules = async ({ scheduleId, scheduleList }) => {
-//   const post = await client.patch(`/schedule/order?scheduleId=${scheduleId}`, {
-//     objectIds: scheduleList,
-//   });
-//   return post;
-// };
+//계획 블록 순서 변경
+export const patchOrderSchedules = async ({ scheduleId, scheduleList }: PatchOrderSchedules) => {
+  const post = await client.patch(`/schedule/order?scheduleId=${scheduleId}`, {
+    objectIds: scheduleList,
+  });
+  return post;
+};
 
 // 계획 블록 생성
-// export const postScheduleBlock = async ({ date, title, categoryColorCode, isRoutine }) => {
-//   const post = await client.post('/schedule', {
-//     date,
-//     title,
-//     categoryColorCode,
-//     isRoutine,
-//   });
-//   return post;
-// };
+export const postScheduleBlock = async ({
+  date,
+  title,
+  categoryColorCode,
+  isRoutine,
+}: PostScheduleBlock) => {
+  const post = await client.post('/schedule', {
+    date,
+    title,
+    categoryColorCode,
+    isRoutine,
+  });
+  return post;
+};
 // isRoutine == true/ false
 
 // 계획 블록 이름 수정
-// export const patchScheduleBlock = async ({ scheduleId, title }) => {
-//   const patch = await client.patch(`/schedule/title?scheduleId=${scheduleId}`, {
-//     title,
-//     scheduleId,
-//   });
-// };
+export const patchScheduleBlock = async ({ scheduleId, title }: TitleAndScheduleId) => {
+  const patch = await client.patch(`/schedule/title?scheduleId=${scheduleId}`, {
+    title,
+    scheduleId,
+  });
+  return patch;
+};
 
 // 자주
 
