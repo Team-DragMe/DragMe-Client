@@ -72,6 +72,7 @@ const Styled = {
   RoutineboxWrapper: styled.div`
     z-index: 10;
     position: absolute;
+    height: 98.7rem;
     top: 6.4rem;
     right: 0;
   `,

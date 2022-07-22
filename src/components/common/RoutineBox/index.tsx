@@ -10,8 +10,8 @@ import styled from 'styled-components';
 import DayPlanList from '../DayPlanList/DayPlanList';
 
 const ROUTINE_BOX = {
-  EN: 'ROUTINE BOX',
-  KO: '자주 사용하는 계획',
+  EN: 'ROUTINE ROAD',
+  KO: '자주 세우는 계획은 루틴로드에 세워보세요.',
 };
 
 function RoutineBox() {
@@ -27,7 +27,9 @@ function RoutineBox() {
           <Styled.Title>{ROUTINE_BOX.EN}</Styled.Title>
           <Styled.SubTitle>{ROUTINE_BOX.KO}</Styled.SubTitle>
         </Styled.TitleArea>
-        <DayPlanList className="routine-plan-list" flag={FLAG.ROUTINE} schedulesData={data} />
+        <Styled.DailyListWrapper>
+          <DayPlanList className="routine-plan-list" flag={FLAG.ROUTINE} schedulesData={data} />
+        </Styled.DailyListWrapper>
       </Styled.ContentsWrapper>
       <Styled.Footer>
         <button>DRAG.ME</button>
@@ -41,7 +43,7 @@ export default RoutineBox;
 
 const Styled = {
   Root: styled.section`
-    width: 32.5rem;
+    width: 28rem;
     height: 100%;
     background: ${theme.colors.scroll_grey};
     border: 1px solid ${theme.category.cate_white};
@@ -57,37 +59,42 @@ const Styled = {
     }
   `,
   ContentsWrapper: styled.article`
-    width: 21rem;
-    margin-top: 8.8rem;
+    position: absolute;
+    top: 40.5%;
+    left: 52%;
+    transform: translate(-50%, -50%);
   `,
   TitleArea: styled.div`
     padding-bottom: 1.2rem;
     border-bottom: 1px solid #d3d6dc;
     margin-bottom: 1.8rem;
+    color: ${theme.colors.letter_black};
   `,
   Title: styled.h2`
     font-style: normal;
     font-weight: 800;
     font-size: 2.4rem;
     line-height: 150%;
-
-    /* Drag.me_blue */
-    color: ${theme.colors.main_color};
   `,
   SubTitle: styled.h3`
     font-style: normal;
     font-weight: 600;
     font-size: 1.2rem;
     line-height: 150%;
-    /* identical to box height, or 18px */
     text-transform: uppercase;
-    color: #0024b6;
   `,
+  DailyListWrapper: styled.div`
+    padding-left: 0.3rem;
+  `,
+
   Footer: styled.footer`
+    position: absolute;
     display: flex;
-    justify-content: space-between;
-    width: 24.6rem;
-    margin: 12.4rem;
+    justify-content: space-around;
+    bottom: 1%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 27rem;
     & button {
       outline: inherit;
       border: none;
@@ -106,11 +113,12 @@ const Styled = {
       &:first-child {
         &::after {
           content: '';
-          display: inline-block;
+          position: absolute;
           width: 0.1rem;
           height: 0.8rem;
           background: #d0d4da;
-          margin-left: 2.4rem;
+          left: 28%;
+          top: 27%;
           /* margin-right: 1.4rem; */
         }
       }
