@@ -289,7 +289,7 @@ const Styled = {
     height: calc(100% - 1.6rem);
     position: absolute;
     z-index: 5;
-    background: red;
+    /* background: red; */
     opacity: 0.3;
     top: 1.6rem;
   `,
@@ -298,7 +298,7 @@ const Styled = {
     height: 1.6rem;
     position: absolute;
     z-index: 5;
-    background: blue;
+    /* background: blue; */
     opacity: 0.3;
     top: 0;
   `,
