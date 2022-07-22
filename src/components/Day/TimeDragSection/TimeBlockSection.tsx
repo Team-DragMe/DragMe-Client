@@ -1,7 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { useRecoilValue } from 'recoil';
+// import useGetSubSchedules from 'src/hooks/query/useGetSubSchedules';
 import useGetTodaySchedules from 'src/hooks/query/useGetTodaySchedules';
-import { dayInfo, scrollY } from 'src/states';
+import { dayInfo, openedSchedules, scrollY } from 'src/states';
 import styled from 'styled-components';
 
 import TimeBlocks from './TimeBlocks';
@@ -12,12 +13,13 @@ import TimeBlocks from './TimeBlocks';
 
 function TimeBlockSection() {
   //리코일에 있는 열려있는 리스트 값 받아오기
-  const openList = ['sampleScheduleId6'];
+  // const openList = ['sampleScheduleId6'];
   const divRef = useRef<HTMLDivElement>(null);
   const scroll = useRecoilValue(scrollY);
   const date = useRecoilValue(dayInfo).slice(0, 10);
+  const openedList = useRecoilValue(openedSchedules);
   const { data: scheduleList } = useGetTodaySchedules({ date });
-
+  // console.log(openedList.has('sampleScheduleId6'));
   useEffect(() => {
     if (divRef.current) {
       divRef.current.scrollTop = scroll;
@@ -26,19 +28,19 @@ function TimeBlockSection() {
 
   return (
     <Styled.Root ref={divRef}>
-      {scheduleList?.map((el) => {
+      {scheduleList?.map((el, idx) => {
         // 포함여부 판단해서 열려있고 subSchdules가 0이 아니면 map 돌기
-        if (openList.includes(el._id) && el.subSchedules.length > 0) {
+        if (openedList.has(el._id) && el.subSchedules.length > 0) {
           return (
             <>
-              <TimeBlocks key={el._id} schedule={el} />
-              {el.subSchedules.map((el) => (
-                <TimeBlocks key={el._id} schedule={undefined} />
+              <TimeBlocks key={el._id} schedule={el} subScheduleId={''} idx={idx} />
+              {el.subSchedules.map((subEl, subIdx) => (
+                <TimeBlocks key={subEl} schedule={el} subScheduleId={subEl} idx={subIdx} />
               ))}
             </>
           );
         }
-        return <TimeBlocks key={el._id} schedule={el} />;
+        return <TimeBlocks key={el._id} schedule={el} subScheduleId={''} idx={idx} />;
       })}
     </Styled.Root>
   );

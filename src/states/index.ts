@@ -89,3 +89,8 @@ export const modalClickXY = atom({
   key: 'modalClickXY',
   default: { posX: 0, posY: 0, scheduleId: '', flag: '', date: '' },
 });
+
+// export const currentClickParent = atom({
+//   key: 'currentClickParent',
+//   default: '',
+// });
