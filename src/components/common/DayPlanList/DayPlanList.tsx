@@ -14,7 +14,6 @@ import usePatchDayToRoutine from 'src/hooks/query/usePatchDayToRoutine';
 import usePatchRescheduleToDay from 'src/hooks/query/usePatchRescheduleToDay';
 import useThrottle from 'src/hooks/useThrottle';
 import {
-  currentClickParent,
   currentDraggintElement,
   currentHoverFlag,
   currentModifyDayPlan,
@@ -91,7 +90,7 @@ function DayPlanList({
   const [currentTargetPlan, setCurrentTargetPlan] = useRecoilState(currentModifyDayPlan);
   const weekRecoil = useRecoilValue(weekInfo);
   const [canAddWeekChip, setCanAddWeekChip] = useState<boolean>(false);
-  const [weeklyPostState, setWeeklyPostState] = useRecoilState(weeklyPostData);
+  const [weeklyPostState, setWeeklyPostState] = useRecoilState<any>(weeklyPostData);
 
   const { mutate: DayToRescheduleMutate } = usePatchDayToReschedule({
     scheduleId: currentDraggingItem._id,
@@ -307,8 +306,7 @@ function DayPlanList({
   // 클릭할 때마다 해당 인덱스와 같으면
   const handleWeekAddClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
-    console.log('>>e.currentTarget.id', e.currentTarget.id);
-    setWeeklyPostState(e.currentTarget.id);
+    e.currentTarget && setWeeklyPostState(e.currentTarget?.id);
     // setCanAddWeekChip((prev) => !prev);
     // @TODO 할 일 등록 이후 false로 초기화
     setTimeout(() => {

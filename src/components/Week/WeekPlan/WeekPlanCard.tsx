@@ -12,7 +12,7 @@ import { Schedule } from 'src/types';
 import styled from 'styled-components';
 
 interface WeekPlanCardProps {
-  dayInfoProps: {
+  dayInfo: {
     date: string;
     type: string;
     value: string;
