@@ -113,7 +113,7 @@ const Styled = {
     display: flex;
     flex-direction: column;
     box-shadow: 1px 1px 20px -5px ${theme.colors.letter_grey};
-    transform: translateY(-100%);
+    transform: translateY(-50%);
   `,
   ColorPickerSection: styled.div`
     width: 100%;
