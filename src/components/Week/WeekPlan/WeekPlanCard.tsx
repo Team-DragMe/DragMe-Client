@@ -20,9 +20,10 @@ interface WeekPlanCardProps {
   day: string;
   schedulesData: Schedule[];
   weekIndex: number;
+  dateForWeek?: string;
 }
 function WeekPlanCard(props: WeekPlanCardProps) {
-  const { dayInfo: dayInfoProps, day, schedulesData, weekIndex } = props;
+  const { dayInfo: dayInfoProps, day, schedulesData, weekIndex, dateForWeek } = props;
   const [click, setClick] = useState<boolean>(false);
   const [isEnterBtn, setIsEnterBtn] = useState(false);
 
@@ -30,6 +31,7 @@ function WeekPlanCard(props: WeekPlanCardProps) {
   const date = useRecoilValue(dayInfo).slice(0, 10);
   const { data } = useGetTodaySchedule({ date });
   const pageXY = useRecoilValue(modalClickXY);
+  const { data: todayDataForWeek } = useGetTodaySchedule({ date: dateForWeek as string });
 
   useEffect(() => {
     data && dailyPlanData(data);
@@ -83,7 +85,7 @@ function WeekPlanCard(props: WeekPlanCardProps) {
       <DayPlanList
         // maxHeight={isEnterBtn ? '23rem' : '26rem'}
         maxHeight="22rem"
-        schedulesData={schedulesData}
+        schedulesData={todayDataForWeek}
         flag="daily"
         weekIndex={weekIndex}
         isEnterBtn={isEnterBtn}
