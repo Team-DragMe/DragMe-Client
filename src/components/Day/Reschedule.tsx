@@ -10,7 +10,7 @@ import DayPlanList from '../common/DayPlanList/DayPlanList';
 
 const RESCHEDULE = {
   EN: 'RESCHEDULE',
-  KO: '미룰 계획',
+  KO: '우회할 계획',
 };
 
 function Reschedule() {

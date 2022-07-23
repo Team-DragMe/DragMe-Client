@@ -60,12 +60,21 @@ export interface PatchOrderSchedules {
 
 export interface PostScheduleBlock {
   date: string;
-  title: string;
+  title?: string;
   categoryColorCode: categoryColorCodeType;
-  isRoutine: boolean;
+  isRoutine?: boolean;
 }
 
 export interface TitleAndScheduleId {
-  title: string;
+  title?: string;
   scheduleId: string;
+}
+
+export interface CategoryPatch {
+  scheduleId: string;
+  categoryColorCode: string;
+}
+export interface useCategoryPatch extends CategoryPatch {
+  flag: dailyPlanFlag;
+  date?: string;
 }

@@ -20,3 +20,13 @@ export const ArrowRightAnimation = `
     }
   }
 `;
+
+export const ModalOpen = `
+@keyframes ModalOpen {
+  from {
+    transform: translateX(-28rem);
+  }
+
+  to {
+    transform: translateX(0);
+  }`;

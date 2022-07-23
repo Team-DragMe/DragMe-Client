@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable no-case-declarations */
 import update from 'immutability-helper';
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 // eslint-disable-next-line import/named
 import { ConnectDropTarget, useDrop } from 'react-dnd';
 import { useQueryClient } from 'react-query';
@@ -14,14 +14,18 @@ import usePatchDayToRoutine from 'src/hooks/query/usePatchDayToRoutine';
 import usePatchRescheduleToDay from 'src/hooks/query/usePatchRescheduleToDay';
 import useThrottle from 'src/hooks/useThrottle';
 import {
+  currentClickParent,
   currentDraggintElement,
   currentHoverFlag,
+  currentModifyDayPlan,
   dailyPlanList,
   dayInfo,
   modalClickXY,
   reschedulePlanList,
   routinePlanList,
   scrollY,
+  weekInfo,
+  weeklyPostData,
 } from 'src/states';
 import { theme } from 'src/styles/theme';
 import { dailyPlanFlag, Schedule } from 'src/types';
@@ -54,10 +58,21 @@ interface DayPlanListProps {
   flag: dailyPlanFlag;
   maxHeight?: string;
   schedulesData?: Schedule[];
+  weekIndex?: number;
+  isWeek?: boolean;
+  currentDayDate?: string;
   [key: string]: any;
 }
 
-function DayPlanList({ maxHeight = '45rem', flag, schedulesData, ...props }: DayPlanListProps) {
+function DayPlanList({
+  maxHeight = '45rem',
+  flag,
+  schedulesData,
+  weekIndex,
+  isWeek = false,
+  currentDay = '',
+  ...props
+}: DayPlanListProps) {
   const [currentSection, setCurrentSection] = useState<dailyPlanFlag>(flag);
   const [dailyscheduleData, setDailyScheduleData] = useRecoilState(dailyPlanList);
   const [rescheduleData, setRescheduleData] = useRecoilState(reschedulePlanList);
@@ -67,13 +82,16 @@ function DayPlanList({ maxHeight = '45rem', flag, schedulesData, ...props }: Day
   const [currentDragChipState, setCurrentDragChipState] = useState<movePlanChipParams | null>(null);
   const currentDragChip = useRef<movePlanChipParams | null>(null);
   const scrollEndRef = useRef<HTMLDivElement>(null);
-  const [addPlan, setAddPlan] = useState(false);
   const [currentDraggingItem, setCurrentDraggingItem] = useRecoilState(currentDraggintElement);
   const [currentHoverItem, setCurrentHoverItem] = useRecoilState(currentHoverFlag);
   const today = useRecoilValue(dayInfo);
   const currentDayDate = today.slice(0, 10);
   const queryClient = useQueryClient();
   const [afterOrder, setAfterOrder] = useState(false);
+  const [currentTargetPlan, setCurrentTargetPlan] = useRecoilState(currentModifyDayPlan);
+  const weekRecoil = useRecoilValue(weekInfo);
+  const [canAddWeekChip, setCanAddWeekChip] = useState<boolean>(false);
+  const [weeklyPostState, setWeeklyPostState] = useRecoilState(weeklyPostData);
 
   const { mutate: DayToRescheduleMutate } = usePatchDayToReschedule({
     scheduleId: currentDraggingItem._id,
@@ -142,7 +160,7 @@ function DayPlanList({ maxHeight = '45rem', flag, schedulesData, ...props }: Day
   // 드랍되었을 때 실행될 함수
   const endToMovePlanChip = ({ hoverFlag, hoverIndex, ...item }: movePlanChipParams) => {
     console.log('>드랍됫어!!', currentDraggingItem);
-    console.log('>currentHoverItem!!', currentHoverItem);
+
     // currentDragChipState를 서버로 요청
     // optimistic update
     switch (currentHoverItem) {
@@ -274,18 +292,40 @@ function DayPlanList({ maxHeight = '45rem', flag, schedulesData, ...props }: Day
     // );
   };
 
-  const handleAddClick = () => {
-    setAddPlan(true);
+  const handleAddClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
+
+    setCurrentTargetPlan({ itemId: '', flag });
+    console.log('>>이거 클릭했을 때 current target', currentTargetPlan);
     // @TODO 할 일 등록 이후 false로 초기화
     setTimeout(() => {
       scrollEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, 50);
   };
 
+  // weekIndex를 부름
+  // 클릭할 때마다 해당 인덱스와 같으면
+  const handleWeekAddClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
+    console.log('>>e.currentTarget.id', e.currentTarget.id);
+    setWeeklyPostState(e.currentTarget.id);
+    // setCanAddWeekChip((prev) => !prev);
+    // @TODO 할 일 등록 이후 false로 초기화
+    setTimeout(() => {
+      scrollEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, 150);
+  };
+
+  // const handleBlur = () => {
+  //   setWeeklyPostState(null);
+  // };
+
   const handleScroll = (e: React.WheelEvent<HTMLElement>) => {
     if (e.target instanceof HTMLElement) {
-      setScrollData(e.currentTarget.scrollTop);
-      setPosXY({ posX: 0, posY: 0, scheduleId: '', flag, date: '' });
+      if (flag === 'daily') {
+        setScrollData(e.currentTarget.scrollTop);
+        setPosXY({ posX: 0, posY: 0, scheduleId: '', flag, date: '' });
+      }
     }
   };
 
@@ -294,8 +334,15 @@ function DayPlanList({ maxHeight = '45rem', flag, schedulesData, ...props }: Day
   const throttleResetFakeItem = useThrottle(resetFakeItem, 300);
   const thorottleMoveItemInSection = useThrottle(moveItemInSection, 100);
 
+  const handleMouseEnter = () => {
+    props?.setIsEnterBtn && props?.setIsEnterBtn(true);
+  };
+  const handleMouseLeave = () => {
+    props?.setIsEnterBtn && props?.setIsEnterBtn(false);
+  };
+
   return (
-    <Styled.Root {...props}>
+    <Styled.Root {...props} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       <Styled.UlWrapper
         maxHeight={maxHeight}
         ref={sectionDropRef}
@@ -332,7 +379,7 @@ function DayPlanList({ maxHeight = '45rem', flag, schedulesData, ...props }: Day
               />
             </Styled.ScrollEnd>
           )}
-          {addPlan && (
+          {currentTargetPlan?.flag === flag && currentTargetPlan?.itemId === '' && (
             <Styled.Li>
               <CommonDayPlanChip
                 color="#FFFFFF"
@@ -343,14 +390,41 @@ function DayPlanList({ maxHeight = '45rem', flag, schedulesData, ...props }: Day
               <div ref={scrollEndRef} />
             </Styled.Li>
           )}
+          {weeklyPostState !== null && weeklyPostState === currentDay && (
+            <Styled.Li2>
+              <CommonDayPlanChip
+                color="#FFFFFF"
+                shape="rectangle"
+                flag={flag}
+                index={schedulesData?.length ? schedulesData?.length + 1 : 1}
+              />
+              <div ref={scrollEndRef} />
+            </Styled.Li2>
+          )}
+          {/* {currentTargetPlan?.date !== '' && (
+            <Styled.WeekAddBtnWrapper>
+              <CommonDayPlanChip
+                color="#FFFFFF"
+                shape="rectangle"
+                flag={flag}
+                index={schedulesData?.length ? schedulesData?.length + 2 : 2}
+              />
+              <div ref={scrollEndRef} />
+            </Styled.WeekAddBtnWrapper>
+          )} */}
           {isOver && <div ref={scrollEndRef} />}
           <div ref={scrollEndRef} />
         </Styled.Ul>
       </Styled.UlWrapper>
-      {flag !== FLAG.reschedule && (
+      {flag !== FLAG.reschedule && weekIndex === undefined && (
         <Styled.AddDayPlanChipWrapper>
-          <AddDayPlanChip onClick={handleAddClick} />
+          <AddDayPlanChip onClick={handleAddClick} id={flag} weekIndex={weekIndex} />
         </Styled.AddDayPlanChipWrapper>
+      )}
+      {isWeek && (
+        <Styled.AddBtnWrapper>
+          <AddDayPlanChip onClick={handleWeekAddClick} id={currentDay} />
+        </Styled.AddBtnWrapper>
       )}
     </Styled.Root>
   );
@@ -365,6 +439,13 @@ const Styled = {
     justify-content: center;
     align-items: center;
     width: 23rem;
+    padding-top: 1.8rem;
+    position: relative;
+    /* &:hover {
+      #addDayPlanChip {
+        display: block;
+      }
+    } */
   `,
 
   UlWrapper: styled.article<UlWrapperStyleProps>`
@@ -391,7 +472,6 @@ const Styled = {
   Ul: styled.ul<UlStyleProps>`
     min-height: ${({ maxHeight }) => maxHeight};
     width: 21rem;
-    padding-top: 1.3rem;
   `,
   Li: styled.li`
     margin: 0;
@@ -400,6 +480,27 @@ const Styled = {
     height: fit-content;
     list-style-type: none;
     position: relative;
+  `,
+  Li2: styled.li`
+    margin: 0;
+    padding: 0;
+    width: 21rem;
+    height: fit-content;
+    list-style-type: none;
+    position: relative;
+    padding-bottom: 1.6rem;
+  `,
+  WeekAddBtnWrapper: styled.li`
+    margin: 0;
+    padding: 0;
+    width: 21rem;
+    height: fit-content;
+    list-style-type: none;
+    position: relative;
+    display: none;
+    &:hover {
+      display: block;
+    }
   `,
   EventHandleDom: styled.div<{ index: number }>`
     width: 21rem;
@@ -413,6 +514,16 @@ const Styled = {
     padding-top: 0.8rem;
     border-top: 1px solid ${theme.colors.plan_grey};
     width: 21rem;
+  `,
+  AddBtnWrapper: styled.div`
+    /* padding-top: 0.8rem; */
+    width: 21rem;
+    height: 3.2rem;
+    position: absolute;
+    top: 23.5rem;
+    /* button {
+      display: none;
+    } */
   `,
   ScrollEnd: styled.div`
     width: 100%;

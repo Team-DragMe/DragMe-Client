@@ -1,9 +1,12 @@
 import Image from 'next/image';
 import RescheduleIC from 'public/assets/ic_Reschedule.svg';
 import icon_trashCan from 'public/assets/icon_trashCan.png';
-import React from 'react';
+import React, { useState } from 'react';
+import { flushSync } from 'react-dom';
 import { useRecoilState } from 'recoil';
 import useDeleteSchedule from 'src/hooks/query/useDeleteSchedule';
+import usePatchCategory from 'src/hooks/query/usePatchCategory';
+import usePatchReschedule from 'src/hooks/query/usePatchReschedule';
 import { modalClickXY } from 'src/states';
 import { theme } from 'src/styles/theme';
 import { dailyPlanFlag } from 'src/types';
@@ -16,12 +19,20 @@ interface DayPlanSettingModalProps {
 function DayPlanSettingModal({ top, left }: DayPlanSettingModalProps) {
   const colors = theme.category;
   const [clickInfo, setClickInfo] = useRecoilState(modalClickXY);
+  const [selectColor, setSelectColor] = useState<string>('');
   const flag = clickInfo.flag as dailyPlanFlag;
   const { mutate: deleteSchedule } = useDeleteSchedule({
     scheduleId: clickInfo.scheduleId,
     flag,
     date: clickInfo.date,
   });
+  const { mutate: patchCategory } = usePatchCategory({
+    scheduleId: clickInfo.scheduleId,
+    flag,
+    date: clickInfo.date,
+    categoryColorCode: selectColor,
+  });
+  const { mutate: patchReschedule } = usePatchReschedule();
 
   const colorCode = [
     { id: 0, color: `${colors.cate_mint}` },
@@ -34,7 +45,11 @@ function DayPlanSettingModal({ top, left }: DayPlanSettingModalProps) {
     { id: 7, color: `${colors.cate_yellow}` },
   ];
   const colorCodes = colorCode.map((code) => (
-    <Styled.ColorPicker onClick={() => console.log(code.color)} key={code.id} color={code.color} />
+    <Styled.ColorPicker
+      onClick={(e) => handleCategory(e, code.color)}
+      key={code.id}
+      color={code.color}
+    />
   ));
 
   const handleDelete = (e: React.MouseEvent<HTMLElement>) => {
@@ -44,13 +59,30 @@ function DayPlanSettingModal({ top, left }: DayPlanSettingModalProps) {
     }
   };
 
+  const handleCategory = (e: React.MouseEvent<HTMLElement>, categoryColorCode: string) => {
+    if (e.target instanceof HTMLElement) {
+      flushSync(() => {
+        setSelectColor(categoryColorCode);
+      });
+      setClickInfo({ posX: 0, posY: 0, scheduleId: '', flag, date: '' });
+      patchCategory();
+    }
+  };
+
+  const handleReschedule = (e: React.MouseEvent<HTMLElement>) => {
+    if (e.target instanceof HTMLElement) {
+      patchReschedule({ scheduleId: clickInfo.scheduleId });
+      location.reload();
+    }
+  };
+
   return (
     <Styled.Root top={top} left={left}>
       <Styled.ColorPickerSection>
         <Styled.ColorContainer>{colorCodes}</Styled.ColorContainer>
       </Styled.ColorPickerSection>
       <Styled.ButtonSection>
-        <Styled.MenuBox>
+        <Styled.MenuBox onClick={handleReschedule}>
           <Styled.ImgWrapper>
             <RescheduleIC />
           </Styled.ImgWrapper>
