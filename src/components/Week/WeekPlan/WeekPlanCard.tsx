@@ -1,26 +1,39 @@
 import { useEffect, useRef, useState } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import DayPlanList from 'src/components/common/DayPlanList/DayPlanList';
+import DayPlanSettingModal from 'src/components/Day/DayPlanSettingModal';
 import ForwardEmojiPicker from 'src/components/Day/TodayPlan/EmojiPicker';
 import { FLAG } from 'src/constants';
+import useGetTodaySchedule from 'src/hooks/query/useGetTodaySchedules';
 import useGetWeeklySchedules from 'src/hooks/query/useGetWeeklySchedules';
-import { weekInfo } from 'src/states';
+import { dailyPlanList, dayInfo, modalClickXY, weekInfo } from 'src/states';
 import { theme } from 'src/styles/theme';
 import { Schedule } from 'src/types';
 import styled from 'styled-components';
 
 interface WeekPlanCardProps {
-  dayInfo: {
+  dayInfoProps: {
     date: string;
     type: string;
     value: string;
   };
   day: string;
   schedulesData: Schedule[];
+  weekIndex: number;
 }
 function WeekPlanCard(props: WeekPlanCardProps) {
-  const { dayInfo, day, schedulesData } = props;
+  const { dayInfo: dayInfoProps, day, schedulesData, weekIndex } = props;
   const [click, setClick] = useState<boolean>(false);
+  const [isEnterBtn, setIsEnterBtn] = useState(false);
+
+  const dailyPlanData = useSetRecoilState(dailyPlanList);
+  const date = useRecoilValue(dayInfo).slice(0, 10);
+  const { data } = useGetTodaySchedule({ date });
+  const pageXY = useRecoilValue(modalClickXY);
+
+  useEffect(() => {
+    data && dailyPlanData(data);
+  }, [data, dailyPlanData]);
 
   const useOutsideAlert = (ref: React.RefObject<HTMLDivElement>) => {
     useEffect(() => {
@@ -43,9 +56,10 @@ function WeekPlanCard(props: WeekPlanCardProps) {
   const refPicker = useRef<HTMLDivElement>(null);
   useOutsideAlert(refPicker);
 
-  const parsedMonth = dayInfo?.date.slice(5, 7);
-  const parsedDate = dayInfo?.date.slice(8, 10);
+  const parsedMonth = dayInfoProps?.date.slice(5, 7);
+  const parsedDate = dayInfoProps?.date.slice(8, 10);
   const dateInfo = parsedMonth + '.' + parsedDate;
+  const weekRecoil = useRecoilValue(weekInfo);
 
   useEffect(() => {
     console.log('>>schedulesData', schedulesData);
@@ -60,13 +74,26 @@ function WeekPlanCard(props: WeekPlanCardProps) {
             ref={refPicker}
             click={click}
             setClick={handleClick}
-            emoji={dayInfo?.value}
-            date={dayInfo?.date}
+            emoji={dayInfoProps?.value}
+            date={dayInfoProps?.date}
           />
         </Styled.DayWrapper>
         <p>{dateInfo}</p>
       </Styled.Header>
-      <DayPlanList maxHeight="21rem" schedulesData={schedulesData} flag={FLAG.DAILY} />
+      <DayPlanList
+        // maxHeight={isEnterBtn ? '23rem' : '26rem'}
+        maxHeight="22rem"
+        schedulesData={schedulesData}
+        flag="daily"
+        weekIndex={weekIndex}
+        isEnterBtn={isEnterBtn}
+        setIsEnterBtn={setIsEnterBtn}
+        isWeek
+        currentDay={weekRecoil[weekIndex]}
+      />
+      {pageXY.posX !== 0 && pageXY.posY !== 0 && (
+        <DayPlanSettingModal top={pageXY.posY} left={pageXY.posX} />
+      )}
     </Styled.Root>
   );
 }

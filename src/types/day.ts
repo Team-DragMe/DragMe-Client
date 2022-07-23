@@ -60,13 +60,13 @@ export interface PatchOrderSchedules {
 
 export interface PostScheduleBlock {
   date: string;
-  title: string;
+  title?: string;
   categoryColorCode: categoryColorCodeType;
-  isRoutine: boolean;
+  isRoutine?: boolean;
 }
 
 export interface TitleAndScheduleId {
-  title: string;
+  title?: string;
   scheduleId: string;
 }
 

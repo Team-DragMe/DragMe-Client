@@ -1,9 +1,17 @@
 /* eslint-disable jsx-a11y/no-autofocus */
 import SemiArrow from 'public/assets/icons/SemiArrow8.svg';
 import React, { forwardRef, useEffect, useRef, useState } from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import usePatchCompletedSchedules from 'src/hooks/query/usePatchCompletedSchedules';
-import { checkedSchedules, currentModifyDayPlan, openedSchedules } from 'src/states';
+import usePatchScheduleBlock from 'src/hooks/query/usePatchScheduleBlock';
+import usePostScheduleBlock from 'src/hooks/query/usePostScheduleBlock';
+import {
+  checkedSchedules,
+  currentModifyDayPlan,
+  dayInfo,
+  openedSchedules,
+  weeklyPostData,
+} from 'src/states';
 import { theme } from 'src/styles/theme';
 import { dailyPlanFlag } from 'src/types';
 import styled, { css } from 'styled-components';
@@ -43,6 +51,8 @@ interface BoxStyleProps {
 
 interface ContentsStyleProps {
   isChecked: boolean;
+  haveChild?: boolean;
+  [key: string]: any;
 }
 
 const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
@@ -67,15 +77,32 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
     const [isChecked, setIsChecked] = useState(isCompleted);
     const inputValue = useRef<HTMLInputElement>(null);
     const [dayPlan, setDayPlan] = useState<string | undefined>(children);
+    const [inputValueState, setInputValueState] = useState<string>('');
     const [currentTargetPlan, setCurrentTargetPlan] = useRecoilState(currentModifyDayPlan);
     const [openItem, setOpenItem] = useRecoilState(openedSchedules);
     const [checkItem, setCheckItem] = useRecoilState(checkedSchedules);
     const checkBoxRef = useRef(null);
+    const today = useRecoilValue(dayInfo);
+    const currentTodayDate = today.slice(0, 10);
+    const [weeklyPostState, setWeeklyPostState] = useRecoilState(weeklyPostData);
+
     const { mutate: mutateCompletedSchedules } = usePatchCompletedSchedules({
       scheduleId: itemId,
       flag,
       date: props?.item?.date,
       isCompleted: !isChecked,
+    });
+    const { mutate: postScheduleNameBlock } = usePostScheduleBlock({
+      date: weeklyPostState ? weeklyPostState : currentTodayDate,
+      categoryColorCode: '#FFFFFF',
+      flag: flag ? flag : 'daily',
+      title: inputValue.current?.value,
+    });
+    const { mutate: patchScheduleNameBlock } = usePatchScheduleBlock({
+      date: props?.item?.date,
+      flag: flag ? flag : 'daily',
+      title: inputValue.current?.value,
+      scheduleId: itemId,
     });
 
     const handleChange = () => {
@@ -99,9 +126,9 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
       }
     };
 
-    useEffect(() => {
-      console.log('>>checkItem', checkItem);
-    }, [checkItem]);
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setInputValueState(e.target.value);
+    };
 
     const handleDbClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
       e.preventDefault();
@@ -110,26 +137,28 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
         inputValue.current?.focus();
       }, 50);
       // 배타적이어야 하므로 현재 선택된 애를 리코일에 저장
-      setCurrentTargetPlan(itemId);
+      setCurrentTargetPlan({ itemId, flag: props?.item?.flag, date: props?.item?.date });
     };
 
     const handleBlur = () => {
-      setCurrentTargetPlan('');
+      setCurrentTargetPlan({ itemId: '', flag: '', date: '' });
     };
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      // @TODO inputValue.current?.value 를 post
-      // console.log(inputValue.current?.value);
-      setDayPlan(inputValue.current?.value);
-      setCurrentTargetPlan('');
-      // @TODO 서버로 계획 생성 POST
+      if (currentTargetPlan?.itemId === '') {
+        postScheduleNameBlock();
+      } else {
+        patchScheduleNameBlock();
+      }
+      setCurrentTargetPlan({ itemId: '', flag: '', date: '' });
+      setWeeklyPostState(null);
+      if (!flag || weeklyPostState) {
+        setTimeout(() => {
+          location.reload();
+        }, 50);
+      }
     };
-
-    useEffect(() => {
-      // console.log('>>>여기 아이디,itemId', itemId);
-      // console.log('>>>>currentTargetPlan', currentTargetPlan);
-    }, [itemId, currentTargetPlan]);
 
     useEffect(() => {
       // Open된 상태 리코일에 저장
@@ -145,6 +174,9 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
       }
     }, [isOpened]);
 
+    useEffect(() => {
+      console.log('>>inputValue.current?.value', inputValue.current?.value);
+    }, [inputValue.current?.value]);
     return (
       <Styled.Container {...props} shape={shape} ref={ref} index={index} flag={flag} id={itemId}>
         {color !== 'none' && <Styled.ColorChip color={color} />}
@@ -153,15 +185,28 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
           <Styled.ContentsWrapper onDoubleClick={handleDbClick} id={itemId}>
             <div>
               {color === 'none' ? (
-                <Styled.Contents isChecked={isChecked}>{children}</Styled.Contents>
+                <Styled.Contents
+                  isChecked={isChecked}
+                  haveChild={!!(props?.item?.subschedules?.length > 0)}
+                >
+                  {children}
+                </Styled.Contents>
               ) : (
                 // eslint-disable-next-line react/jsx-no-useless-fragment
                 <>
-                  {currentTargetPlan !== itemId && dayPlan ? (
-                    <Styled.Contents isChecked={isChecked}>{children}</Styled.Contents>
+                  {currentTargetPlan.itemId !== itemId && dayPlan ? (
+                    <Styled.Contents isChecked={isChecked} haveChild={haveChild}>
+                      {children}
+                    </Styled.Contents>
                   ) : (
-                    <Styled.Form onSubmit={handleSubmit}>
-                      <Styled.Input type="text" ref={inputValue} onBlur={handleBlur} autoFocus />
+                    <Styled.Form onSubmit={handleSubmit} haveChild={haveChild}>
+                      <Styled.Input
+                        type="text"
+                        ref={inputValue}
+                        onChange={handleInputChange}
+                        onBlur={handleBlur}
+                        autoFocus
+                      />
                     </Styled.Form>
                   )}
                 </>
@@ -256,13 +301,14 @@ const Styled = {
     justify-content: space-between;
     align-items: center;
   `,
-  Form: styled.form`
-    min-width: 11.3rem;
-    width: 65%;
+  Form: styled.form<ContentsStyleProps>`
+    min-width: 11rem;
+    /* width: 65%; */
     appearance: none;
     outline: none;
     margin-left: 0.8rem;
     /* font-size: 1.2rem; */
+    ${({ haveChild }) => (haveChild ? 'width: 65%;' : 'min-width: 14rem;')}
   `,
   Input: styled.input`
     width: 100%;
@@ -272,6 +318,11 @@ const Styled = {
     padding: 0px 0px;
     /* font-size: 1.2rem; */
     font: inherit;
+    /* width: 70px;
+    padding: 0 5px; */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   `,
   BtnWrapper: styled.div`
     display: flex;
@@ -328,8 +379,14 @@ const Styled = {
     display: flex;
     align-items: center;
     margin-left: 0.8rem;
-    min-width: 11.3rem;
-    width: 65%;
+    /* max-width: 12rem; */
+    max-width: 11.3rem;
+    /* width: 65%; */
+    ${({ haveChild }) => (haveChild ? 'max-width: 11rem' : 'max-width: 13rem;')}
     color: ${({ isChecked }) => isChecked && theme.colors.plan_grey};
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
   `,
 };

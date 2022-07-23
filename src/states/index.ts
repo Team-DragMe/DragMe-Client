@@ -25,9 +25,14 @@ export const dayCount = atom({
   default: 0,
 });
 
+export interface tempData {
+  itemId?: string;
+  flag?: string;
+  date?: string | null;
+}
 export const currentModifyDayPlan = atom({
   key: 'currentModifyDayPlan',
-  default: '' as string,
+  default: { itemId: '', flag: '', date: '' } as tempData,
 });
 
 // 기본적으로 업데이트 시킬 때 이 atom에 임시 저장 -> cache값 optimistic update (mutation 시에)
@@ -90,7 +95,8 @@ export const modalClickXY = atom({
   default: { posX: 0, posY: 0, scheduleId: '', flag: '', date: '' },
 });
 
-// export const currentClickParent = atom({
-//   key: 'currentClickParent',
-//   default: '',
-// });
+// week post할 땐 변수 따로쓰자
+export const weeklyPostData = atom({
+  key: 'weeklyPostData',
+  default: null,
+});
