@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { FLAG } from 'src/constants';
 import useGetTodaySchedule from 'src/hooks/query/useGetTodaySchedules';
-import { schedules } from 'src/mock-data/schedules';
 import { dailyPlanList, dayInfo, modalClickXY } from 'src/states';
 
 import DayPlanList from '../common/DayPlanList/DayPlanList';

@@ -164,3 +164,9 @@ export const patchCategory = async ({ scheduleId, categoryColorCode }: CategoryP
 
   return post;
 };
+
+export const patchReschedule = async ({ scheduleId }: ScheduleId) => {
+  const post = await client.patch(`/schedule/day-reschedule?scheduleId=${scheduleId}`);
+
+  return post;
+};

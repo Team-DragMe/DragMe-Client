@@ -6,6 +6,7 @@ import { flushSync } from 'react-dom';
 import { useRecoilState } from 'recoil';
 import useDeleteSchedule from 'src/hooks/query/useDeleteSchedule';
 import usePatchCategory from 'src/hooks/query/usePatchCategory';
+import usePatchReschedule from 'src/hooks/query/usePatchReschedule';
 import { modalClickXY } from 'src/states';
 import { theme } from 'src/styles/theme';
 import { dailyPlanFlag } from 'src/types';
@@ -31,6 +32,7 @@ function DayPlanSettingModal({ top, left }: DayPlanSettingModalProps) {
     date: clickInfo.date,
     categoryColorCode: selectColor,
   });
+  const { mutate: patchReschedule } = usePatchReschedule();
 
   const colorCode = [
     { id: 0, color: `${colors.cate_mint}` },
@@ -67,13 +69,20 @@ function DayPlanSettingModal({ top, left }: DayPlanSettingModalProps) {
     }
   };
 
+  const handleReschedule = (e: React.MouseEvent<HTMLElement>) => {
+    if (e.target instanceof HTMLElement) {
+      patchReschedule({ scheduleId: clickInfo.scheduleId });
+      location.reload();
+    }
+  };
+
   return (
     <Styled.Root top={top} left={left}>
       <Styled.ColorPickerSection>
         <Styled.ColorContainer>{colorCodes}</Styled.ColorContainer>
       </Styled.ColorPickerSection>
       <Styled.ButtonSection>
-        <Styled.MenuBox>
+        <Styled.MenuBox onClick={handleReschedule}>
           <Styled.ImgWrapper>
             <RescheduleIC />
           </Styled.ImgWrapper>
