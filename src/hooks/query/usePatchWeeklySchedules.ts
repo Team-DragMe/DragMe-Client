@@ -18,7 +18,7 @@ const usePatchWeeklySchedules = ({
   hoverDate,
 }: usePatchWeeklySchedulesParams) => {
   const queryClient = useQueryClient();
-  return useMutation(async () => patchWeeklySchedules({ scheduleId, date }), {
+  return useMutation(async () => patchWeeklySchedules({ scheduleId, date: date as string }), {
     onMutate: async () => {
       // 기존 데이터 안고 있기
       const snapShotOfPreviousData = queryClient.getQueryData(['daily', date]);

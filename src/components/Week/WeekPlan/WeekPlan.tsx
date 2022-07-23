@@ -20,7 +20,7 @@ function WeekPlan() {
   const weekRecoil = useRecoilValue(weekInfo);
   const startDate = weekRecoil[0];
   const endDate = weekRecoil[6];
-  // const { data: weeklySchedules } = useGetWeeklySchedules({ startDate, endDate });
+  const { data: weeklySchedules } = useGetWeeklySchedules({ startDate, endDate });
   const { data } = useEmojiListData({ startDate, endDate });
 
   const weekInfoData: WeekInfoType[] = data?.data;
@@ -36,7 +36,7 @@ function WeekPlan() {
             dayInfo={weekInfoData[number]}
             day={week[number]}
             dateForWeek={weekRecoil[idx]}
-            // schedulesData={weeklySchedules?.data[idx]?.schedules}
+            schedulesData={weeklySchedules?.data[idx]?.schedules}
             weekIndex={idx}
           />
         ))}

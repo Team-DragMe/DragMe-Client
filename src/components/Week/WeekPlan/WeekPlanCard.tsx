@@ -18,7 +18,7 @@ interface WeekPlanCardProps {
     value: string;
   };
   day: string;
-  schedulesData: Schedule[];
+  schedulesData?: Schedule[];
   weekIndex: number;
   dateForWeek?: string;
 }
