@@ -14,6 +14,7 @@ import usePatchDayToRoutine from 'src/hooks/query/usePatchDayToRoutine';
 import usePatchRescheduleToDay from 'src/hooks/query/usePatchRescheduleToDay';
 import useThrottle from 'src/hooks/useThrottle';
 import {
+  currentClickParent,
   currentDraggintElement,
   currentHoverFlag,
   currentModifyDayPlan,
@@ -321,8 +322,10 @@ function DayPlanList({
 
   const handleScroll = (e: React.WheelEvent<HTMLElement>) => {
     if (e.target instanceof HTMLElement) {
-      setScrollData(e.currentTarget.scrollTop);
-      setPosXY({ posX: 0, posY: 0, scheduleId: '', flag, date: '' });
+      if (flag === 'daily') {
+        setScrollData(e.currentTarget.scrollTop);
+        setPosXY({ posX: 0, posY: 0, scheduleId: '', flag, date: '' });
+      }
     }
   };
 

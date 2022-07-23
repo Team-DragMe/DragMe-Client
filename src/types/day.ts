@@ -69,3 +69,12 @@ export interface TitleAndScheduleId {
   title?: string;
   scheduleId: string;
 }
+
+export interface CategoryPatch {
+  scheduleId: string;
+  categoryColorCode: string;
+}
+export interface useCategoryPatch extends CategoryPatch {
+  flag: dailyPlanFlag;
+  date?: string;
+}

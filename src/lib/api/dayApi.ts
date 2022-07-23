@@ -1,5 +1,6 @@
 import {
   CalendarQueryType,
+  CategoryPatch,
   DateQueryType,
   deleteRefetching,
   getEmojiQueryType,
@@ -163,4 +164,18 @@ export const deleteScheduleData = async ({ scheduleId }: ScheduleId) => {
   const { data } = await client.delete(`/schedule?scheduleId=${scheduleId}`);
 
   return data;
+};
+
+export const patchCategory = async ({ scheduleId, categoryColorCode }: CategoryPatch) => {
+  const post = await client.patch(`/schedule/category?scheduleId=${scheduleId}`, {
+    categoryColorCode,
+  });
+
+  return post;
+};
+
+export const patchReschedule = async ({ scheduleId }: ScheduleId) => {
+  const post = await client.patch(`/schedule/day-reschedule?scheduleId=${scheduleId}`);
+
+  return post;
 };
