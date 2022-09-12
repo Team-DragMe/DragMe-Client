@@ -29,7 +29,7 @@ const usePatchScheduleBlock = ({
 
       // 캐싱된 일정데이터에 접근하여 일정에 추가
       queryClient.setQueryData(queryKeys, (oldSchedules: any) => {
-        const newData = oldSchedules?.data?.data?.schedules?.map((item, idx) => {
+        const newData = oldSchedules?.data?.data?.schedules?.map((item: any) => {
           if (item._id === scheduleId) {
             return {
               title,

@@ -1,4 +1,4 @@
-import { startAndEndDate, StartDateQuery } from 'src/types/week';
+import { scheduleAndDate, startAndEndDate, StartDateQuery } from 'src/types/week';
 
 import { client } from './api';
 
@@ -20,4 +20,11 @@ export const getWeeklySchedules = async ({ startDate, endDate }: startAndEndDate
   const { data } = await client.get(`/schedule/weeks?startDate=${startDate}&endDate=${endDate}`);
   console.log('>>>>data', data);
   return { data };
+};
+
+export const patchWeeklySchedules = async ({ scheduleId, date }: scheduleAndDate) => {
+  const patch = await client.patch(`/schedule/days?scheduleId=${scheduleId}`, {
+    date,
+  });
+  return patch;
 };

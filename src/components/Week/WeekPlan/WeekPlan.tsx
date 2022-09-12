@@ -26,16 +26,16 @@ function WeekPlan() {
   const weekInfoData: WeekInfoType[] = data?.data;
   const numberArray = [0, 1, 2, 3, 4, 5, 6];
   const week = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
-
   return (
     <Styled.Root>
       {weekInfoData &&
-        weeklySchedules?.data &&
+        weekRecoil &&
         numberArray.map((number: number, idx: number) => (
           <WeekPlanCard
             key={number}
             dayInfo={weekInfoData[number]}
             day={week[number]}
+            dateForWeek={weekRecoil[idx]}
             schedulesData={weeklySchedules?.data[idx]?.schedules}
             weekIndex={idx}
           />

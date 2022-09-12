@@ -154,9 +154,9 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
       setCurrentTargetPlan({ itemId: '', flag: '', date: '' });
       setWeeklyPostState(null);
       if (!flag || weeklyPostState) {
-        setTimeout(() => {
-          location.reload();
-        }, 50);
+        // setTimeout(() => {
+        //   location.reload();
+        // }, 50);
       }
     };
 
