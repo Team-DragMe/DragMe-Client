@@ -88,6 +88,7 @@ export default NavBar;
 const Styled = {
   Root: styled.div`
     width: 100%;
+    overflow: hidden;
     height: 6rem;
     padding: 0 4.5rem 0 4.6rem;
     display: flex;
@@ -173,10 +174,10 @@ const Styled = {
 
   RoutineboxWrapper: styled.div<{ isOpened: boolean }>`
     z-index: 10;
-    position: absolute;
+    position: fixed;
     height: 98.7rem;
     top: 7rem;
-    right: -28rem;
+    right: -30rem;
     transition: all 1s;
     transform: ${(props) => props.isOpened && 'translateX(-100%);'};
   `,
