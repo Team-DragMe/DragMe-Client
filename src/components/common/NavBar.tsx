@@ -30,6 +30,9 @@ function NavBar() {
 
   const handleHamburgerMenu = () => {
     hamburgerMenu === false ? setHamburgerMenu(true) : setHamburgerMenu(false);
+    if (router.pathname === '/') {
+      setHamburgerMenu(false);
+    }
   };
 
   useEffect(() => {
