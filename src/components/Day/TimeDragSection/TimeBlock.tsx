@@ -16,15 +16,6 @@ function TimeBlock(props: timeType) {
 
   const [draged, setDraged] = useState(isDraged);
 
-  // const [test, setTest] = useState(isUsed);
-
-  // useEffect(() => {
-  //   if (!isUsed && draged === 'done') {
-  //     setDraged('');
-  //     console.log('dkdk');
-  //   }
-  // }, [isUsed]);
-
   useEffect(() => {
     if (parseInt(startBlock) <= id && id <= parseInt(endBlock)) {
       isUsed ? setDraged('done') : setDraged('plan');

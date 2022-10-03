@@ -36,14 +36,6 @@ function TimeBlocks({ schedule, subScheduleId, idx }: TimeBlocksProps) {
     flag: 'daily',
   });
   const scheduleInfo = subScheduleId === '' ? schedule : subSchedule ? subSchedule[idx] : schedule;
-  // const scheduleInfo =
-  //   subScheduleId === undefined ? schedule : subSchedule ? subSchedule[idx] : schedule;
-
-  // const [isUsed, setIsUsed] = useState(scheduleInfo?.isCompleted);
-
-  // useEffect(() => {
-  //   setIsUsed((prev) => !prev);
-  // }, [checkedList.has(scheduleInfo?._id)]);
 
   const handleDragState = ({ isDragging, startBlock, endBlock }: DragStateArg) => {
     setIsDragging(isDragging);
@@ -55,7 +47,6 @@ function TimeBlocks({ schedule, subScheduleId, idx }: TimeBlocksProps) {
     }
   };
 
-  // console.log(scheduleInfo?.isCompleted);
   //배열 만들어서 서버에 전송
   const handleSubmit = () => {
     const blockList = [];
@@ -67,7 +58,6 @@ function TimeBlocks({ schedule, subScheduleId, idx }: TimeBlocksProps) {
 
     //start, end로 요청 추가, 삭제 분기처리
     if (start < end) {
-      console.log('생성 배열', blockList);
       postScheduleTime({
         scheduleId: scheduleInfo?._id || '',
         isUsed: scheduleInfo.isCompleted || false,
@@ -75,21 +65,18 @@ function TimeBlocks({ schedule, subScheduleId, idx }: TimeBlocksProps) {
       });
     } else if (start > end) {
       //삭제요청
-      console.log('삭제 배열', blockList);
       patchScheduleTime({
         scheduleId: scheduleInfo?._id || '',
         timeBlockNumbers: blockList,
       });
     } else if (start === end) {
       if (isClickMakeBlock) {
-        console.log('클릭 하나 생성', blockList);
         postScheduleTime({
           scheduleId: scheduleInfo?._id || '',
           isUsed: scheduleInfo.isCompleted || false,
           timeBlockNumbers: blockList,
         });
       } else {
-        console.log('클릭 하나 삭제', blockList);
         patchScheduleTime({
           scheduleId: scheduleInfo?._id || '',
           timeBlockNumbers: blockList,

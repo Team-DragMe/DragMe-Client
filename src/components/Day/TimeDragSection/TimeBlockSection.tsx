@@ -1,25 +1,18 @@
 import { useEffect, useRef } from 'react';
 import { useRecoilValue } from 'recoil';
-// import useGetSubSchedules from 'src/hooks/query/useGetSubSchedules';
 import useGetTodaySchedules from 'src/hooks/query/useGetTodaySchedules';
 import { dayInfo, openedSchedules, scrollY } from 'src/states';
 import styled from 'styled-components';
 
 import TimeBlocks from './TimeBlocks';
 
-// interface TimeBlockSectionProps {
-//   plans: string[];
-// }
-
 function TimeBlockSection() {
   //리코일에 있는 열려있는 리스트 값 받아오기
-  // const openList = ['sampleScheduleId6'];
   const divRef = useRef<HTMLDivElement>(null);
   const scroll = useRecoilValue(scrollY);
   const date = useRecoilValue(dayInfo).slice(0, 10);
   const openedList = useRecoilValue(openedSchedules);
   const { data: scheduleList } = useGetTodaySchedules({ date });
-  // console.log(openedList.has('sampleScheduleId6'));
   useEffect(() => {
     if (divRef.current) {
       divRef.current.scrollTop = scroll;
