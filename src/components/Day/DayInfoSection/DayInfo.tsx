@@ -1,11 +1,10 @@
 import React from 'react';
-import { useRecoilValue } from 'recoil';
-import { dayInfo } from 'src/states';
 import { theme } from 'src/styles/theme';
+import { getTodayDate } from 'src/utils/getDate';
 import styled from 'styled-components';
 
 function DayInfo() {
-  const today = useRecoilValue(dayInfo);
+  const today = getTodayDate(0);
 
   return (
     <Styled.Root>

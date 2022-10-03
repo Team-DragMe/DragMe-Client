@@ -1,10 +1,8 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import NextArrow from 'public/assets/NextArrow.png';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { flushSync } from 'react-dom';
-import { useRecoilState } from 'recoil';
-import { dayCount, dayInfo } from 'src/states';
 import { theme } from 'src/styles/theme';
 import { DayStorage, getTodayDate } from 'src/utils/getDate';
 import styled from 'styled-components';
@@ -13,8 +11,8 @@ import PrevArrow from '/public/assets/PrevArrow.png';
 
 function DayChange() {
   const router = useRouter();
-  const [dayDate, setDayDate] = useRecoilState(dayInfo);
-  const [dayChange, setDayChange] = useRecoilState(dayCount);
+  const [dayDate, setDayDate] = useState(getTodayDate(0));
+  const [dayChange, setDayChange] = useState(0);
   const day = getTodayDate(0);
   const SavedDay = DayStorage(day.slice(0, 10), dayChange);
   const dayPlanURL = router.query.date?.toString();

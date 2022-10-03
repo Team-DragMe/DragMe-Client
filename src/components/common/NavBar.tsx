@@ -5,10 +5,9 @@ import HamburgerMenu from 'public/assets/icons/HamburgerMenu.svg';
 import React, { useEffect, useState } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { useRecoilValue } from 'recoil';
 import RoutineBox from 'src/components/common/RoutineBox/index';
-import { dayInfo } from 'src/states';
 import { theme } from 'src/styles/theme';
+import { getTodayDate } from 'src/utils/getDate';
 import styled from 'styled-components';
 
 type isMenuType = 'Today' | 'Week';
@@ -20,7 +19,7 @@ interface LiStyle {
 
 function NavBar() {
   const router = useRouter();
-  const dayPeriod = useRecoilValue(dayInfo);
+  const dayPeriod = getTodayDate(0);
   const [pickedMenu, setPickedMenu] = useState<isMenuType>('Today');
   const [hamburgerMenu, setHamburgerMenu] = useState(false);
 
@@ -46,7 +45,7 @@ function NavBar() {
       setPickedMenu('Today');
     }
   };
-  const periodData = [
+  const periodData: [{ id: string; name: string; path: string; term: string; symbol: string }] = [
     { id: '1', name: 'DAILY PLAN', path: '/day/', term: dayPeriod, symbol: 'Today' },
   ];
 
