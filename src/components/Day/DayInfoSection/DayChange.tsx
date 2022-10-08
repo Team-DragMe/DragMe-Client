@@ -1,8 +1,7 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import NextArrow from 'public/assets/NextArrow.png';
-import React, { useEffect, useState } from 'react';
-import { flushSync } from 'react-dom';
+import React, { useEffect, useRef, useState } from 'react';
 import { theme } from 'src/styles/theme';
 import { DayStorage, getTodayDate } from 'src/utils/getDate';
 import styled from 'styled-components';
@@ -11,49 +10,49 @@ import PrevArrow from '/public/assets/PrevArrow.png';
 
 function DayChange() {
   const router = useRouter();
-  const [dayDate, setDayDate] = useState(getTodayDate(0));
-  const [dayChange, setDayChange] = useState(0);
-  const day = getTodayDate(0);
-  const SavedDay = DayStorage(day.slice(0, 10), dayChange);
+  const changedDateCounter = useRef<number>(0);
+  const [dayDate] = useState(getTodayDate(0));
+  const today = getTodayDate(0);
   const dayPlanURL = router.query.date?.toString();
 
-  const goToday = () => {
-    setDayChange(0);
+  const goToSelectedDay = () => {
     if (dayPlanURL !== undefined) {
-      setDayDate(day);
-      router.push(`/day/${day}`);
+      changedDateCounter
+        ? router.push(`/day/${DayStorage(today.slice(0, 10), changedDateCounter.current)}`)
+        : router.push(`/day/${today}`);
     }
   };
 
-  useEffect(() => {
-    if (dayPlanURL !== undefined) {
-      router.push(`/day/${SavedDay}`);
-    }
-  }, [dayChange]);
+  const getPrevDate = () => {
+    changedDateCounter.current -= 1;
+    goToSelectedDay();
+  };
+
+  const getFollowDate = () => {
+    changedDateCounter.current += 1;
+    goToSelectedDay();
+  };
+
+  const goToday = () => {
+    changedDateCounter.current = 0;
+    goToSelectedDay();
+  };
 
   useEffect(() => {
     if (dayDate !== undefined) {
-      setDayDate(getTodayDate(dayChange));
-      router.push(`/day/${SavedDay}`);
+      router.push(`/day/${DayStorage(today.slice(0, 10), changedDateCounter.current)}`);
     }
   }, []);
 
-  const handleClick = (option: number) => {
-    flushSync(() => {
-      setDayChange((prev) => prev + option);
-    });
-    setDayDate(DayStorage(day.slice(0, 10), dayChange + option));
-  };
-
   return (
     <Styled.Root>
-      <Styled.Button onClick={() => handleClick(-1)}>
+      <Styled.Navigator onClick={() => getPrevDate()}>
         <Image src={PrevArrow} alt="이전날짜" width={'5'} height={'12'} />
-      </Styled.Button>
+      </Styled.Navigator>
       <Styled.GoToday onClick={goToday}>TODAY</Styled.GoToday>
-      <Styled.Button onClick={() => handleClick(+1)}>
+      <Styled.Navigator onClick={() => getFollowDate()}>
         <Image src={NextArrow} alt="다음날짜" width={'5'} height={'12'} />
-      </Styled.Button>
+      </Styled.Navigator>
     </Styled.Root>
   );
 }
@@ -76,7 +75,7 @@ const Styled = {
     width: 4.2rem;
     cursor: pointer;
   `,
-  Button: styled.div`
+  Navigator: styled.div`
     width: 0.5rem;
     height: 1.2rem;
     cursor: pointer;
