@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import NextArrow from 'public/assets/NextArrow.png';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { theme } from 'src/styles/theme';
 import { DayStorage, getTodayDate } from 'src/utils/getDate';
 import styled from 'styled-components';
@@ -11,7 +11,6 @@ import PrevArrow from '/public/assets/PrevArrow.png';
 function DayChange() {
   const router = useRouter();
   const changedDateCounter = useRef<number>(0);
-  const [dayDate] = useState(getTodayDate(0));
   const today = getTodayDate(0);
   const dayPlanURL = router.query.date?.toString();
 
@@ -39,7 +38,7 @@ function DayChange() {
   };
 
   useEffect(() => {
-    if (dayDate !== undefined) {
+    if (getTodayDate(0) !== undefined) {
       router.push(`/day/${DayStorage(today.slice(0, 10), changedDateCounter.current)}`);
     }
   }, []);
