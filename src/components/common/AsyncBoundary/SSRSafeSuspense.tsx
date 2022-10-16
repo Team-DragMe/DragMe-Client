@@ -9,7 +9,8 @@ function SSRSafeSuspense(props: ComponentProps<typeof Suspense>) {
   }
   const { fallback } = props;
 
-  return { fallback };
+  // eslint-disable-next-line react/jsx-no-useless-fragment
+  return <>{fallback}</>;
 }
 
 export default SSRSafeSuspense;
