@@ -1,7 +1,5 @@
-import React, { JSXElementConstructor, ReactElement } from 'react';
-
-type Nullable<T> = T | null;
-type ReactChild = string | number | ReactElement<any, string | JSXElementConstructor<any>>;
+import React, { ReactElement } from 'react';
+import { Nullable, ReactChild } from 'src/types';
 
 interface IParentComponentProps {
   className?: string;
@@ -41,8 +39,11 @@ class ErrorBoundary extends React.Component<IProps, IErrorBoundaryState> {
   }
 
   componentDidUpdate(prevProps: IProps) {
-    if (!this.state.hasError == null) return;
-    if (prevProps.resetKey !== this.props.resetKey) {
+    const { hasError } = this.state;
+    const { resetKey: prevResetKey } = prevProps;
+    const { resetKey: currentResetKey } = this.props;
+    if (!hasError === null) return;
+    if (prevResetKey !== currentResetKey) {
       this.resetErrorBoundary();
     }
   }
@@ -59,10 +60,11 @@ class ErrorBoundary extends React.Component<IProps, IErrorBoundaryState> {
   render() {
     const { children, renderFallback } = this.props;
     const { hasError, error } = this.state;
-
     if (hasError) {
       return renderFallback({
         error,
+        /* resetErrorBoundary 메서드에서 this를 사용하지 않으므로 off*/
+        // eslint-disable-next-line @typescript-eslint/unbound-method
         reset: this.resetErrorBoundary,
       });
     }
