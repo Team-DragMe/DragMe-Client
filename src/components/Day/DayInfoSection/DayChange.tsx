@@ -1,17 +1,15 @@
-import Image from 'next/image';
 import { useRouter } from 'next/router';
-import NextArrow from 'public/assets/NextArrow.png';
 import React, { useEffect, useRef } from 'react';
 import { theme } from 'src/styles/theme';
 import { DayStorage, getTodayDate } from 'src/utils/getDate';
 import styled from 'styled-components';
 
-import PrevArrow from '/public/assets/PrevArrow.png';
+export const DEFAULT_DATE_CHANGE = 0;
 
 function DayChange() {
   const router = useRouter();
-  const changedDateCounter = useRef<number>(0);
-  const today = getTodayDate(0);
+  const changedDateCounter = useRef<number>(DEFAULT_DATE_CHANGE);
+  const today = getTodayDate(DEFAULT_DATE_CHANGE);
   const dayPlanURL = router.query.date?.toString();
 
   const goToSelectedDay = () => {
@@ -45,13 +43,9 @@ function DayChange() {
 
   return (
     <Styled.Root>
-      <Styled.Navigator onClick={() => getPrevDate()}>
-        <Image src={PrevArrow} alt="이전날짜" width={'5'} height={'12'} />
-      </Styled.Navigator>
-      <Styled.GoToday onClick={goToday}>TODAY</Styled.GoToday>
-      <Styled.Navigator onClick={() => getFollowDate()}>
-        <Image src={NextArrow} alt="다음날짜" width={'5'} height={'12'} />
-      </Styled.Navigator>
+      <Styled.NavigatorButton onClick={() => getPrevDate()}>&lt;</Styled.NavigatorButton>
+      <Styled.MoveTodayButton onClick={goToday}>TODAY</Styled.MoveTodayButton>
+      <Styled.NavigatorButton onClick={() => getFollowDate()}>&gt;</Styled.NavigatorButton>
     </Styled.Root>
   );
 }
@@ -60,7 +54,6 @@ export default DayChange;
 
 const Styled = {
   Root: styled.div`
-    width: 9.7rem;
     height: 1.8rem;
     display: flex;
     flex-direction: row;
@@ -70,13 +63,23 @@ const Styled = {
     font-weight: bold;
     color: ${theme.colors.letter_black};
   `,
-  GoToday: styled.div`
-    width: 4.2rem;
+  MoveTodayButton: styled.div`
+    margin-top: 0.4rem;
+    padding: 1.5rem;
     cursor: pointer;
+    &:hover {
+      color: ${theme.colors.main_color};
+    }
   `,
-  Navigator: styled.div`
-    width: 0.5rem;
-    height: 1.2rem;
+  NavigatorButton: styled.div`
+    padding: 1.5rem 0.5rem;
+    font-size: 1.5rem;
+    font-weight: 300;
+    color: ${theme.colors.plan_grey};
     cursor: pointer;
+    &:hover {
+      color: ${theme.colors.main_color};
+      font-weight: bold;
+    }
   `,
 };

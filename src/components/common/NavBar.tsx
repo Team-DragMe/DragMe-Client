@@ -28,10 +28,11 @@ function NavBar() {
   }, []);
 
   const handleHamburgerMenu = () => {
-    hamburgerMenu === false ? setHamburgerMenu(true) : setHamburgerMenu(false);
     if (router.pathname === '/') {
       setHamburgerMenu(false);
+      return;
     }
+    setHamburgerMenu((prev) => !prev);
   };
 
   useEffect(() => {
@@ -162,6 +163,7 @@ const Styled = {
     margin-left: -1.5rem;
     transition: all 1s;
     transform: ${(props) => props.isOpened && 'translate(6%, 2%) rotate(90deg);'};
+    cursor: pointer;
   `,
   MyPageWrapper: styled.div<{ isToggle: boolean }>`
     display: none;

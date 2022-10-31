@@ -3,8 +3,10 @@ import { theme } from 'src/styles/theme';
 import { getTodayDate } from 'src/utils/getDate';
 import styled from 'styled-components';
 
+import { DEFAULT_DATE_CHANGE } from './DayChange';
+
 function DayInfo() {
-  const today = getTodayDate(0);
+  const today = getTodayDate(DEFAULT_DATE_CHANGE);
 
   return (
     <Styled.Root>
