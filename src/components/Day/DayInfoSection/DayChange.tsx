@@ -11,6 +11,8 @@ function DayChange() {
   const changedDateCounter = useRef<number>(DEFAULT_DATE_CHANGE);
   const today = getTodayDate(DEFAULT_DATE_CHANGE);
   const dayPlanURL = router.query.date?.toString();
+  const PREV_DATE = -1;
+  const NEXT_DATE = 1;
 
   const goToSelectedDay = () => {
     if (dayPlanURL !== undefined) {
@@ -20,18 +22,25 @@ function DayChange() {
     }
   };
 
+  const setDateCount = (date: number) => {
+    changedDateCounter.current += date;
+    if (date === DEFAULT_DATE_CHANGE) {
+      changedDateCounter.current = DEFAULT_DATE_CHANGE;
+    }
+  };
+
   const getPrevDate = () => {
-    changedDateCounter.current -= 1;
+    setDateCount(PREV_DATE);
     goToSelectedDay();
   };
 
   const getFollowDate = () => {
-    changedDateCounter.current += 1;
+    setDateCount(NEXT_DATE);
     goToSelectedDay();
   };
 
   const goToday = () => {
-    changedDateCounter.current = 0;
+    setDateCount(DEFAULT_DATE_CHANGE);
     goToSelectedDay();
   };
 
@@ -43,9 +52,9 @@ function DayChange() {
 
   return (
     <Styled.Root>
-      <Styled.NavigatorButton onClick={() => getPrevDate()}>&lt;</Styled.NavigatorButton>
+      <Styled.NavigatorButton onClick={getPrevDate}>&lt;</Styled.NavigatorButton>
       <Styled.MoveTodayButton onClick={goToday}>TODAY</Styled.MoveTodayButton>
-      <Styled.NavigatorButton onClick={() => getFollowDate()}>&gt;</Styled.NavigatorButton>
+      <Styled.NavigatorButton onClick={getFollowDate}>&gt;</Styled.NavigatorButton>
     </Styled.Root>
   );
 }
