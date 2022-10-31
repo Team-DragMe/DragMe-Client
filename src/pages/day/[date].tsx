@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import DayChange from 'src/components/Day/DayInfoSection/DayChange';
@@ -11,13 +11,22 @@ import TodayNoteSection from 'src/components/Day/TodayNote/TodayNoteSection';
 import styled from 'styled-components';
 
 function Day() {
+  const changedDateCounter = useRef<number>(0);
+
+  const setDateCount = (date: number) => {
+    changedDateCounter.current += date;
+    if (date === 0) {
+      changedDateCounter.current = 0;
+    }
+  };
+
   return (
     <DndProvider backend={HTML5Backend}>
       <Styled.Root>
         <Styled.HeaderWrapper>
-          <DayInfo />
+          <DayInfo changedDateCounter={changedDateCounter} />
           <Styled.HeaderOptionWrapper>
-            <DayChange />
+            <DayChange changedDateCounter={changedDateCounter} setDateCount={setDateCount} />
             <CalendarBtn />
           </Styled.HeaderOptionWrapper>
         </Styled.HeaderWrapper>

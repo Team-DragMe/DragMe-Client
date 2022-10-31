@@ -1,31 +1,27 @@
 import { useRouter } from 'next/router';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { theme } from 'src/styles/theme';
+import { DateInfomationType } from 'src/types/day';
 import { DayStorage, getTodayDate } from 'src/utils/getDate';
 import styled from 'styled-components';
 
-export const DEFAULT_DATE_CHANGE = 0;
+interface DateSelectType extends DateInfomationType {
+  setDateCount: (date: number) => void;
+}
 
-function DayChange() {
-  const router = useRouter();
-  const changedDateCounter = useRef<number>(DEFAULT_DATE_CHANGE);
-  const today = getTodayDate(DEFAULT_DATE_CHANGE);
-  const dayPlanURL = router.query.date?.toString();
+function DayChange({ changedDateCounter, setDateCount }: DateSelectType) {
+  const DEFAULT_DATE_CHANGE = 0;
   const PREV_DATE = -1;
   const NEXT_DATE = 1;
+  const router = useRouter();
+  const today = getTodayDate(DEFAULT_DATE_CHANGE);
+  const dayPlanURL = router.query.date?.toString();
 
   const goToSelectedDay = () => {
     if (dayPlanURL !== undefined) {
       changedDateCounter
         ? router.push(`/day/${DayStorage(today.slice(0, 10), changedDateCounter.current)}`)
         : router.push(`/day/${today}`);
-    }
-  };
-
-  const setDateCount = (date: number) => {
-    changedDateCounter.current += date;
-    if (date === DEFAULT_DATE_CHANGE) {
-      changedDateCounter.current = DEFAULT_DATE_CHANGE;
     }
   };
 

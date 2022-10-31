@@ -1,12 +1,11 @@
 import React from 'react';
 import { theme } from 'src/styles/theme';
+import { DateInfomationType } from 'src/types/day';
 import { getTodayDate } from 'src/utils/getDate';
 import styled from 'styled-components';
 
-import { DEFAULT_DATE_CHANGE } from './DayChange';
-
-function DayInfo() {
-  const today = getTodayDate(DEFAULT_DATE_CHANGE);
+function DayInfo({ changedDateCounter }: DateInfomationType) {
+  const today = getTodayDate(changedDateCounter.current);
 
   return (
     <Styled.Root>

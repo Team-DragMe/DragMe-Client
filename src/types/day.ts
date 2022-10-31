@@ -78,3 +78,7 @@ export interface useCategoryPatch extends CategoryPatch {
   flag: dailyPlanFlag;
   date?: string;
 }
+
+export interface DateInfomationType {
+  changedDateCounter: React.MutableRefObject<number>;
+}
