@@ -15,14 +15,9 @@ function DayChange({ changedDateCounter, setDateCount }: DateSelectType) {
   const NEXT_DATE = 1;
   const router = useRouter();
   const today = getTodayDate(DEFAULT_DATE_CHANGE);
-  const dayPlanURL = router.query.date?.toString();
 
   const goToSelectedDay = () => {
-    if (dayPlanURL !== undefined) {
-      changedDateCounter
-        ? router.push(`/day/${DayStorage(today.slice(0, 10), changedDateCounter.current)}`)
-        : router.push(`/day/${today}`);
-    }
+    router.push(`/day/${DayStorage(today.slice(0, 10), changedDateCounter.current)}`);
   };
 
   const getPrevDate = () => {
@@ -41,9 +36,7 @@ function DayChange({ changedDateCounter, setDateCount }: DateSelectType) {
   };
 
   useEffect(() => {
-    if (getTodayDate(0) !== undefined) {
-      router.push(`/day/${DayStorage(today.slice(0, 10), changedDateCounter.current)}`);
-    }
+    router.push(`/day/${DayStorage(today.slice(0, 10), changedDateCounter.current)}`);
   }, []);
 
   return (
