@@ -1,8 +1,8 @@
-import React, { useRef } from 'react';
+import dynamic from 'next/dynamic';
+import React from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import DayChange from 'src/components/Day/DayInfoSection/DayChange';
-import DayInfo from 'src/components/Day/DayInfoSection/DayInfo';
 import MainDayPlan from 'src/components/Day/MainDayPlanList';
 import CalendarBtn from 'src/components/Day/Modal/CalendarBtn';
 import Reschedule from 'src/components/Day/Reschedule';
@@ -10,23 +10,18 @@ import TimeLine from 'src/components/Day/TimeDragSection/TimeLine';
 import TodayNoteSection from 'src/components/Day/TodayNote/TodayNoteSection';
 import styled from 'styled-components';
 
+const DayInfo = dynamic(async () => import('src/components/Day/DayInfoSection/DayInfo'), {
+  ssr: false,
+});
+
 function Day() {
-  const changedDateCounter = useRef<number>(0);
-
-  const setDateCount = (date: number) => {
-    changedDateCounter.current += date;
-    if (date === 0) {
-      changedDateCounter.current = 0;
-    }
-  };
-
   return (
     <DndProvider backend={HTML5Backend}>
       <Styled.Root>
         <Styled.HeaderWrapper>
-          <DayInfo changedDateCounter={changedDateCounter} />
+          <DayInfo />
           <Styled.HeaderOptionWrapper>
-            <DayChange changedDateCounter={changedDateCounter} setDateCount={setDateCount} />
+            <DayChange />
             <CalendarBtn />
           </Styled.HeaderOptionWrapper>
         </Styled.HeaderWrapper>

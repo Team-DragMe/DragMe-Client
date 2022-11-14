@@ -1,19 +1,22 @@
 import React from 'react';
 import { theme } from 'src/styles/theme';
-import { DateInfomationType } from 'src/types/day';
 import { getTodayDate } from 'src/utils/getDate';
 import styled from 'styled-components';
 
-function DayInfo({ changedDateCounter }: DateInfomationType) {
-  const today = getTodayDate(changedDateCounter.current);
+function DayInfo() {
+  const localCount = Number(window.localStorage.getItem('date'));
+  const today = getTodayDate(localCount);
+  const MONTH = today.slice(5, 7);
+  const DATE = today.slice(8, 10);
+  const DAY_OF_THE_WEEK = today.slice(11, 14);
 
   return (
     <Styled.Root>
       <Styled.HeaderBox>
-        <Styled.Month>{today.slice(5, 7)}</Styled.Month>
-        <Styled.DayOfTheWeek>{today.slice(11, 14)}</Styled.DayOfTheWeek>
+        <Styled.Month>{MONTH}</Styled.Month>
+        <Styled.DayOfTheWeek>{DAY_OF_THE_WEEK}</Styled.DayOfTheWeek>
       </Styled.HeaderBox>
-      <Styled.Day>{today.slice(8, 10)}.</Styled.Day>
+      <Styled.Day>{DATE}.</Styled.Day>
     </Styled.Root>
   );
 }

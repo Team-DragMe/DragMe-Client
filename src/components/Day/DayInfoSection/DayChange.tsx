@@ -1,43 +1,45 @@
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { theme } from 'src/styles/theme';
-import { DateInfomationType } from 'src/types/day';
 import { DayStorage, getTodayDate } from 'src/utils/getDate';
 import styled from 'styled-components';
 
-interface DateSelectType extends DateInfomationType {
-  setDateCount: (date: number) => void;
-}
-
-function DayChange({ changedDateCounter, setDateCount }: DateSelectType) {
+function DayChange() {
+  const [count, setCount] = useState(0);
   const DEFAULT_DATE_CHANGE = 0;
   const PREV_DATE = -1;
   const NEXT_DATE = 1;
   const router = useRouter();
   const today = getTodayDate(DEFAULT_DATE_CHANGE);
 
-  const goToSelectedDay = () => {
-    router.push(`/day/${DayStorage(today.slice(0, 10), changedDateCounter.current)}`);
+  useEffect(() => {
+    const localCount = Number(window.localStorage.getItem('date'));
+    if (localCount) {
+      setCount(localCount);
+    }
+    router.push(`/day/${DayStorage(today.slice(0, 10), localCount)}`);
+  }, []);
+
+  useEffect(() => {
+    moveToSelectedDate();
+    window.localStorage.setItem('date', count.toString());
+  }, [count]);
+
+  const moveToSelectedDate = () => {
+    router.push(`/day/${DayStorage(today.slice(0, 10), count)}`);
   };
 
   const getPrevDate = () => {
-    setDateCount(PREV_DATE);
-    goToSelectedDay();
+    setCount(count + PREV_DATE);
   };
 
   const getFollowDate = () => {
-    setDateCount(NEXT_DATE);
-    goToSelectedDay();
+    setCount(count + NEXT_DATE);
   };
 
   const goToday = () => {
-    setDateCount(DEFAULT_DATE_CHANGE);
-    goToSelectedDay();
+    setCount(DEFAULT_DATE_CHANGE);
   };
-
-  useEffect(() => {
-    router.push(`/day/${DayStorage(today.slice(0, 10), changedDateCounter.current)}`);
-  }, []);
 
   return (
     <Styled.Root>
