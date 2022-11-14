@@ -14,7 +14,7 @@ function DayChange() {
   const today = getTodayDate(DEFAULT_DATE_CHANGE);
 
   useEffect(() => {
-    const localCount = Number(window.localStorage.getItem('date'));
+    const localCountingDays = Number(window.localStorage.getItem('changedDaysNumber'));
     const localPivotDate = window.localStorage.getItem('pivotDate');
     if (!localPivotDate) {
       window.localStorage.setItem('pivotDate', today);
@@ -22,16 +22,15 @@ function DayChange() {
     if (localPivotDate && pivotDate !== localPivotDate) {
       setPivotDate(localPivotDate);
     }
-    if (localCount) {
-      setCountingDays(localCount);
+    if (localCountingDays) {
+      setCountingDays(localCountingDays);
     }
-
-    router.push(`/day/${DayStorage(pivotDate.slice(0, 10), localCount)}`);
+    router.push(`/day/${DayStorage(pivotDate.slice(0, 10), localCountingDays)}`);
   }, []);
 
   useEffect(() => {
     moveToSelectedDate();
-    window.localStorage.setItem('date', countingDays.toString());
+    window.localStorage.setItem('changedDaysNumber', countingDays.toString());
   }, [countingDays]);
 
   const moveToSelectedDate = () => {
@@ -46,14 +45,15 @@ function DayChange() {
     setCountingDays(countingDays + NEXT_DATE);
   };
 
-  const goToday = () => {
+  const getTodaysDate = () => {
+    window.localStorage.setItem('pivotDate', today);
     setCountingDays(DEFAULT_DATE_CHANGE);
   };
 
   return (
     <Styled.Root>
       <Styled.NavigatorButton onClick={getPrevDate}>&lt;</Styled.NavigatorButton>
-      <Styled.MoveTodayButton onClick={goToday}>TODAY</Styled.MoveTodayButton>
+      <Styled.MoveTodayButton onClick={getTodaysDate}>TODAY</Styled.MoveTodayButton>
       <Styled.NavigatorButton onClick={getFollowDate}>&gt;</Styled.NavigatorButton>
     </Styled.Root>
   );

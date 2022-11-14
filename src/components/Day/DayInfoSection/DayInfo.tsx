@@ -4,11 +4,11 @@ import { getTodayDate } from 'src/utils/getDate';
 import styled from 'styled-components';
 
 function DayInfo() {
-  const localCount = Number(window.localStorage.getItem('date'));
-  const today = getTodayDate(localCount);
-  const MONTH = today.slice(5, 7);
-  const DATE = today.slice(8, 10);
-  const DAY_OF_THE_WEEK = today.slice(11, 14);
+  const changedDaysNumber = Number(window.localStorage.getItem('changedDaysNumber'));
+  const changedDate = getTodayDate(changedDaysNumber);
+  const MONTH = changedDate.slice(5, 7);
+  const DATE = changedDate.slice(8, 10);
+  const DAY_OF_THE_WEEK = changedDate.slice(11, 14);
 
   return (
     <Styled.Root>
