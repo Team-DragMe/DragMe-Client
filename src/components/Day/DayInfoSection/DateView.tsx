@@ -3,7 +3,7 @@ import { theme } from 'src/styles/theme';
 import { getTodayDate } from 'src/utils/getDate';
 import styled from 'styled-components';
 
-function DayInfo() {
+function DateView() {
   const changedDaysNumber = Number(window.localStorage.getItem('changedDaysNumber'));
   const changedDate = getTodayDate(changedDaysNumber);
   const MONTH = changedDate.slice(5, 7);
@@ -21,7 +21,7 @@ function DayInfo() {
   );
 }
 
-export default DayInfo;
+export default DateView;
 
 const Styled = {
   Root: styled.div`

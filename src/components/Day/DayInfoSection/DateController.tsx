@@ -4,7 +4,7 @@ import { theme } from 'src/styles/theme';
 import { DayStorage, getTodayDate } from 'src/utils/getDate';
 import styled from 'styled-components';
 
-function DayChange() {
+function DateController() {
   const DEFAULT_DATE_CHANGE = 0;
   const PREV_DATE = -1;
   const NEXT_DATE = 1;
@@ -16,6 +16,7 @@ function DayChange() {
   useEffect(() => {
     const localCountingDays = Number(window.localStorage.getItem('changedDaysNumber'));
     const localPivotDate = window.localStorage.getItem('pivotDate');
+
     if (!localPivotDate) {
       window.localStorage.setItem('pivotDate', today);
     }
@@ -25,6 +26,7 @@ function DayChange() {
     if (localCountingDays) {
       setChangedDays(localCountingDays);
     }
+
     router.push(`/day/${DayStorage(pivotDate.slice(0, 10), localCountingDays)}`);
   }, []);
 
@@ -59,7 +61,7 @@ function DayChange() {
   );
 }
 
-export default DayChange;
+export default DateController;
 
 const Styled = {
   Root: styled.div`
