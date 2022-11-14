@@ -25,17 +25,17 @@ export default DayInfo;
 
 const Styled = {
   Root: styled.div`
+    display: flex;
+    flex-direction: column;
     color: ${theme.colors.letter_black};
     width: 12.9rem;
-    display: flex;
     font-weight: 900;
-    flex-direction: column;
   `,
   HeaderBox: styled.div`
     display: flex;
     justify-content: center;
-    height: 2.8rem;
     align-items: center;
+    height: 2.8rem;
   `,
   Month: styled.div`
     font-size: 1.8rem;
