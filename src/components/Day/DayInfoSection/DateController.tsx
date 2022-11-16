@@ -14,7 +14,7 @@ function DateController() {
   const today = getTodayDate(DEFAULT_DATE_CHANGE);
 
   useEffect(() => {
-    const localCountingDays = Number(window.localStorage.getItem('changedDaysNumber'));
+    const localCountingDays = Number(window.localStorage.getItem('changedDaysCount'));
     const localPivotDate = window.localStorage.getItem('pivotDate');
 
     if (!localPivotDate) {
@@ -32,7 +32,7 @@ function DateController() {
 
   useEffect(() => {
     moveToSelectedDate();
-    window.localStorage.setItem('changedDaysNumber', changedDays.toString());
+    window.localStorage.setItem('changedDaysCount', changedDays.toString());
   }, [changedDays]);
 
   const moveToSelectedDate = () => {
@@ -40,11 +40,11 @@ function DateController() {
   };
 
   const getPrevDate = () => {
-    setChangedDays(changedDays + PREV_DATE);
+    setChangedDays((prev) => prev + PREV_DATE);
   };
 
   const getFollowDate = () => {
-    setChangedDays(changedDays + NEXT_DATE);
+    setChangedDays((prev) => prev + NEXT_DATE);
   };
 
   const getTodaysDate = () => {

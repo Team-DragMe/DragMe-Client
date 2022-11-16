@@ -1,11 +1,15 @@
 import React from 'react';
 import { theme } from 'src/styles/theme';
-import { getTodayDate } from 'src/utils/getDate';
+import { DayStorage, getTodayDate } from 'src/utils/getDate';
 import styled from 'styled-components';
 
 function DateView() {
-  const changedDaysNumber = Number(window.localStorage.getItem('changedDaysNumber'));
-  const changedDate = getTodayDate(changedDaysNumber);
+  const changedDaysNumber = Number(window.localStorage.getItem('changedDaysCount'));
+  const pivotDate = window.localStorage.getItem('pivotDate');
+  const changedDate =
+    pivotDate !== null
+      ? DayStorage(pivotDate.slice(0, 10), changedDaysNumber)
+      : getTodayDate(changedDaysNumber);
   const MONTH = changedDate.slice(5, 7);
   const DATE = changedDate.slice(8, 10);
   const DAY_OF_THE_WEEK = changedDate.slice(11, 14);
