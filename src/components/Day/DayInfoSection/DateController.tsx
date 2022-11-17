@@ -20,7 +20,7 @@ function DateController() {
     if (!localPivotDate) {
       window.localStorage.setItem('pivotDate', today);
     }
-    if (localPivotDate && pivotDate !== localPivotDate) {
+    if (localPivotDate) {
       setPivotDate(localPivotDate);
     }
     if (localCountingDays) {
