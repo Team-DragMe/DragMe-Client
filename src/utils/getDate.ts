@@ -1,11 +1,15 @@
-export const getTodayDate = (days: number) => {
-  const date = getDateInfo(days);
-  return date.year + '-' + date.month + '-' + date.day + '-' + getDayWeek();
+export const getTodayDate = (countDate = 0) => {
+  const date = getDateInfo(countDate);
+  return date.year + '-' + date.month + '-' + date.day + '-' + getDayWeek(countDate);
 };
 
-//TODO : 날짜 계산 함수 리팩토링
-const getDateInfo = (dayCount = 0) => {
-  const date = new Date(new Date().setDate(new Date().getDate() + dayCount));
+export const makeDateString = (countDate = 0) => {
+  const date = getDateInfo(countDate);
+  return date.year + '-' + date.month + '-' + date.day + '-' + getDayWeek(countDate);
+};
+
+const getDateInfo = (countDate = 0) => {
+  const date = new Date(new Date().setDate(new Date().getDate() + countDate));
   const Object = {
     year: date.getFullYear(),
     month: ('0' + (date.getMonth() + 1)).slice(-2),
@@ -15,14 +19,9 @@ const getDateInfo = (dayCount = 0) => {
   return Object;
 };
 
-const getDayWeek = () => {
+const getDayWeek = (countDate = 0) => {
   const WEEK = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-  return WEEK[new Date().getDay()];
-};
-
-export const makeDateString = (countDays: number) => {
-  const Date = getDateInfo(countDays);
-  return Date.year + '-' + Date.month + '-' + Date.day + '-' + getDayWeek();
+  return WEEK[new Date(new Date().setDate(new Date().getDate() + countDate)).getDay()];
 };
 
 export const DayStorage = (days: string, count: number) => {
