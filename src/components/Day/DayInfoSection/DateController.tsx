@@ -1,17 +1,17 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { theme } from 'src/styles/theme';
-import { DayStorage, getTodayDate } from 'src/utils/getDate';
+import { DayStorage, makeDateString } from 'src/utils/getDate';
 import styled from 'styled-components';
 
 function DateController() {
-  const DEFAULT_DATE_CHANGE = 0;
+  const DEFAULT_DATE = 0;
   const PREV_DATE = -1;
   const NEXT_DATE = 1;
   const [changedDays, setChangedDays] = useState(0);
-  const [pivotDate, setPivotDate] = useState(getTodayDate(DEFAULT_DATE_CHANGE));
+  const [pivotDate, setPivotDate] = useState(makeDateString(DEFAULT_DATE));
   const router = useRouter();
-  const today = getTodayDate(DEFAULT_DATE_CHANGE);
+  const today = makeDateString(DEFAULT_DATE);
 
   useEffect(() => {
     const localCountingDays = Number(window.localStorage.getItem('changedDaysCount'));
@@ -39,24 +39,21 @@ function DateController() {
     router.push(`/day/${DayStorage(pivotDate.slice(0, 10), changedDays)}`);
   };
 
-  const getPrevDate = () => {
-    setChangedDays((prev) => prev + PREV_DATE);
-  };
-
-  const getFollowDate = () => {
-    setChangedDays((prev) => prev + NEXT_DATE);
-  };
-
-  const getTodaysDate = () => {
-    window.localStorage.setItem('pivotDate', today);
-    setChangedDays(DEFAULT_DATE_CHANGE);
+  const moveToTheseDate = (count: number) => {
+    count === 0 ? setChangedDays(0) : setChangedDays((prev) => prev + count);
   };
 
   return (
     <Styled.Root>
-      <Styled.NavigatorButton onClick={getPrevDate}>&lt;</Styled.NavigatorButton>
-      <Styled.MoveTodayButton onClick={getTodaysDate}>TODAY</Styled.MoveTodayButton>
-      <Styled.NavigatorButton onClick={getFollowDate}>&gt;</Styled.NavigatorButton>
+      <Styled.NavigatorButton onClick={() => moveToTheseDate(PREV_DATE)}>
+        &lt;
+      </Styled.NavigatorButton>
+      <Styled.MoveTodayButton onClick={() => moveToTheseDate(DEFAULT_DATE)}>
+        TODAY
+      </Styled.MoveTodayButton>
+      <Styled.NavigatorButton onClick={() => moveToTheseDate(NEXT_DATE)}>
+        &gt;
+      </Styled.NavigatorButton>
     </Styled.Root>
   );
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { theme } from 'src/styles/theme';
-import { DayStorage, getTodayDate } from 'src/utils/getDate';
+import { DayStorage, makeDateString } from 'src/utils/getDate';
 import styled from 'styled-components';
 
 function DateView() {
@@ -9,7 +9,7 @@ function DateView() {
   const changedDate =
     pivotDate !== null
       ? DayStorage(pivotDate.slice(0, 10), changedDaysNumber)
-      : getTodayDate(changedDaysNumber);
+      : makeDateString(changedDaysNumber);
   const MONTH = changedDate.slice(5, 7);
   const DATE = changedDate.slice(8, 10);
   const DAY_OF_THE_WEEK = changedDate.slice(11, 14);
