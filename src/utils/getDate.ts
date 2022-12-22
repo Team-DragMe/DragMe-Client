@@ -1,11 +1,11 @@
 export const getTodayDate = (countDate = 0) => {
-  const date = getDateInfo(countDate);
-  return date.year + '-' + date.month + '-' + date.day + '-' + getDayWeek(countDate);
+  const { year, month, day } = getDateInfo(countDate);
+  return year + '-' + month + '-' + day + '-' + getDayWeek(countDate);
 };
 
 export const makeDateString = (countDate = 0) => {
-  const date = getDateInfo(countDate);
-  return date.year + '-' + date.month + '-' + date.day + '-' + getDayWeek(countDate);
+  const { year, month, day } = getDateInfo(countDate);
+  return year + '-' + month + '-' + day + '-' + getDayWeek(countDate);
 };
 
 const getDateInfo = (countDate = 0) => {
