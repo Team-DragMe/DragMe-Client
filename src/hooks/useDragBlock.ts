@@ -1,29 +1,26 @@
-import React from 'react';
-
-interface DragStateArg {
-  isDragging: boolean;
-  startBlock: string;
-  endBlock: string;
-}
+import React, { useState } from 'react';
 
 interface DragBlockHookArg {
-  isDragging: boolean;
-  handleDragState: ({ isDragging, startBlock, endBlock }: DragStateArg) => void;
   handleSubmit: () => void;
 }
 
-function useDragBlock({ isDragging, handleDragState, handleSubmit }: DragBlockHookArg) {
+function useDragBlock({ handleSubmit }: DragBlockHookArg) {
+  const [startBlock, setStartBlock] = useState('');
+  const [endBlock, setEndBlock] = useState('');
+  const [isDragging, setIsDragging] = useState(false);
+
   const onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target instanceof HTMLDivElement) {
-      handleDragState({ isDragging: true, startBlock: e.target.id, endBlock: e.target.id });
+      setStartBlock(e.target.id);
+      setEndBlock(e.target.id);
+      setIsDragging(true);
     }
   };
 
   const onMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (isDragging) {
       if (e.target instanceof HTMLElement) {
-        e.target.id.length < 3 &&
-          handleDragState({ isDragging: true, startBlock: '', endBlock: e.target.id });
+        e.target.id.length < 3 && setEndBlock(e.target.id);
       }
     }
   };
@@ -31,7 +28,8 @@ function useDragBlock({ isDragging, handleDragState, handleSubmit }: DragBlockHo
   const onMouseUp = (e: React.MouseEvent<HTMLDivElement>) => {
     handleSubmit();
     if (e.target instanceof HTMLElement) {
-      handleDragState({ isDragging: false, startBlock: '-1', endBlock: '-1' });
+      setEndBlock(e.target.id);
+      setIsDragging(false);
     }
   };
 
@@ -39,6 +37,8 @@ function useDragBlock({ isDragging, handleDragState, handleSubmit }: DragBlockHo
     onMouseDown,
     onMouseMove,
     onMouseUp,
+    startBlock,
+    endBlock,
   };
 }
 
