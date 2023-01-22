@@ -1,7 +1,4 @@
 import { useState } from 'react';
-import useGetSubSchedules from 'src/hooks/query/useGetSubSchedules';
-import usePatchScheduleTime from 'src/hooks/query/usePatchScheduleTime';
-import usePostScheduleTime from 'src/hooks/query/usePostScheduleTime';
 import useDragBlock from 'src/hooks/useDragBlock';
 import { Schedule } from 'src/types';
 import { getTimeArray } from 'src/utils/dateUtil';
@@ -17,25 +14,14 @@ interface DragStateArg {
 
 interface TimeBlocksProps {
   schedule: Schedule;
-  subScheduleId: string;
-  idx: number;
 }
 
-function TimeBlocks({ schedule, subScheduleId, idx }: TimeBlocksProps) {
+function TimeBlocks({ schedule }: TimeBlocksProps) {
   const { timeArr } = getTimeArray();
-  // const checkedList = useRecoilValue(checkedSchedules);
-  const { mutate: postScheduleTime } = usePostScheduleTime();
-  const { mutate: patchScheduleTime } = usePatchScheduleTime();
   const [isDragging, setIsDragging] = useState(false);
   const [startBlock, setStartBlock] = useState('');
   const [endBlock, setEndBlock] = useState('');
-  const [isClickMakeBlock, setIsClickMakeBlock] = useState(false);
-  const { data: subSchedule } = useGetSubSchedules({
-    scheduleId: schedule?._id || '',
-    isAbled: subScheduleId !== undefined,
-    flag: 'daily',
-  });
-  const scheduleInfo = subScheduleId === '' ? schedule : subSchedule ? subSchedule[idx] : schedule;
+  const scheduleInfo = schedule;
 
   const handleDragState = ({ isDragging, startBlock, endBlock }: DragStateArg) => {
     setIsDragging(isDragging);
@@ -47,42 +33,8 @@ function TimeBlocks({ schedule, subScheduleId, idx }: TimeBlocksProps) {
     }
   };
 
-  //배열 만들어서 서버에 전송
   const handleSubmit = () => {
-    const blockList = [];
-    const start = parseInt(startBlock);
-    const end = parseInt(endBlock);
-    for (let i = start < end ? start : end; i <= (start < end ? end : start); i++) {
-      blockList.push(i);
-    }
-
-    //start, end로 요청 추가, 삭제 분기처리
-    if (start < end) {
-      postScheduleTime({
-        scheduleId: scheduleInfo?._id || '',
-        isUsed: scheduleInfo.isCompleted || false,
-        timeBlockNumbers: blockList,
-      });
-    } else if (start > end) {
-      //삭제요청
-      patchScheduleTime({
-        scheduleId: scheduleInfo?._id || '',
-        timeBlockNumbers: blockList,
-      });
-    } else if (start === end) {
-      if (isClickMakeBlock) {
-        postScheduleTime({
-          scheduleId: scheduleInfo?._id || '',
-          isUsed: scheduleInfo.isCompleted || false,
-          timeBlockNumbers: blockList,
-        });
-      } else {
-        patchScheduleTime({
-          scheduleId: scheduleInfo?._id || '',
-          timeBlockNumbers: blockList,
-        });
-      }
-    }
+    //서버 요청
   };
 
   //서버에서 가져온 데이터 블럭 생성
@@ -106,7 +58,6 @@ function TimeBlocks({ schedule, subScheduleId, idx }: TimeBlocksProps) {
           startBlock={startBlock}
           endBlock={endBlock}
           isDraged={isDraged(el)}
-          setIsClickMakeBlock={setIsClickMakeBlock}
         />
       ))}
     </Styled.Root>

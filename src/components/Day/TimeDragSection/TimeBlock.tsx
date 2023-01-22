@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
 
@@ -8,11 +8,10 @@ interface timeType {
   startBlock: string;
   endBlock: string;
   isDraged: string;
-  setIsClickMakeBlock: Dispatch<SetStateAction<boolean>>;
 }
 
 function TimeBlock(props: timeType) {
-  const { id, isUsed, startBlock, endBlock, isDraged, setIsClickMakeBlock } = props;
+  const { id, isUsed, startBlock, endBlock, isDraged } = props;
 
   const [draged, setDraged] = useState(isDraged);
 
@@ -24,10 +23,8 @@ function TimeBlock(props: timeType) {
     } else if (parseInt(startBlock) === id && parseInt(endBlock) === id) {
       if (draged === '') {
         isUsed ? setDraged('done') : setDraged('plan');
-        setIsClickMakeBlock(true);
       } else {
         setDraged('');
-        setIsClickMakeBlock(false);
       }
     }
   }, [endBlock]);

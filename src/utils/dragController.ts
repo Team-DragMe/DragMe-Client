@@ -1,0 +1,45 @@
+import React from 'react';
+
+interface DragStateArg {
+  isDragging: boolean;
+  startBlock: string;
+  endBlock: string;
+}
+
+interface DragBlockHookArg {
+  isDragging: boolean;
+  handleDragState: ({ isDragging, startBlock, endBlock }: DragStateArg) => void;
+  handleSubmit: () => void;
+}
+
+function dragController({ isDragging, handleDragState, handleSubmit }: DragBlockHookArg) {
+  const onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target instanceof HTMLDivElement) {
+      handleDragState({ isDragging: true, startBlock: e.target.id, endBlock: e.target.id });
+    }
+  };
+
+  const onMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (isDragging) {
+      if (e.target instanceof HTMLElement) {
+        e.target.id.length < 3 &&
+          handleDragState({ isDragging: true, startBlock: '', endBlock: e.target.id });
+      }
+    }
+  };
+
+  const onMouseUp = (e: React.MouseEvent<HTMLDivElement>) => {
+    handleSubmit();
+    if (e.target instanceof HTMLElement) {
+      handleDragState({ isDragging: false, startBlock: '-1', endBlock: '-1' });
+    }
+  };
+
+  return {
+    onMouseDown,
+    onMouseMove,
+    onMouseUp,
+  };
+}
+
+export default dragController;

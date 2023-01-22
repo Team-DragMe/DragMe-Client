@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useRecoilValue } from 'recoil';
 import useGetTodaySchedules from 'src/hooks/query/useGetTodaySchedules';
-import { dayInfo, openedSchedules, scrollY } from 'src/states';
+import { dayInfo, scrollY } from 'src/states';
 import styled from 'styled-components';
 
 import TimeBlocks from './TimeBlocks';
@@ -11,7 +11,6 @@ function TimeBlockSection() {
   const divRef = useRef<HTMLDivElement>(null);
   const scroll = useRecoilValue(scrollY);
   const date = useRecoilValue(dayInfo).slice(0, 10);
-  const openedList = useRecoilValue(openedSchedules);
   const { data: scheduleList } = useGetTodaySchedules({ date });
   useEffect(() => {
     if (divRef.current) {
@@ -21,20 +20,9 @@ function TimeBlockSection() {
 
   return (
     <Styled.Root ref={divRef}>
-      {scheduleList?.map((el, idx) => {
-        // 포함여부 판단해서 열려있고 subSchdules가 0이 아니면 map 돌기
-        if (openedList.has(el._id) && el.subSchedules.length > 0) {
-          return (
-            <>
-              <TimeBlocks key={el._id} schedule={el} subScheduleId={''} idx={idx} />
-              {el.subSchedules.map((subEl, subIdx) => (
-                <TimeBlocks key={subEl} schedule={el} subScheduleId={subEl} idx={subIdx} />
-              ))}
-            </>
-          );
-        }
-        return <TimeBlocks key={el._id} schedule={el} subScheduleId={''} idx={idx} />;
-      })}
+      {scheduleList?.map((el) => (
+        <TimeBlocks key={el._id} schedule={el} />
+      ))}
     </Styled.Root>
   );
 }
