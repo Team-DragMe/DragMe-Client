@@ -5,8 +5,8 @@ import styled from 'styled-components';
 interface timeType {
   id: number;
   isUsed: boolean;
-  startBlock: string;
-  endBlock: string;
+  startBlock: number;
+  endBlock: number;
   isDraged: string;
 }
 
@@ -16,11 +16,13 @@ function TimeBlock(props: timeType) {
   const [draged, setDraged] = useState(isDraged);
 
   useEffect(() => {
-    if (parseInt(startBlock) <= id && id <= parseInt(endBlock)) {
+    if (startBlock <= id && id <= endBlock) {
       isUsed ? setDraged('done') : setDraged('plan');
-    } else if (parseInt(startBlock) >= id && id >= parseInt(endBlock)) {
+    }
+    if (startBlock >= id && id >= endBlock) {
       setDraged('');
-    } else if (parseInt(startBlock) === id && parseInt(endBlock) === id) {
+    }
+    if (startBlock === id && endBlock === id) {
       if (draged === '') {
         isUsed ? setDraged('done') : setDraged('plan');
       } else {

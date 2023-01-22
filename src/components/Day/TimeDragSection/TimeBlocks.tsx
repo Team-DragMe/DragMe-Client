@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import useDragBlock from 'src/hooks/useDragBlock';
 import { Schedule } from 'src/types';
 import { getTimeArray } from 'src/utils/dateUtil';
@@ -6,33 +5,14 @@ import styled from 'styled-components';
 
 import TimeBlock from './TimeBlock';
 
-interface DragStateArg {
-  isDragging: boolean;
-  startBlock: string;
-  endBlock: string;
-}
-
 interface TimeBlocksProps {
   schedule: Schedule;
 }
 
 function TimeBlocks({ schedule }: TimeBlocksProps) {
   const { timeArr } = getTimeArray();
-  const [isDragging, setIsDragging] = useState(false);
-  const [startBlock, setStartBlock] = useState('');
-  const [endBlock, setEndBlock] = useState('');
+
   const scheduleInfo = schedule;
-
-  const handleDragState = ({ isDragging, startBlock, endBlock }: DragStateArg) => {
-    setIsDragging(isDragging);
-    if (startBlock !== '') {
-      setStartBlock(startBlock);
-    }
-    if (endBlock !== '') {
-      setEndBlock(endBlock);
-    }
-  };
-
   const handleSubmit = () => {
     //서버 요청
   };
@@ -47,7 +27,8 @@ function TimeBlocks({ schedule }: TimeBlocksProps) {
     return '';
   };
 
-  const { ...dragInfo } = useDragBlock({ isDragging, handleDragState, handleSubmit });
+  const { startBlock, endBlock, ...dragInfo } = useDragBlock({ handleSubmit });
+
   return (
     <Styled.Root id={scheduleInfo?._id} {...dragInfo}>
       {timeArr.map((el: number) => (
