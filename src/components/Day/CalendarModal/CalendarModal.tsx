@@ -47,7 +47,7 @@ function CalendarModal({ toggle }: CalendarModalProps) {
   const parsedDate = parseToValidQuery(date?.slice(0, 10));
   const { data } = useCalendarData({ currentMonth });
 
-  const DAY_OBJECT: dayObjectType = {
+  const dayObject: dayObjectType = {
     0: 'S',
     1: 'M',
     2: 'T',
@@ -61,9 +61,9 @@ function CalendarModal({ toggle }: CalendarModalProps) {
     const today = new Date().getTime();
     const clickDay = value.getTime();
     const gap = clickDay - today;
-    const D_DAY = Math.floor(gap / (1000 * 60 * 60 * 24)) + 1;
-    setDayChange(D_DAY);
-    setDayDate(DayStorage(getTodayDate(0).slice(0, 10), D_DAY));
+    const dday = Math.floor(gap / (1000 * 60 * 60 * 24)) + 1;
+    setDayChange(dday);
+    setDayDate(DayStorage(getTodayDate(0).slice(0, 10), dday));
   };
 
   const onChangeMonth = (isPrev: boolean) => {
@@ -104,7 +104,7 @@ function CalendarModal({ toggle }: CalendarModalProps) {
             <span>{currentMonth.month > 9 ? currentMonth.month : '0' + currentMonth.month}</span>
           </Styled.MonthYear>
         )}
-        formatShortWeekday={(locale, date) => DAY_OBJECT[date.getDay()]}
+        formatShortWeekday={(locale, date) => dayObject[date.getDay()]}
         tileClassName={({ date, view }) =>
           view === 'month' && date.toDateString() === todayDate ? 'today-date' : null
         }
