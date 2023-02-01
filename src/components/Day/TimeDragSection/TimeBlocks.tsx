@@ -13,6 +13,7 @@ function TimeBlocks({ schedule }: TimeBlocksProps) {
   const { timeArr } = getTimeArray();
 
   const scheduleInfo = schedule;
+
   const handleSubmit = () => {
     //서버 요청
   };
