@@ -12,7 +12,6 @@ function useDragBlock({ handleSubmit }: DragBlockHookArg) {
   const [isDragging, setIsDragging] = useState(false);
 
   const onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-    console.log('onMouseDown');
     if (e.target instanceof HTMLDivElement && e.target.id.length < 3) {
       setStartBlock(parseInt(e.target.id));
       setEndBlock(parseInt(e.target.id));
@@ -21,7 +20,6 @@ function useDragBlock({ handleSubmit }: DragBlockHookArg) {
   };
 
   const onMouseOver = (e: React.MouseEvent<HTMLDivElement>) => {
-    console.log('onMouseOver');
     if (isDragging) {
       if (e.target instanceof HTMLDivElement && e.target.id.length < 3) {
         setEndBlock(parseInt(e.target.id));
@@ -30,7 +28,6 @@ function useDragBlock({ handleSubmit }: DragBlockHookArg) {
   };
 
   const onMouseUp = () => {
-    console.log('onMouseUp');
     handleSubmit();
     setIsDragging(false);
     setStartBlock(INITIAL_BLOCK);
