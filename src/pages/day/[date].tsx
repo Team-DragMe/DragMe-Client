@@ -1,28 +1,27 @@
+import dynamic from 'next/dynamic';
 import React from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { useRecoilValue } from 'recoil';
-import RoutineBox from 'src/components/common/RoutineBox/index';
-import DayChange from 'src/components/Day/DayInfoSection/DayChange';
-import DayInfo from 'src/components/Day/DayInfoSection/DayInfo';
+import DateController from 'src/components/Day/DayInfoSection/DateController';
 import MainDayPlan from 'src/components/Day/MainDayPlanList';
 import CalendarBtn from 'src/components/Day/Modal/CalendarBtn';
 import Reschedule from 'src/components/Day/Reschedule';
 import TimeLine from 'src/components/Day/TimeDragSection/TimeLine';
 import TodayNoteSection from 'src/components/Day/TodayNote/TodayNoteSection';
-import { RoutineBoxIsOpened } from 'src/states';
 import styled from 'styled-components';
 
-function Day() {
-  const ModalToggle = useRecoilValue(RoutineBoxIsOpened);
+const DateView = dynamic(async () => import('src/components/Day/DayInfoSection/DateView'), {
+  ssr: false,
+});
 
+function Day() {
   return (
     <DndProvider backend={HTML5Backend}>
       <Styled.Root>
         <Styled.HeaderWrapper>
-          <DayInfo />
+          <DateView />
           <Styled.HeaderOptionWrapper>
-            <DayChange />
+            <DateController />
             <CalendarBtn />
           </Styled.HeaderOptionWrapper>
         </Styled.HeaderWrapper>
@@ -34,9 +33,6 @@ function Day() {
           <Reschedule />
           <TodayNoteSection />
         </Styled.BottomWrapper>
-        <Styled.RoutineboxWrapper isModal={ModalToggle}>
-          <RoutineBox />
-        </Styled.RoutineboxWrapper>
       </Styled.Root>
     </DndProvider>
   );
@@ -75,17 +71,5 @@ const Styled = {
     padding: 0 4.4rem;
     gap: 4.7rem;
     margin-bottom: 6.1rem;
-  `,
-  RoutineboxWrapper: styled.div<{ isModal: boolean }>`
-    z-index: 10;
-    position: absolute;
-    height: 98.7rem;
-    top: 0.4rem;
-    right: -28rem;
-    transition: all 1s;
-    ${({ isModal }) =>
-      isModal &&
-      `transform:translateX(-107%);
-    `};
   `,
 };
