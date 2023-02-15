@@ -85,11 +85,6 @@ export const scrollY = atom({
   default: 0,
 });
 
-export const RoutineBoxIsOpened = atom({
-  key: 'RoutineboxIsOpened',
-  default: false,
-});
-
 export const modalClickXY = atom({
   key: 'modalClickXY',
   default: { posX: 0, posY: 0, scheduleId: '', flag: '', date: '' },
