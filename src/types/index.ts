@@ -1,3 +1,5 @@
+import { JSXElementConstructor, ReactElement } from 'react';
+
 export type categoryColorCodeType =
   | '#7B8DD8'
   | '#DCADC8'
@@ -53,3 +55,6 @@ export interface UnWrappingData {
     data: SchedulDataWrapper;
   };
 }
+
+export type Nullable<T> = T | null;
+export type ReactChild = string | number | ReactElement<any, string | JSXElementConstructor<any>>;
