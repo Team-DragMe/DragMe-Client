@@ -4,7 +4,6 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import DateController from 'src/components/Day/DayInfoSection/DateController';
 import MainDayPlan from 'src/components/Day/MainDayPlanList';
-import CalendarBtn from 'src/components/Day/Modal/CalendarBtn';
 import Reschedule from 'src/components/Day/Reschedule';
 import TimeLine from 'src/components/Day/TimeDragSection/TimeLine';
 import TodayNoteSection from 'src/components/Day/TodayNote/TodayNoteSection';
