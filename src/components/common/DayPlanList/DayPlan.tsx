@@ -179,7 +179,7 @@ const DayPlan = React.memo(function DayPlan({
       <CommonDayPlanChip
         color={item?.categoryColorCode}
         shape={item?.subSchedules?.length > 0 ? 'rectangle' : 'triangle'}
-        haveChild={item?.subSchedules?.length > 0}
+        haveChild={false}
         addon
         isOpened={isOpen}
         onArrowBtnClick={onArrowBtnClick}
@@ -192,12 +192,6 @@ const DayPlan = React.memo(function DayPlan({
       >
         {item?.title}
       </CommonDayPlanChip>
-
-      {subSchedules && subSchedules?.length > 0 && (
-        <Styled.SubDayPlanWrapper isOpen={isOpen} ref={subscheduleRef} id="subSchedule-wrapper">
-          <SubDayPlan subschedules={subSchedules} categoryColorCode={item?.categoryColorCode} />
-        </Styled.SubDayPlanWrapper>
-      )}
       {/* 브라우저 리플로우 방지를 위한 이벤트 핸들용 가상돔 */}
       {currentHoverItem === 'daily' &&
         currentDraggingItem?.flag === 'daily' &&

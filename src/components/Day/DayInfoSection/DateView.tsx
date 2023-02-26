@@ -1,38 +1,45 @@
 import React from 'react';
-import { useRecoilValue } from 'recoil';
-import { dayInfo } from 'src/states';
 import { theme } from 'src/styles/theme';
+import { DayStorage, makeDateString } from 'src/utils/getDate';
 import styled from 'styled-components';
 
-function DayInfo() {
-  const today = useRecoilValue(dayInfo);
+function DateView() {
+  const changedDaysNumber = Number(window.localStorage.getItem('changedDaysCount'));
+  const pivotDate = window.localStorage.getItem('pivotDate');
+  const changedDate =
+    pivotDate !== null
+      ? DayStorage(pivotDate.slice(0, 10), changedDaysNumber)
+      : makeDateString(changedDaysNumber);
+  const MONTH = changedDate.slice(5, 7);
+  const DATE = changedDate.slice(8, 10);
+  const DAY_OF_THE_WEEK = changedDate.slice(11, 14);
 
   return (
     <Styled.Root>
       <Styled.HeaderBox>
-        <Styled.Month>{today.slice(5, 7)}</Styled.Month>
-        <Styled.DayOfTheWeek>{today.slice(11, 14)}</Styled.DayOfTheWeek>
+        <Styled.Month>{MONTH}</Styled.Month>
+        <Styled.DayOfTheWeek>{DAY_OF_THE_WEEK}</Styled.DayOfTheWeek>
       </Styled.HeaderBox>
-      <Styled.Day>{today.slice(8, 10)}.</Styled.Day>
+      <Styled.Day>{DATE}.</Styled.Day>
     </Styled.Root>
   );
 }
 
-export default DayInfo;
+export default DateView;
 
 const Styled = {
   Root: styled.div`
+    display: flex;
+    flex-direction: column;
     color: ${theme.colors.letter_black};
     width: 12.9rem;
-    display: flex;
     font-weight: 900;
-    flex-direction: column;
   `,
   HeaderBox: styled.div`
     display: flex;
     justify-content: center;
-    height: 2.8rem;
     align-items: center;
+    height: 2.8rem;
   `,
   Month: styled.div`
     font-size: 1.8rem;
