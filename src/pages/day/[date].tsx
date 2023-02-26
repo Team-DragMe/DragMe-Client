@@ -2,6 +2,7 @@ import dynamic from 'next/dynamic';
 import React from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import CalendarBtn from 'src/components/Day/CalendarModal/CalendarBtn';
 import DateController from 'src/components/Day/DayInfoSection/DateController';
 import MainDayPlan from 'src/components/Day/MainDayPlanList';
 import Reschedule from 'src/components/Day/Reschedule';
