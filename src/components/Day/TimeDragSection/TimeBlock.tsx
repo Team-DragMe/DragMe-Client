@@ -1,32 +1,33 @@
-import { useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
 
 interface timeType {
   id: number;
   isUsed: boolean;
-  startBlock: number;
-  endBlock: number;
+  startBlock: string;
+  endBlock: string;
   isDraged: string;
+  setIsClickMakeBlock: Dispatch<SetStateAction<boolean>>;
 }
 
 function TimeBlock(props: timeType) {
-  const { id, isUsed, startBlock, endBlock, isDraged } = props;
+  const { id, isUsed, startBlock, endBlock, isDraged, setIsClickMakeBlock } = props;
 
   const [draged, setDraged] = useState(isDraged);
 
   useEffect(() => {
-    if (startBlock <= id && id <= endBlock) {
+    if (parseInt(startBlock) <= id && id <= parseInt(endBlock)) {
       isUsed ? setDraged('done') : setDraged('plan');
-    }
-    if (startBlock >= id && id >= endBlock) {
+    } else if (parseInt(startBlock) >= id && id >= parseInt(endBlock)) {
       setDraged('');
-    }
-    if (startBlock === id && endBlock === id) {
+    } else if (parseInt(startBlock) === id && parseInt(endBlock) === id) {
       if (draged === '') {
         isUsed ? setDraged('done') : setDraged('plan');
+        setIsClickMakeBlock(true);
       } else {
         setDraged('');
+        setIsClickMakeBlock(false);
       }
     }
   }, [endBlock]);

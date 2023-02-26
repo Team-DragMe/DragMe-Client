@@ -1,45 +1,44 @@
-import React, { useState } from 'react';
+import React from 'react';
+
+interface DragStateArg {
+  isDragging: boolean;
+  startBlock: string;
+  endBlock: string;
+}
 
 interface DragBlockHookArg {
+  isDragging: boolean;
+  handleDragState: ({ isDragging, startBlock, endBlock }: DragStateArg) => void;
   handleSubmit: () => void;
 }
 
-const INITIAL_BLOCK = -1;
-
-function useDragBlock({ handleSubmit }: DragBlockHookArg) {
-  const [startBlock, setStartBlock] = useState(INITIAL_BLOCK);
-  const [endBlock, setEndBlock] = useState<number>(INITIAL_BLOCK);
-  const [isDragging, setIsDragging] = useState(false);
-
+function useDragBlock({ isDragging, handleDragState, handleSubmit }: DragBlockHookArg) {
   const onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target instanceof HTMLDivElement && e.target.id.length < 3) {
-      setStartBlock(parseInt(e.target.id));
-      setEndBlock(parseInt(e.target.id));
-      setIsDragging(true);
+    if (e.target instanceof HTMLDivElement) {
+      handleDragState({ isDragging: true, startBlock: e.target.id, endBlock: e.target.id });
     }
   };
 
-  const onMouseOver = (e: React.MouseEvent<HTMLDivElement>) => {
+  const onMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (isDragging) {
-      if (e.target instanceof HTMLDivElement && e.target.id.length < 3) {
-        setEndBlock(parseInt(e.target.id));
+      if (e.target instanceof HTMLElement) {
+        e.target.id.length < 3 &&
+          handleDragState({ isDragging: true, startBlock: '', endBlock: e.target.id });
       }
     }
   };
 
-  const onMouseUp = () => {
+  const onMouseUp = (e: React.MouseEvent<HTMLDivElement>) => {
     handleSubmit();
-    setIsDragging(false);
-    setStartBlock(INITIAL_BLOCK);
-    setEndBlock(INITIAL_BLOCK);
+    if (e.target instanceof HTMLElement) {
+      handleDragState({ isDragging: false, startBlock: '-1', endBlock: '-1' });
+    }
   };
 
   return {
     onMouseDown,
-    onMouseOver,
+    onMouseMove,
     onMouseUp,
-    startBlock,
-    endBlock,
   };
 }
 
