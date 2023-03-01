@@ -5,18 +5,19 @@ import styled from 'styled-components';
 
 import TodayPlan from '../TodayPlan';
 import TodayNote from './TodayNote';
-
+import { todayPlan } from 'src/mock-data/todayPlan';
 function TodayNoteSection() {
   const today = useRecoilValue(dayInfo);
   const date = today.slice(0, 10);
   console.log(date);
-  const { data } = useGetTodayNoteData({ date });
-  const todayNoteInfo = data?.data;
+  console.log(todayPlan);
+  // const { data } = useGetTodayNoteData({ date });
+  // const todayNoteInfo = data?.data;
 
   return (
     <Styled.Root>
-      <TodayPlan emoji={todayNoteInfo?.emoji || ''} dailyGoal={todayNoteInfo?.dailyGoal || ''} />
-      <TodayNote memo={todayNoteInfo?.memo || ''} />
+      <TodayPlan emoji={todayPlan?.emoji || ''} dailyGoal={todayPlan?.dailyGoal || ''} />
+      <TodayNote memo={todayPlan?.memo || ''} />
     </Styled.Root>
   );
 }

@@ -11,7 +11,6 @@ import styled, { css } from 'styled-components';
 
 import CommonDayPlanChip from '../DayPlanChip/CommonDayPlanChip';
 import { moveItemInSectionParams } from './DayPlanList';
-import SubDayPlan from './SubDayPlanList';
 
 export type positionType = 'top' | 'bottom';
 export interface movePlanChipParams extends Schedule {
