@@ -8,10 +8,10 @@ import { useQueryClient } from 'react-query';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import DayPlanSettingModal from 'src/components/Day/DayPlanSettingModal';
 import { FLAG } from 'src/constants';
-import usePatchDayToReschedule from 'src/hooks/query/usePatchDayToReschedule';
-import usePatchCompletedSchedules from 'src/hooks/query/usePatchDayToReschedule';
-import usePatchDayToRoutine from 'src/hooks/query/usePatchDayToRoutine';
-import usePatchRescheduleToDay from 'src/hooks/query/usePatchRescheduleToDay';
+// import usePatchDayToReschedule from 'src/hooks/query/usePatchDayToReschedule';
+// import usePatchCompletedSchedules from 'src/hooks/query/usePatchDayToReschedule';
+// import usePatchDayToRoutine from 'src/hooks/query/usePatchDayToRoutine';
+// import usePatchRescheduleToDay from 'src/hooks/query/usePatchRescheduleToDay';
 import useThrottle from 'src/hooks/useThrottle';
 import {
   currentDraggintElement,
@@ -92,25 +92,25 @@ function DayPlanList({
   const [canAddWeekChip, setCanAddWeekChip] = useState<boolean>(false);
   const [weeklyPostState, setWeeklyPostState] = useRecoilState<any>(weeklyPostData);
 
-  const { mutate: DayToRescheduleMutate } = usePatchDayToReschedule({
-    scheduleId: currentDraggingItem._id,
-    schedule: currentDraggingItem,
-    date: currentDayDate,
-    hoverFlag: currentHoverItem,
-  });
-  const { mutate: RescheduleToDayMutate } = usePatchRescheduleToDay({
-    scheduleId: currentDraggingItem._id,
-    schedule: currentDraggingItem,
-    date: currentDayDate,
-    hoverFlag: currentHoverItem,
-  });
+  // const { mutate: DayToRescheduleMutate } = usePatchDayToReschedule({
+  //   scheduleId: currentDraggingItem._id,
+  //   schedule: currentDraggingItem,
+  //   date: currentDayDate,
+  //   hoverFlag: currentHoverItem,
+  // });
+  // const { mutate: RescheduleToDayMutate } = usePatchRescheduleToDay({
+  //   scheduleId: currentDraggingItem._id,
+  //   schedule: currentDraggingItem,
+  //   date: currentDayDate,
+  //   hoverFlag: currentHoverItem,
+  // });
 
-  const { mutate: DayToRoutineMutate } = usePatchDayToRoutine({
-    scheduleId: currentDraggingItem._id,
-    schedule: currentDraggingItem,
-    date: currentDayDate,
-    hoverFlag: currentHoverItem,
-  });
+  // const { mutate: DayToRoutineMutate } = usePatchDayToRoutine({
+  //   scheduleId: currentDraggingItem._id,
+  //   schedule: currentDraggingItem,
+  //   date: currentDayDate,
+  //   hoverFlag: currentHoverItem,
+  // });
   /* item flag에 따라 드롭할 수 있는 영역 수정 */
   const getAcceptableEl = (currentType: string) => {
     switch (currentType) {
@@ -167,14 +167,14 @@ function DayPlanList({
         // 일간 계획 요청 api post
         // 자주 사용 -> 일간 (복사)
         // 미룰 -> 일간 (삭제)
-        RescheduleToDayMutate();
+        // RescheduleToDayMutate();
 
         break;
       case 'reschedule':
         // 계획 미루기 api post
         // 일간 -> 미룰 (삭제)
         console.log('>>>>reschedule', currentHoverItem);
-        DayToRescheduleMutate();
+        // DayToRescheduleMutate();
 
         // queryClient.setQueryData(['daily', currentDayDate], (oldSchedules: any) => {
         //   const newData = oldSchedules?.data?.data?.schedules.filter(
@@ -187,7 +187,7 @@ function DayPlanList({
       case 'routine':
         // 자주 사용하는 계획 api post
         // 일간 -> 자주 (복사)
-        DayToRoutineMutate();
+        // DayToRoutineMutate();
         break;
       default:
         break;
@@ -263,7 +263,7 @@ function DayPlanList({
     }
 
     const { index: currentItemIndex, planChip: currentItemObj } = findDailyIndex(
-      currentDragChip.current?._id as string,
+      currentDragChip.current?._id,
     );
     const { index: hoverItemIndex, planChip: hoverItemObj } = findDailyIndex(hoverId as string);
 
