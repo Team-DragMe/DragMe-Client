@@ -10,15 +10,18 @@ interface TodayPlanInputProps {
   dailyGoal: string;
 }
 
+function emptyFunc(): void {}
+
 function TodayPlanInput({ dailyGoal }: TodayPlanInputProps) {
   const today = useRecoilValue(dayInfo);
   const date = today.slice(0, 10);
-  const { mutate: postDailyGoal } = usePostInformationData();
+  // const { mutate: postDailyGoal } = usePostInformationData();
   const [value, setValue] = useState(dailyGoal);
   const { onChange } = useDebouncing({
     date,
     type: 'dailyGoal',
-    handlePost: postDailyGoal,
+    // handlePost: postDailyGoal,
+    handlePost: emptyFunc,
   });
 
   const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {

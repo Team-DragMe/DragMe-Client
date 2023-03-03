@@ -22,13 +22,13 @@ function EmojiPicker(
   { click, setClick, emoji, date }: EmojiPickerProps,
   ref: React.ForwardedRef<EmojiPickerElement>,
 ) {
-  const { mutate: postEmoji } = usePostInformationData();
+  // const { mutate: postEmoji } = usePostInformationData();
   const [chosenEmoji, setChosenEmoji] = useState<IEmojiData>();
   const handleEmojiClick = (
     event: React.MouseEvent<Element, MouseEvent>,
     emojiObject: IEmojiData,
   ) => {
-    postEmoji({ date, type: 'emoji', value: emojiObject.emoji });
+    // postEmoji({ date, type: 'emoji', value: emojiObject.emoji });
     setChosenEmoji(emojiObject);
     setClick(false);
   };
