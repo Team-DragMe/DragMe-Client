@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { useRecoilState } from 'recoil';
 import { FLAG } from 'src/constants';
-import useGetSubSchedules from 'src/hooks/query/useGetSubSchedules';
+// import useGetSubSchedules from 'src/hooks/query/useGetSubSchedules';
 import useLatestState from 'src/hooks/useLatestState';
 import { currentDraggintElement, currentHoverFlag } from 'src/states';
 import { dailyPlanFlag, Schedule } from 'src/types';
@@ -72,19 +72,19 @@ const DayPlan = React.memo(function DayPlan({
     useLatestState<FlagType | null>(null);
   const [currentDraggingItem, setCurrentDraggingItem] = useRecoilState(currentDraggintElement);
   const [currentHoverItem, setCurrentHoverItem] = useRecoilState(currentHoverFlag);
-  const { data: subSchedules } = useGetSubSchedules({
-    scheduleId: item?._id,
-    isAbled: item?.subSchedules?.length > 0,
-    flag,
-  });
+  // const { data: subSchedules } = useGetSubSchedules({
+  //   scheduleId: item?._id,
+  //   isAbled: item?.subSchedules?.length > 0,
+  //   flag,
+  // });
   const onArrowBtnClick = () => {
     setIsOpen((prev) => !prev);
   };
   const subscheduleRef = useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => {
-    console.log('>>subSchedules', subSchedules);
-  }, [subSchedules]);
+  // useEffect(() => {
+  //   console.log('>>subSchedules', subSchedules);
+  // }, [subSchedules]);
   // control drag element
   const [{ isDragging }, dragRef] = useDrag(
     () => ({

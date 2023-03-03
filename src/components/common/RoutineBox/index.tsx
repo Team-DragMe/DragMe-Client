@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { FLAG } from 'src/constants';
-import useGetRoutineSchedules from 'src/hooks/query/useGetRoutineSchedules';
 import { routineSchedules } from 'src/mock-data/schedules';
+// import useGetRoutineSchedules from 'src/hooks/query/useGetRoutineSchedules';
+// import { routineSchedules } from 'src/mock-data/schedules';
 import { routinePlanList } from 'src/states';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
@@ -16,10 +17,10 @@ const ROUTINE_BOX = {
 
 function RoutineBox() {
   const routinePlanData = useSetRecoilState(routinePlanList);
-  const { data } = useGetRoutineSchedules();
-  useEffect(() => {
-    data && routinePlanData(data);
-  }, [data, routinePlanData]);
+  // const { data } = useGetRoutineSchedules();
+  // useEffect(() => {
+  //   data && routinePlanData(data);
+  // }, [data, routinePlanData]);
   return (
     <Styled.Root>
       <Styled.ContentsWrapper>
@@ -28,7 +29,11 @@ function RoutineBox() {
           <Styled.SubTitle>{ROUTINE_BOX.KO}</Styled.SubTitle>
         </Styled.TitleArea>
         <Styled.DailyListWrapper>
-          <DayPlanList className="routine-plan-list" flag={FLAG.ROUTINE} schedulesData={data} />
+          <DayPlanList
+            className="routine-plan-list"
+            flag={FLAG.ROUTINE}
+            schedulesData={routineSchedules}
+          />
         </Styled.DailyListWrapper>
       </Styled.ContentsWrapper>
       <Styled.Footer>

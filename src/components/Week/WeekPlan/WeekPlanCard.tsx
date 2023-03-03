@@ -4,8 +4,8 @@ import DayPlanList from 'src/components/common/DayPlanList/DayPlanList';
 import DayPlanSettingModal from 'src/components/Day/DayPlanSettingModal';
 import ForwardEmojiPicker from 'src/components/Day/TodayPlan/EmojiPicker';
 import { FLAG } from 'src/constants';
-import useGetTodaySchedule from 'src/hooks/query/useGetTodaySchedules';
-import useGetWeeklySchedules from 'src/hooks/query/useGetWeeklySchedules';
+// import useGetTodaySchedule from 'src/hooks/query/useGetTodaySchedules';
+// import useGetWeeklySchedules from 'src/hooks/query/useGetWeeklySchedules';
 import { dailyPlanList, dayInfo, modalClickXY, weekInfo } from 'src/states';
 import { theme } from 'src/styles/theme';
 import { Schedule } from 'src/types';
@@ -29,13 +29,13 @@ function WeekPlanCard(props: WeekPlanCardProps) {
 
   const dailyPlanData = useSetRecoilState(dailyPlanList);
   const date = useRecoilValue(dayInfo).slice(0, 10);
-  const { data } = useGetTodaySchedule({ date });
+  // const { data } = useGetTodaySchedule({ date });
   const pageXY = useRecoilValue(modalClickXY);
-  const { data: todayDataForWeek } = useGetTodaySchedule({ date: dateForWeek as string });
+  // const { data: todayDataForWeek } = useGetTodaySchedule({ date: dateForWeek as string });
 
-  useEffect(() => {
-    data && dailyPlanData(data);
-  }, [data, dailyPlanData]);
+  // useEffect(() => {
+  //   data && dailyPlanData(data);
+  // }, [data, dailyPlanData]);
 
   const useOutsideAlert = (ref: React.RefObject<HTMLDivElement>) => {
     useEffect(() => {
@@ -82,17 +82,17 @@ function WeekPlanCard(props: WeekPlanCardProps) {
         </Styled.DayWrapper>
         <p>{dateInfo}</p>
       </Styled.Header>
-      <DayPlanList
+      {/* <DayPlanList
         // maxHeight={isEnterBtn ? '23rem' : '26rem'}
         maxHeight="22rem"
-        schedulesData={todayDataForWeek}
+        schedulesData={todayDataForWeek as any}
         flag="daily"
         weekIndex={weekIndex}
         isEnterBtn={isEnterBtn}
         setIsEnterBtn={setIsEnterBtn}
         isWeek
         currentDay={weekRecoil[weekIndex]}
-      />
+      /> */}
       {pageXY.posX !== 0 && pageXY.posY !== 0 && (
         <DayPlanSettingModal top={pageXY.posY} left={pageXY.posX} />
       )}

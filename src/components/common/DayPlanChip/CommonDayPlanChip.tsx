@@ -2,9 +2,9 @@
 import SemiArrow from 'public/assets/icons/SemiArrow8.svg';
 import React, { forwardRef, useEffect, useRef, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import usePatchCompletedSchedules from 'src/hooks/query/usePatchCompletedSchedules';
-import usePatchScheduleBlock from 'src/hooks/query/usePatchScheduleBlock';
-import usePostScheduleBlock from 'src/hooks/query/usePostScheduleBlock';
+// import usePatchCompletedSchedules from 'src/hooks/query/usePatchCompletedSchedules';
+// import usePatchScheduleBlock from 'src/hooks/query/usePatchScheduleBlock';
+// import usePostScheduleBlock from 'src/hooks/query/usePostScheduleBlock';
 import {
   checkedSchedules,
   currentModifyDayPlan,
@@ -86,28 +86,28 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
     const currentTodayDate = today.slice(0, 10);
     const [weeklyPostState, setWeeklyPostState] = useRecoilState(weeklyPostData);
 
-    const { mutate: mutateCompletedSchedules } = usePatchCompletedSchedules({
-      scheduleId: itemId,
-      flag,
-      date: props?.item?.date,
-      isCompleted: !isChecked,
-    });
-    const { mutate: postScheduleNameBlock } = usePostScheduleBlock({
-      date: weeklyPostState ? weeklyPostState : currentTodayDate,
-      categoryColorCode: '#FFFFFF',
-      flag: flag ? flag : 'daily',
-      title: inputValue.current?.value,
-    });
-    const { mutate: patchScheduleNameBlock } = usePatchScheduleBlock({
-      date: props?.item?.date,
-      flag: flag ? flag : 'daily',
-      title: inputValue.current?.value,
-      scheduleId: itemId,
-    });
+    // const { mutate: mutateCompletedSchedules } = usePatchCompletedSchedules({
+    //   scheduleId: itemId,
+    //   flag,
+    //   date: props?.item?.date,
+    //   isCompleted: !isChecked,
+    // });
+    // const { mutate: postScheduleNameBlock } = usePostScheduleBlock({
+    //   date: weeklyPostState ? weeklyPostState : currentTodayDate,
+    //   categoryColorCode: '#FFFFFF',
+    //   flag: flag ? flag : 'daily',
+    //   title: inputValue.current?.value,
+    // });
+    // const { mutate: patchScheduleNameBlock } = usePatchScheduleBlock({
+    //   date: props?.item?.date,
+    //   flag: flag ? flag : 'daily',
+    //   title: inputValue.current?.value,
+    //   scheduleId: itemId,
+    // });
 
     const handleChange = () => {
       setIsChecked((prev) => !prev);
-      mutateCompletedSchedules();
+      // mutateCompletedSchedules();
 
       if (flag !== 'daily') {
         return;
@@ -147,9 +147,9 @@ const CommonDayPlanChip = forwardRef<HTMLElement, CommonDayPlanChipProps>(
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       if (currentTargetPlan?.itemId === '') {
-        postScheduleNameBlock();
+        // postScheduleNameBlock();
       } else {
-        patchScheduleNameBlock();
+        // patchScheduleNameBlock();
       }
       setCurrentTargetPlan({ itemId: '', flag: '', date: '' });
       setWeeklyPostState(null);

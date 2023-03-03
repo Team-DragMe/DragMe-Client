@@ -4,9 +4,9 @@ import icon_trashCan from 'public/assets/icon_trashCan.png';
 import React, { useState } from 'react';
 import { flushSync } from 'react-dom';
 import { useRecoilState } from 'recoil';
-import useDeleteSchedule from 'src/hooks/query/useDeleteSchedule';
-import usePatchCategory from 'src/hooks/query/usePatchCategory';
-import usePatchReschedule from 'src/hooks/query/usePatchReschedule';
+// import useDeleteSchedule from 'src/hooks/query/useDeleteSchedule';
+// import usePatchCategory from 'src/hooks/query/usePatchCategory';
+// import usePatchReschedule from 'src/hooks/query/usePatchReschedule';
 import { modalClickXY } from 'src/states';
 import { theme } from 'src/styles/theme';
 import { dailyPlanFlag } from 'src/types';
@@ -21,18 +21,18 @@ function DayPlanSettingModal({ top, left }: DayPlanSettingModalProps) {
   const [clickInfo, setClickInfo] = useRecoilState(modalClickXY);
   const [selectColor, setSelectColor] = useState<string>('');
   const flag = clickInfo.flag as dailyPlanFlag;
-  const { mutate: deleteSchedule } = useDeleteSchedule({
-    scheduleId: clickInfo.scheduleId,
-    flag,
-    date: clickInfo.date,
-  });
-  const { mutate: patchCategory } = usePatchCategory({
-    scheduleId: clickInfo.scheduleId,
-    flag,
-    date: clickInfo.date,
-    categoryColorCode: selectColor,
-  });
-  const { mutate: patchReschedule } = usePatchReschedule();
+  // const { mutate: deleteSchedule } = useDeleteSchedule({
+  //   scheduleId: clickInfo.scheduleId,
+  //   flag,
+  //   date: clickInfo.date,
+  // });
+  // const { mutate: patchCategory } = usePatchCategory({
+  //   scheduleId: clickInfo.scheduleId,
+  //   flag,
+  //   date: clickInfo.date,
+  //   categoryColorCode: selectColor,
+  // });
+  // const { mutate: patchReschedule } = usePatchReschedule();
 
   const colorCode = [
     { id: 0, color: `${colors.cate_mint}` },

@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { FLAG } from 'src/constants';
-import useGetTodaySchedule from 'src/hooks/query/useGetTodaySchedules';
+import { schedules } from 'src/mock-data/schedules';
+// import useGetTodaySchedule from 'src/hooks/query/useGetTodaySchedules';
 import { dailyPlanList, dayInfo, modalClickXY } from 'src/states';
 
 import DayPlanList from '../common/DayPlanList/DayPlanList';
@@ -15,16 +16,16 @@ function MainDayPlanList() {
 
   const dailyPlanData = useSetRecoilState(dailyPlanList);
   const date = useRecoilValue(dayInfo).slice(0, 10);
-  const { data } = useGetTodaySchedule({ date });
+  // const { data } = useGetTodaySchedule({ date });
   const pageXY = useRecoilValue(modalClickXY);
 
-  useEffect(() => {
-    data && dailyPlanData(data);
-  }, [data, dailyPlanData]);
+  // useEffect(() => {
+  //   data && dailyPlanData(data);
+  // }, [data, dailyPlanData]);
 
   return (
     <>
-      <DayPlanList flag={FLAG.DAILY} schedulesData={data} />
+      <DayPlanList flag={FLAG.DAILY} schedulesData={schedules} />
       {pageXY.posX !== 0 && pageXY.posY !== 0 && (
         <DayPlanSettingModal top={pageXY.posY} left={pageXY.posX} />
       )}
