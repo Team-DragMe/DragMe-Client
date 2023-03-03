@@ -1,3 +1,5 @@
+import { Schedule } from 'src/types';
+
 export const schedules = [
   {
     _id: 'sampleScheduleId1',
@@ -516,5 +518,25 @@ export const routineSchedules = [
     isReschedule: false,
     isRoutine: false,
     orderIndex: 1,
+  },
+];
+
+//서버 제거로 인한 임시 목 데이터
+export const timeBlockSchedules: Schedule[] = [
+  {
+    _id: 'sampleScheduleId1',
+    date: '2022-08-08',
+    estimatedTime: [1, 2, 3],
+    usedTime: [4, 5, 6],
+    title: '드래그미 회의',
+    subSchedules: ['sampleSubScheduleId', 'sampleSubScheduleId2'],
+    categoryColorCode: '#7B8DD8',
+    userId: 'sampleUserId',
+    isCompleted: true,
+    isReschedule: false,
+    isRoutine: false,
+    orderIndex: 1,
+    createdAt: '12111',
+    updatedAt: '1222',
   },
 ];

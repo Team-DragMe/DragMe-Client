@@ -45,7 +45,8 @@ function CalendarModal({ toggle }: CalendarModalProps) {
   const router = useRouter();
   const { date } = router.query;
   const parsedDate = parseToValidQuery(date?.slice(0, 10));
-  const { data } = useCalendarData({ currentMonth });
+  // const { data } = useCalendarData({ currentMonth });
+  const data = [1, 2, 3];
 
   const dayObject: dayObjectType = {
     0: 'S',
@@ -101,7 +102,7 @@ function CalendarModal({ toggle }: CalendarModalProps) {
         navigationLabel={() => (
           <Styled.MonthYear>
             <p>{currentMonth.year}</p>
-            <span>{currentMonth.month > 9 ? currentMonth.month : '0' + currentMonth.month}</span>
+            <span>{currentMonth.month > 9 ? currentMonth.month : `0${currentMonth.month}`}</span>
           </Styled.MonthYear>
         )}
         formatShortWeekday={(locale, date) => dayObject[date.getDay()]}
@@ -110,7 +111,7 @@ function CalendarModal({ toggle }: CalendarModalProps) {
         }
         tileContent={({ date }) => {
           const html = [];
-          if (data?.data.includes(date.getDate())) {
+          if (data.includes(date.getDate())) {
             html.push(<div className="dot" />);
           }
           return <div className="dot-wrapper">{html}</div>;
