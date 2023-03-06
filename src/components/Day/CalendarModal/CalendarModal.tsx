@@ -45,8 +45,8 @@ function CalendarModal({ toggle }: CalendarModalProps) {
   const router = useRouter();
   const { date } = router.query;
   const parsedDate = parseToValidQuery(date?.slice(0, 10));
-  // const { data } = useCalendarData({ currentMonth });
-  const data = [1, 2, 3];
+  const { data } = useCalendarData({ currentMonth });
+  const planedDay = data?.data;
 
   const dayObject: dayObjectType = {
     0: 'S',
@@ -111,7 +111,7 @@ function CalendarModal({ toggle }: CalendarModalProps) {
         }
         tileContent={({ date }) => {
           const html = [];
-          if (data.includes(date.getDate())) {
+          if (planedDay?.includes(date.getDate())) {
             html.push(<div className="dot" />);
           }
           return <div className="dot-wrapper">{html}</div>;
