@@ -9,16 +9,17 @@ import styled from 'styled-components';
 interface TodayNoteProps {
   memo: string;
 }
-
+function emptyFunc(): void {}
 function TodayNote({ memo }: TodayNoteProps) {
   const today = useRecoilValue(dayInfo);
   const date = today.slice(0, 10);
   const [value, setValue] = useState(memo);
-  const { mutate: postMemo } = usePostInformationData();
+  // const { mutate: postMemo } = usePostInformationData();
   const { onChange } = useDebouncing({
     date,
     type: 'memo',
-    handlePost: postMemo,
+    //handlePost: postMemo,
+    handlePost: emptyFunc,
   });
 
   const changeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {

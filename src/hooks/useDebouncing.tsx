@@ -9,7 +9,8 @@ import { InformationRequestType } from 'src/types/day';
 interface useDebouncingProps {
   date: string;
   type: string;
-  handlePost: MutateType<InformationRequestType>;
+  // handlePost: MutateType<InformationRequestType>;
+  handlePost: () => void;
 }
 
 function useDebouncing(args: useDebouncingProps) {
@@ -26,7 +27,7 @@ function useDebouncing(args: useDebouncingProps) {
     const newTimer = setTimeout(async () => {
       try {
         console.log(date, type, e.target.value);
-        handlePost({ date, type, value: e.target.value });
+        // handlePost({ date, type, value: e.target.value });
       } catch (e) {
         console.error('error', e);
       }

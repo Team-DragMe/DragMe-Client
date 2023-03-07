@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import useGetWeeklyGoalData from 'src/hooks/query/useGetWeeklyGoalData';
+// import useGetWeeklyGoalData from 'src/hooks/query/useGetWeeklyGoalData';
 import { weekInfo } from 'src/states';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
@@ -16,13 +16,13 @@ interface weeklyGoalType {
 function WeeklyGoalBox() {
   const week = useRecoilValue(weekInfo);
   const startDate = week[0];
-  const { data } = useGetWeeklyGoalData({ startDate });
+  // const { data } = useGetWeeklyGoalData({ startDate });
 
   return (
     <Styled.Root>
       <span>WEEKLY GOAL</span>
       <Styled.Wrapper>
-        {data?.data.map((el: weeklyGoalType, idx: number) => (
+        {data?.data?.map((el: weeklyGoalType, idx: number) => (
           <WeeklyGoalInput key={el.type} idx={idx} content={el.value} date={startDate} />
         ))}
       </Styled.Wrapper>

@@ -8,14 +8,13 @@ export type categoryColorCodeType =
   | '#F67F6F'
   | '#FFFFFF'
   | '#96CCC9';
-
 export type dailyPlanFlag = 'daily' | 'routine' | 'reschedule' | 'weekly' | 'child';
 
 export interface Schedule {
   _id: string;
   date: string;
   title: string;
-  categoryColorCode: categoryColorCodeType;
+  categoryColorCode: categoryColorCodeType | string; //임시
   userId: string;
   isCompleted: boolean;
   isReschedule: boolean;
@@ -24,11 +23,11 @@ export interface Schedule {
   // @TODO timeSets 형식 수정
   estimatedTime: number[];
   usedTime: number[];
-  subSchedules: string[];
-  createdAt: string;
-  updatedAt: string;
+  subSchedules: any[]; // 임시
+  createdAt?: string;
+  updatedAt?: string;
   // react Query에서 데이터 가공해서 넣기
-  flag?: dailyPlanFlag;
+  flag?: dailyPlanFlag | string; //임시
   isFake?: boolean;
 }
 
