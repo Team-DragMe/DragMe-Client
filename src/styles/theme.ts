@@ -11,6 +11,7 @@ export const theme = {
     hour_fill: '#B8C1F0',
     scroll_grey: '#F8F9FB',
     calender_future: '#DADFF7',
+    border_grey: '#ABB4C0',
   },
   category: {
     cate_blue: '#7B8DD8',
