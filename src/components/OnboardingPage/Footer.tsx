@@ -32,9 +32,6 @@ function Footer() {
       <Link href={`/day/${getTodayDate(0)}`}>
         <Styled.BtnText>시작하기</Styled.BtnText>
       </Link>
-      <Styled.Sign>
-        <Image src={YourDirection} alt="이정표" width={'480'} height={'630'} />
-      </Styled.Sign>
     </Styled.Root>
   );
 }
