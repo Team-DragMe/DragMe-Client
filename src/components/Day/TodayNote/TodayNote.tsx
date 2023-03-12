@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import usePostInformationData from 'src/hooks/query/usePostInformationData';
 import useDebouncing from 'src/hooks/useDebouncing';
 import { dayInfo } from 'src/states';
 import { theme } from 'src/styles/theme';
@@ -9,17 +8,14 @@ import styled from 'styled-components';
 interface TodayNoteProps {
   memo: string;
 }
-function emptyFunc(): void {}
+
 function TodayNote({ memo }: TodayNoteProps) {
   const today = useRecoilValue(dayInfo);
   const date = today.slice(0, 10);
   const [value, setValue] = useState(memo);
-  // const { mutate: postMemo } = usePostInformationData();
   const { onChange } = useDebouncing({
     date,
     type: 'memo',
-    //handlePost: postMemo,
-    handlePost: emptyFunc,
   });
 
   const changeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {

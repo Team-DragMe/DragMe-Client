@@ -12,6 +12,9 @@ import {
   ScheduleTimeDeleteType,
   ScheduleTimePostType,
   TitleAndScheduleId,
+  EmojiRequestType,
+  FeelRequestType,
+  MemoRequestType,
 } from 'src/types/day';
 
 import { client } from './api';
@@ -23,8 +26,7 @@ export const getCalendarData = async ({ month }: CalendarQueryType) => {
 };
 
 export const getTodayNoteData = async ({ date }: DateQueryType) => {
-  const { data } = await client.get(`/information/days?date=${date}`);
-
+  const { data } = await client.get(`/dailynote?planDate=${date}`);
   return { data };
 };
 
@@ -52,8 +54,23 @@ export const getSubScheduleData = async ({ scheduleId }: ScheduleId) => {
 };
 
 export const postInformationData = async (data: InformationRequestType) => {
-  const post = await client.post('/information', { ...data });
+  const post = await client.post('/dailynote', { ...data });
 
+  return post;
+};
+
+export const postEmojiData = async (data: EmojiRequestType) => {
+  const post = await client.post('/dailynote', { ...data });
+  return post;
+};
+
+export const postFeelData = async (data: FeelRequestType) => {
+  const post = await client.post('/dailynote', { ...data });
+  return post;
+};
+
+export const postMemoData = async (data: MemoRequestType) => {
+  const post = await client.post('/dailynote', { ...data });
   return post;
 };
 

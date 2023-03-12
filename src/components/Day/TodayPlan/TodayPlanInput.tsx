@@ -1,27 +1,21 @@
 import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import usePostInformationData from 'src/hooks/query/usePostInformationData';
 import useDebouncing from 'src/hooks/useDebouncing';
 import { dayInfo } from 'src/states';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
 
 interface TodayPlanInputProps {
-  dailyGoal: string;
+  feel: string;
 }
 
-function emptyFunc(): void {}
-
-function TodayPlanInput({ dailyGoal }: TodayPlanInputProps) {
+function TodayPlanInput({ feel }: TodayPlanInputProps) {
   const today = useRecoilValue(dayInfo);
   const date = today.slice(0, 10);
-  // const { mutate: postDailyGoal } = usePostInformationData();
-  const [value, setValue] = useState(dailyGoal);
+  const [value, setValue] = useState(feel);
   const { onChange } = useDebouncing({
     date,
-    type: 'dailyGoal',
-    // handlePost: postDailyGoal,
-    handlePost: emptyFunc,
+    type: 'feel',
   });
 
   const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,8 +26,8 @@ function TodayPlanInput({ dailyGoal }: TodayPlanInputProps) {
   };
 
   useEffect(() => {
-    setValue(dailyGoal);
-  }, [dailyGoal]);
+    setValue(feel);
+  }, [feel]);
 
   return (
     <StyledTodayPlanInput.Root>

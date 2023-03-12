@@ -2,7 +2,7 @@ import { IEmojiData, IEmojiPickerProps } from 'emoji-picker-react';
 import dynamic from 'next/dynamic';
 import SmileEmoticon from 'public/assets/SmileEmoticon.svg';
 import React, { useState } from 'react';
-import usePostInformationData from 'src/hooks/query/usePostInformationData';
+import usePostEmojiData from 'src/hooks/query/usePostEmojiData';
 import styled from 'styled-components';
 
 const Picker = dynamic(async () => import('emoji-picker-react'), {
@@ -22,13 +22,13 @@ function EmojiPicker(
   { click, setClick, emoji, date }: EmojiPickerProps,
   ref: React.ForwardedRef<EmojiPickerElement>,
 ) {
-  // const { mutate: postEmoji } = usePostInformationData();
+  const { mutate: postEmoji } = usePostEmojiData();
   const [chosenEmoji, setChosenEmoji] = useState<IEmojiData>();
   const handleEmojiClick = (
     event: React.MouseEvent<Element, MouseEvent>,
     emojiObject: IEmojiData,
   ) => {
-    // postEmoji({ date, type: 'emoji', value: emojiObject.emoji });
+    postEmoji({ planDate: date, emoji: emojiObject.emoji });
     setChosenEmoji(emojiObject);
     setClick(false);
   };
