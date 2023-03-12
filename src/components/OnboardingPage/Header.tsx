@@ -16,7 +16,7 @@ const Styled = {
   Root: styled.div`
     position: relative;
     width: 144rem;
-    height: 100%;
+    height: 89rem;
   `,
   SubText: styled.p`
     position: absolute;

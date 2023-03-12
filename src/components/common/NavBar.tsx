@@ -90,8 +90,9 @@ export default NavBar;
 
 const Styled = {
   Root: styled.div`
-    width: 100%;
+    width: 144rem;
     overflow: hidden;
+    margin: 0 auto;
     height: 6rem;
     padding: 0 4.5rem 0 4.6rem;
     display: flex;

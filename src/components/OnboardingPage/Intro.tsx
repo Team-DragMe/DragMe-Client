@@ -32,8 +32,9 @@ export default OnboardingIntro;
 
 const Styled = {
   Root: styled.div`
-    width: 100%;
     position: relative;
+
+    width: 100%;
     height: 41.8rem;
   `,
 
