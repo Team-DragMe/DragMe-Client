@@ -2,7 +2,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import BackgroundFooter from 'public/assets/Background_footer.png';
 import StartBtn from 'public/assets/StartBtn.svg';
-import YourDirection from 'public/assets/YourDirection.png';
 import React from 'react';
 import { theme } from 'src/styles/theme';
 import { getTodayDate } from 'src/utils/getDate';
@@ -11,7 +10,6 @@ import styled from 'styled-components';
 function Footer() {
   return (
     <Styled.Root>
-      {/* <Styled.Upper /> */}
       <Styled.GradientArea>
         <Styled.BackgroundWrapper>
           <Image
@@ -23,14 +21,14 @@ function Footer() {
           />
         </Styled.BackgroundWrapper>
         <Styled.Title>
-          DRAG.ME를 통해
+          DRAG ME를 통해
           <br />
           목표에 도달할 준비가 되셨나요?
           <Styled.StartButton />
         </Styled.Title>
       </Styled.GradientArea>
       <Link href={`/day/${getTodayDate(0)}`}>
-        <Styled.BtnText>시작하기</Styled.BtnText>
+        <Styled.BtnText>구글 로그인으로 바로 시작하기</Styled.BtnText>
       </Link>
     </Styled.Root>
   );
@@ -40,26 +38,29 @@ export default Footer;
 const Styled = {
   Root: styled.div`
     position: relative;
-    width: 100%;
-    height: 58rem;
+    width: 144rem;
+    height: 41.8rem;
   `,
-  // Upper: styled.div`
-  //   position: absolute;
-  //   top: 17rem;
-  //   width: 100%;
-  //   height: 10rem;
-  // border-bottom: 1rem solid #f2f4f6;
-  //   background: white;
-  // `,
+  BackgroundWrapper: styled.div`
+    border-top: 1rem solid #f2f4f6;
+  `,
+  GradientArea: styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    background: linear-gradient(0deg, #dadff7 0%, #dadff7 0.01%, rgba(218, 223, 247, 0) 69.94%);
+  `,
   Title: styled.div`
     z-index: 1;
+    margin-left: 18rem;
     position: relative;
-    top: 40%;
-    left: 338px;
     font-weight: 700;
     font-size: 3.2rem;
     line-height: 140%;
-    text-transform: uppercase;
+    color: ${theme.colors.letter_black};
+    transform: translateY(-50%);
+
     &:before {
       content: '';
       z-index: -1;
@@ -68,11 +69,8 @@ const Styled = {
       height: 0.3rem;
       left: 0rem;
       top: 107%;
-
       background: ${theme.colors.letter_black};
     }
-
-    color: ${theme.colors.letter_black};
   `,
   StartButton: styled(StartBtn)`
     color: ${theme.category.cate_white};
@@ -81,34 +79,16 @@ const Styled = {
     top: 11rem;
   `,
   BtnText: styled.div`
-    width: 21.4rem;
-    height: 5.4rem;
     position: absolute;
+    width: 30rem;
+    height: 5.4rem;
     z-index: 999;
     color: ${theme.category.cate_white};
-    left: 27.7%;
-    bottom: 11%;
+    left: 46%;
+    bottom: 29%;
     font-weight: 500;
     font-size: 22px;
     line-height: 140%;
     cursor: pointer;
-  `,
-
-  GradientArea: styled.div`
-    position: absolute;
-    width: 100%;
-    height: 41.8rem;
-    bottom: 0;
-    background: linear-gradient(0deg, #dadff7 0%, #dadff7 0.01%, rgba(218, 223, 247, 0) 59.94%);
-  `,
-  Sign: styled.div`
-    position: absolute;
-    bottom: 0;
-    left: 75.3rem;
-  `,
-  BackgroundWrapper: styled.div`
-    border-top: 1rem solid #f2f4f6;
-
-    z-index: -2;
   `,
 };
