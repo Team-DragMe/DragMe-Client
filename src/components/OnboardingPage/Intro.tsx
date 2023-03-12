@@ -34,7 +34,6 @@ const Styled = {
   Root: styled.div`
     width: 100%;
     position: relative;
-    min-height: 35rem;
     height: 41.8rem;
   `,
 

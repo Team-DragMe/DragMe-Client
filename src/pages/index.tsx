@@ -24,7 +24,7 @@ function OnboardingPage() {
 export default OnboardingPage;
 const Styled = {
   Root: styled.div`
-    width: 100%;
-    overflow-x: hidden;
+    width: 144rem;
+    margin: 0.5rem auto;
   `,
 };

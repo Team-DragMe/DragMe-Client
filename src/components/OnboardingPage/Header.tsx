@@ -16,22 +16,17 @@ const Styled = {
   Root: styled.div`
     position: relative;
     width: 144rem;
-    height: 90rem;
-    display: flex;
-    flex-direction: column;
+    height: 100%;
   `,
   SubText: styled.p`
     position: absolute;
-    z-index: 8;
-    width: 27.4rem;
     left: 50%;
-    bottom: 6rem;
+    bottom: 8rem;
     transform: translateX(-50%);
 
     font-style: normal;
     font-weight: 700;
     font-size: 2.4rem;
-    line-height: 2rem;
 
     color: rgba(20, 54, 151, 0.2);
   `,
