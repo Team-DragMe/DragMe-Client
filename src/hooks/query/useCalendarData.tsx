@@ -6,9 +6,9 @@ const useCalendarData = ({ currentMonth }: CalendarQueryKeyType) =>
   useQuery(
     ['month', currentMonth],
     async () =>
-      getCalendarData({
+      await getCalendarData({
         month: `${currentMonth.year}-${
-          currentMonth.month > 9 ? currentMonth.month : '0' + currentMonth.month
+          currentMonth.month > 9 ? currentMonth.month : `0${currentMonth.month}`
         }`,
       }),
     {

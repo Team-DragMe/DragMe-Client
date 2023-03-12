@@ -2,7 +2,6 @@ import {
   CalendarQueryType,
   CategoryPatch,
   DateQueryType,
-  deleteRefetching,
   getEmojiQueryType,
   InformationRequestType,
   PatchOrderSchedules,
@@ -18,7 +17,7 @@ import {
 import { client } from './api';
 
 export const getCalendarData = async ({ month }: CalendarQueryType) => {
-  const { data } = await client.get(`/schedule/calendar?month=${month}`);
+  const { data } = await client.get(`/plan/calendar?month=${month}`);
 
   return { data };
 };
