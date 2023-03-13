@@ -81,7 +81,7 @@ const Styled = {
     z-index: 999;
     color: ${theme.category.cate_white};
     left: 46%;
-    bottom: 29%;
+    bottom: 28%;
     font-weight: 500;
     font-size: 22px;
     line-height: 140%;
