@@ -11,15 +11,13 @@ function Footer() {
   return (
     <Styled.Root>
       <Styled.GradientArea>
-        <Styled.BackgroundWrapper>
-          <Image
-            src={BackgroundFooter}
-            alt="백그라운드"
-            layout="fill"
-            objectFit="cover"
-            objectPosition="center"
-          />
-        </Styled.BackgroundWrapper>
+        <Image
+          src={BackgroundFooter}
+          alt="백그라운드"
+          layout="fill"
+          objectFit="cover"
+          objectPosition="center"
+        />
         <Styled.Title>
           DRAG ME를 통해
           <br />
@@ -40,8 +38,6 @@ const Styled = {
     position: relative;
     width: 144rem;
     height: 41.8rem;
-  `,
-  BackgroundWrapper: styled.div`
     border-top: 1rem solid #f2f4f6;
   `,
   GradientArea: styled.div`
