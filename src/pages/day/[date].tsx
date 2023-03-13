@@ -47,6 +47,7 @@ const Styled = {
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    margin: 0 auto;
   `,
   HeaderWrapper: styled.div`
     display: flex;
@@ -70,6 +71,5 @@ const Styled = {
     align-items: flex-start;
     padding: 0 4.4rem;
     gap: 4.7rem;
-    margin-bottom: 6.1rem;
   `,
 };

@@ -1,5 +1,6 @@
 import Image from 'next/image';
-import OnboardingBackround from 'public/assets/onboardingBackground.png';
+import OnboardingBackground from 'public/assets/onboardingBackground.png';
+import StartBtn from 'public/assets/StartBtn.svg';
 import React from 'react';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
@@ -15,16 +16,17 @@ function OnboardingIntro() {
         <br />
         드래그미와 함께, <Styled.underline>느슨하지만 단단한 일정관리</Styled.underline>로
         <br /> 새로운 일상을 맞이해보세요.
+        <br />
       </Styled.IntroductionText>
-      <Styled.BackgroundWrapper>
-        <Image
-          src={OnboardingBackround}
-          alt="백그라운드"
-          layout="fill"
-          objectFit="cover"
-          objectPosition="center"
-        />
-      </Styled.BackgroundWrapper>
+      <Styled.StartButton />
+      <Styled.BtnText>구글 로그인으로 바로 시작하기</Styled.BtnText>
+      <Image
+        src={OnboardingBackground}
+        alt="백그라운드"
+        layout="fill"
+        objectFit="cover"
+        objectPosition="center"
+      />
     </Styled.Root>
   );
 }
@@ -32,21 +34,16 @@ export default OnboardingIntro;
 
 const Styled = {
   Root: styled.div`
-    width: 100%;
     position: relative;
-    min-height: 35rem;
+    width: 100%;
     height: 41.8rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
   `,
 
   IntroductionText: styled.p`
-    z-index: 1;
-    position: absolute;
-    width: 50.5rem;
-    height: 6.8rem;
-    left: 50%;
-    top: 33%;
-    transform: translate(-50%, -50%);
-
     font-style: normal;
     font-weight: 500;
     font-size: 2.4rem;
@@ -55,8 +52,27 @@ const Styled = {
     text-align: center;
     letter-spacing: -0.02em;
   `,
-  BackgroundWrapper: styled.div``,
+  StartButton: styled(StartBtn)`
+    color: ${theme.category.cate_white};
+    transform: translateX(8%);
+    margin-top: 3rem;
+    z-index: 999;
+    cursor: pointer;
+  `,
   underline: styled.span`
     border-bottom: 0.2rem solid ${theme.colors.letter_black};
+  `,
+  BtnText: styled.div`
+    position: absolute;
+    width: 30rem;
+    height: 5.4rem;
+    color: ${theme.category.cate_white};
+    left: 42%;
+    bottom: 13.5%;
+    z-index: 999;
+    font-weight: 500;
+    font-size: 22px;
+    line-height: 140%;
+    cursor: pointer;
   `,
 };

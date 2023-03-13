@@ -6,12 +6,12 @@ import styled from 'styled-components';
 function OnBoardingPage() {
   return (
     <Styled.Root>
-      <Styled.LogoContainer>
-        <Image src={Logo} alt="온보딩 로고" width={'1440'} height={'900'} />
-      </Styled.LogoContainer>
-      <Styled.GradientArea>
-        <Styled.SubText>Find one&#39;s own direction</Styled.SubText>
-      </Styled.GradientArea>
+      <Image src={Logo} alt="main logo" width={1440} height={900} />
+      <Styled.SubText>Find one&#39;s own direction</Styled.SubText>
+      <Styled.Description>
+        느슨하지만 단단한 플랜 서비스로
+        <br /> 나다움의 방향성을 찾아가다.
+      </Styled.Description>
     </Styled.Root>
   );
 }
@@ -19,38 +19,30 @@ export default OnBoardingPage;
 const Styled = {
   Root: styled.div`
     position: relative;
-    width: 100%;
-    height: 84rem;
-    display: flex;
-    flex-direction: column;
-  `,
-  LogoContainer: styled.div`
-    z-index: -1;
-    position: absolute;
-    width: 100%;
-    bottom: 1.2rem;
+    width: 144rem;
+    height: 89rem;
   `,
   SubText: styled.p`
     position: absolute;
-    z-index: 8;
-    width: 27.4rem;
     left: 50%;
-    bottom: 6rem;
+    bottom: 8rem;
     transform: translateX(-50%);
 
     font-style: normal;
     font-weight: 700;
     font-size: 2.4rem;
-    line-height: 2rem;
 
     color: rgba(20, 54, 151, 0.2);
   `,
-  GradientArea: styled.div`
-    z-index: 2;
+  Description: styled.p`
     position: absolute;
-    width: 100%;
-    height: 84rem;
+    left: 4rem;
+    top: 9.7rem;
+    font-style: normal;
 
-    background: linear-gradient(0deg, #dadff7 0%, #dadff7 0.01%, rgba(218, 223, 247, 0) 59.94%);
+    font-weight: bold;
+    font-size: 3.2rem;
+    line-height: 150%;
+    letter-spacing: -0.05em;
   `,
 };
