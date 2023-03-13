@@ -140,9 +140,8 @@ const Styled = {
       ${({ symbol, pickedMenu }) =>
         pickedMenu === symbol &&
         `
-          color: ${theme.colors.main_color};
+          color: ${theme.colors.letter_black};
           padding-bottom: 0.1rem;
-          border-bottom: 1px solid ${theme.colors.main_color};
         `}
     }
   `,
