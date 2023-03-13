@@ -1,10 +1,8 @@
 import Image from 'next/image';
-import Link from 'next/link';
 import BackgroundFooter from 'public/assets/Background_footer.png';
 import StartBtn from 'public/assets/StartBtn.svg';
 import React from 'react';
 import { theme } from 'src/styles/theme';
-import { getTodayDate } from 'src/utils/getDate';
 import styled from 'styled-components';
 
 function Footer() {
