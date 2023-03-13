@@ -25,9 +25,7 @@ function Footer() {
           <Styled.StartButton />
         </Styled.Title>
       </Styled.GradientArea>
-      <Link href={`/day/${getTodayDate(0)}`}>
-        <Styled.BtnText>구글 로그인으로 바로 시작하기</Styled.BtnText>
-      </Link>
+      <Styled.BtnText>구글 로그인으로 바로 시작하기</Styled.BtnText>
     </Styled.Root>
   );
 }
@@ -73,6 +71,7 @@ const Styled = {
     position: absolute;
     left: -0.5rem;
     top: 11rem;
+    cursor: pointer;
   `,
   BtnText: styled.div`
     position: absolute;

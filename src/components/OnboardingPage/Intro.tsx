@@ -56,6 +56,8 @@ const Styled = {
     color: ${theme.category.cate_white};
     transform: translateX(8%);
     margin-top: 3rem;
+    z-index: 999;
+    cursor: pointer;
   `,
   underline: styled.span`
     border-bottom: 0.2rem solid ${theme.colors.letter_black};
@@ -67,7 +69,7 @@ const Styled = {
     color: ${theme.category.cate_white};
     left: 42%;
     bottom: 13.5%;
-
+    z-index: 999;
     font-weight: 500;
     font-size: 22px;
     line-height: 140%;
