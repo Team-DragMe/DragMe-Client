@@ -4,39 +4,33 @@ import { theme } from 'src/styles/theme';
 import { DayStorage, makeDateString } from 'src/utils/getDate';
 import styled from 'styled-components';
 
+const DEFAULT_DATE = 0;
+const PREV_DATE = -1;
+const NEXT_DATE = 1;
+const STANDARD_DATE = makeDateString(DEFAULT_DATE);
+
 function DateController() {
-  const DEFAULT_DATE = 0;
-  const PREV_DATE = -1;
-  const NEXT_DATE = 1;
-  const [changedDays, setChangedDays] = useState(0);
-  const [pivotDate, setPivotDate] = useState(makeDateString(DEFAULT_DATE));
   const router = useRouter();
-  const today = makeDateString(DEFAULT_DATE);
+  const [changedDays, setChangedDays] = useState(0);
 
   useEffect(() => {
-    const localCountingDays = Number(window.localStorage.getItem('changedDaysCount'));
-    const localPivotDate = window.localStorage.getItem('pivotDate');
+    const sessionCountingDays = Number(sessionStorage.getItem('changedDaysCount'));
 
-    if (!localPivotDate) {
-      window.localStorage.setItem('pivotDate', today);
-    }
-    if (localPivotDate) {
-      setPivotDate(localPivotDate);
-    }
-    if (localCountingDays) {
-      setChangedDays(localCountingDays);
-    }
+    sessionCountingDays
+      ? setChangedDays(sessionCountingDays)
+      : sessionStorage.setItem('changedDaysCount', DEFAULT_DATE.toString());
 
-    router.push(`/day/${DayStorage(pivotDate.slice(0, 10), localCountingDays)}`);
+    router.push(`/day/${DayStorage(STANDARD_DATE.slice(0, 10), sessionCountingDays)}`);
   }, []);
 
   useEffect(() => {
     moveToSelectedDate();
-    window.localStorage.setItem('changedDaysCount', changedDays.toString());
+    window.sessionStorage.setItem('changedDaysCount', changedDays.toString());
   }, [changedDays]);
 
   const moveToSelectedDate = () => {
-    router.push(`/day/${DayStorage(pivotDate.slice(0, 10), changedDays)}`);
+    const movedDate = DayStorage(STANDARD_DATE.slice(0, 10), changedDays);
+    router.push(`/day/${movedDate}`);
   };
 
   const moveToTheseDate = (count: number) => {
