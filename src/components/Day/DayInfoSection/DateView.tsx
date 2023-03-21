@@ -3,17 +3,17 @@ import { theme } from 'src/styles/theme';
 import { DayStorage, makeDateString } from 'src/utils/getDate';
 import styled from 'styled-components';
 
-const CHANGED_DAYS_NUMBER = Number(window.sessionStorage.getItem('changedDaysCount')) || 0;
-const STANDARD_DATE = makeDateString(0);
-const CHANGED_DATE =
-  STANDARD_DATE !== null
-    ? DayStorage(STANDARD_DATE.slice(0, 10), CHANGED_DAYS_NUMBER)
-    : makeDateString(CHANGED_DAYS_NUMBER);
-const MONTH = CHANGED_DATE.slice(5, 7);
-const DATE = CHANGED_DATE.slice(8, 10);
-const DAY_OF_THE_WEEK = CHANGED_DATE.slice(11, 14);
-
 function DateView() {
+  const CHANGED_DAYS_NUMBER = Number(window.sessionStorage.getItem('changedDaysCount')) || 0;
+  const STANDARD_DATE = makeDateString(0);
+  const CHANGED_DATE =
+    STANDARD_DATE !== null
+      ? DayStorage(STANDARD_DATE.slice(0, 10), CHANGED_DAYS_NUMBER)
+      : makeDateString(CHANGED_DAYS_NUMBER);
+  const MONTH = CHANGED_DATE.slice(5, 7);
+  const DATE = CHANGED_DATE.slice(8, 10);
+  const DAY_OF_THE_WEEK = CHANGED_DATE.slice(11, 14);
+
   return (
     <Styled.Root>
       <Styled.HeaderBox>
