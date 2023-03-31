@@ -28,7 +28,6 @@ export default MyInfoSection;
 const Styled = {
   Root: styled.section`
     display: flex;
-    width: fit-content;
     padding: 0 2rem;
     padding-bottom: 3.6rem;
     border-bottom: 1px solid ${theme.colors.border_grey};
