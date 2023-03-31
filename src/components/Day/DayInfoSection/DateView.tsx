@@ -4,15 +4,15 @@ import { DayStorage, makeDateString } from 'src/utils/getDate';
 import styled from 'styled-components';
 
 function DateView() {
-  const changedDaysNumber = Number(window.localStorage.getItem('changedDaysCount'));
-  const pivotDate = window.localStorage.getItem('pivotDate');
-  const changedDate =
-    pivotDate !== null
-      ? DayStorage(pivotDate.slice(0, 10), changedDaysNumber)
-      : makeDateString(changedDaysNumber);
-  const MONTH = changedDate.slice(5, 7);
-  const DATE = changedDate.slice(8, 10);
-  const DAY_OF_THE_WEEK = changedDate.slice(11, 14);
+  const CHANGED_DAYS_NUMBER = Number(window.sessionStorage.getItem('changedDaysCount')) || 0;
+  const STANDARD_DATE = makeDateString(0);
+  const CHANGED_DATE =
+    STANDARD_DATE !== null
+      ? DayStorage(STANDARD_DATE.slice(0, 10), CHANGED_DAYS_NUMBER)
+      : makeDateString(CHANGED_DAYS_NUMBER);
+  const MONTH = CHANGED_DATE.slice(5, 7);
+  const DATE = CHANGED_DATE.slice(8, 10);
+  const DAY_OF_THE_WEEK = CHANGED_DATE.slice(11, 14);
 
   return (
     <Styled.Root>
