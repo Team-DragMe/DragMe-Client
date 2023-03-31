@@ -1,4 +1,5 @@
 import AccountSection from 'src/components/MyPage/AccountSection';
+import ConnectSection from 'src/components/MyPage/ConnectSection';
 import MyInfoSection from 'src/components/MyPage/MyInfoSection';
 
 function MyPage() {
@@ -6,6 +7,7 @@ function MyPage() {
     <main>
       <MyInfoSection />
       <AccountSection />
+      <ConnectSection />
     </main>
   );
 }
