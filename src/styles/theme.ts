@@ -12,6 +12,7 @@ export const theme = {
     scroll_grey: '#F8F9FB',
     calender_future: '#DADFF7',
     border_grey: '#ABB4C0',
+    info_grey: '#ABABAB',
   },
   category: {
     cate_blue: '#7B8DD8',
