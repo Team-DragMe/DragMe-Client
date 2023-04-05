@@ -1,3 +1,5 @@
+import Image from 'next/image';
+import FooterImage from 'public/assets/Footer.png';
 import AccountSection from 'src/components/MyPage/AccountSection';
 import ConnectSection from 'src/components/MyPage/ConnectSection';
 import InfoSection from 'src/components/MyPage/InfoSection';
@@ -26,10 +28,15 @@ const Styled = {
     flex-direction: column;
     align-items: center;
   `,
-  Main: styled.body`
+  Main: styled.section`
     width: 84.3rem;
     padding-top: 18rem;
     padding-bottom: 16rem;
   `,
-  Footer: styled.footer``,
+  Footer: styled.footer`
+    width: 100%;
+    height: 30.4rem;
+    background-image: url('/assets/Footer.png');
+    background-size: cover;
+  `,
 };
