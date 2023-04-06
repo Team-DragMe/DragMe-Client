@@ -1,13 +1,27 @@
 import Image from 'next/image';
 import PencilIcon from 'public/assets/ic_pencil.svg';
 import TestImage from 'public/assets/Logo.png';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { GOAL_PLACEHOLDER } from 'src/constants/mypage';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
 
 function MyInfoSection() {
-  const [isDisabled, setIsDisabled] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(true);
+  const toggle = () => setIsDisabled(!isDisabled);
+  const focusRef = useRef<HTMLInputElement>(null);
+
+  const handleCheckClick = () => {
+    toggle();
+    //서버 전송
+  };
+
+  useEffect(() => {
+    if (focusRef.current !== null) {
+      focusRef.current.focus();
+      console.log('dkdkdk');
+    }
+  }, [isDisabled]);
 
   return (
     <Styled.Root>
@@ -17,10 +31,19 @@ function MyInfoSection() {
       <Styled.ProfileInfoWrapper>
         <Styled.NameWrapper>
           <p>전희선</p>
-          <Styled.PencilBtn />
+          {isDisabled ? (
+            <Styled.PencilBtn onClick={toggle} />
+          ) : (
+            <Styled.CheckBtn onClick={handleCheckClick}>확인</Styled.CheckBtn>
+          )}
         </Styled.NameWrapper>
         <Styled.GoalWrapper>
-          <input placeholder={GOAL_PLACEHOLDER} maxLength={35} disabled={isDisabled} />
+          <input
+            placeholder={GOAL_PLACEHOLDER}
+            maxLength={35}
+            disabled={isDisabled}
+            ref={focusRef}
+          />
         </Styled.GoalWrapper>
       </Styled.ProfileInfoWrapper>
     </Styled.Root>
@@ -80,4 +103,5 @@ const Styled = {
   PencilBtn: styled(PencilIcon)`
     cursor: pointer;
   `,
+  CheckBtn: styled.button``,
 };
