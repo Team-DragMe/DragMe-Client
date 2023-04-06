@@ -74,7 +74,9 @@ function NavBar() {
                 </Link>
               </Styled.List>
             ))}
-            <Styled.MyPageOff>MY PAGE</Styled.MyPageOff>
+            <Link href={'/mypage'}>
+              <Styled.MyPageOff>MY PAGE</Styled.MyPageOff>
+            </Link>
           </Styled.MenuList>
           <Styled.HamburgerMenu isOpened={hamburgerMenu} onClick={handleHamburgerMenu} />
         </Styled.Contents>
