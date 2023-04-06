@@ -1,10 +1,14 @@
 import Image from 'next/image';
 import PencilIcon from 'public/assets/ic_pencil.svg';
 import TestImage from 'public/assets/Logo.png';
+import { useState } from 'react';
+import { GOAL_PLACEHOLDER } from 'src/constants/mypage';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
 
 function MyInfoSection() {
+  const [isDisabled, setIsDisabled] = useState(false);
+
   return (
     <Styled.Root>
       <Styled.ProfileImageWrapper>
@@ -16,7 +20,7 @@ function MyInfoSection() {
           <Styled.PencilBtn />
         </Styled.NameWrapper>
         <Styled.GoalWrapper>
-          <input />
+          <input placeholder={GOAL_PLACEHOLDER} maxLength={35} disabled={isDisabled} />
         </Styled.GoalWrapper>
       </Styled.ProfileInfoWrapper>
     </Styled.Root>
@@ -63,9 +67,14 @@ const Styled = {
     margin-top: 1.3rem;
 
     & > input {
+      width: 100%;
       outline: 0;
       border: 0;
+      padding: 0 1.3rem;
       background-color: ${theme.colors.scroll_grey};
+      font-size: 1.8rem;
+      font-weight: 500;
+      color: ${theme.colors.info_leter_grey};
     }
   `,
   PencilBtn: styled(PencilIcon)`

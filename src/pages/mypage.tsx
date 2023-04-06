@@ -1,5 +1,3 @@
-import Image from 'next/image';
-import FooterImage from 'public/assets/Footer.png';
 import AccountSection from 'src/components/MyPage/AccountSection';
 import ConnectSection from 'src/components/MyPage/ConnectSection';
 import InfoSection from 'src/components/MyPage/InfoSection';
