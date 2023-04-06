@@ -3,11 +3,13 @@ import PencilIcon from 'public/assets/ic_pencil.svg';
 import TestImage from 'public/assets/Logo.png';
 import { useEffect, useRef, useState } from 'react';
 import { GOAL_PLACEHOLDER } from 'src/constants/mypage';
+import { mypageInfo } from 'src/mock-data/mypage';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
 
 function MyInfoSection() {
   const [isDisabled, setIsDisabled] = useState(true);
+  const [goal, setGoal] = useState<string>();
   const toggle = () => setIsDisabled(!isDisabled);
   const focusRef = useRef<HTMLInputElement>(null);
 
@@ -16,10 +18,15 @@ function MyInfoSection() {
     //서버 전송
   };
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target instanceof HTMLInputElement) {
+      setGoal(e.target.value);
+    }
+  };
+
   useEffect(() => {
     if (focusRef.current !== null) {
       focusRef.current.focus();
-      console.log('dkdkdk');
     }
   }, [isDisabled]);
 
@@ -30,7 +37,7 @@ function MyInfoSection() {
       </Styled.ProfileImageWrapper>
       <Styled.ProfileInfoWrapper>
         <Styled.NameWrapper>
-          <p>전희선</p>
+          <p>{mypageInfo.name}</p>
           {isDisabled ? (
             <Styled.PencilBtn onClick={toggle} />
           ) : (
@@ -43,6 +50,8 @@ function MyInfoSection() {
             maxLength={35}
             disabled={isDisabled}
             ref={focusRef}
+            value={goal}
+            onChange={handleChange}
           />
         </Styled.GoalWrapper>
       </Styled.ProfileInfoWrapper>

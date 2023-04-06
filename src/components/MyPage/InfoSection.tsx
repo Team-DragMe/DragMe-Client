@@ -1,3 +1,4 @@
+import { MYPAGE_LETTER } from 'src/constants/mypage';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
 
@@ -5,10 +6,10 @@ function InfoSection() {
   return (
     <Styled.Root>
       <Styled.LeftInfo>
-        <button>문의 및 피드백</button>
-        <button>개인정보보호 정책</button>
+        <button>{MYPAGE_LETTER.INQUIRY_FEEDBACK}</button>
+        <button>{MYPAGE_LETTER.PRIVACY_POLICY}</button>
       </Styled.LeftInfo>
-      <button>로그아웃</button>
+      <button>{MYPAGE_LETTER.LOGOUT}</button>
     </Styled.Root>
   );
 }

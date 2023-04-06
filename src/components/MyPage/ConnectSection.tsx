@@ -1,11 +1,13 @@
+import { MYPAGE_LETTER } from 'src/constants/mypage';
+import { mypageInfo } from 'src/mock-data/mypage';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
 
 function ConnectSection() {
   return (
     <Styled.Root>
-      <Styled.Title>연락처</Styled.Title>
-      <Styled.Account>dragme.kr@gmail.com</Styled.Account>
+      <Styled.Title>{MYPAGE_LETTER.CONNECTION}</Styled.Title>
+      <Styled.Account>{mypageInfo.email}</Styled.Account>
     </Styled.Root>
   );
 }

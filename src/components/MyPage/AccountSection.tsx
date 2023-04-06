@@ -1,12 +1,14 @@
+import { MYPAGE_LETTER } from 'src/constants/mypage';
+import { mypageInfo } from 'src/mock-data/mypage';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
 
 function AccountSection() {
   return (
     <Styled.Root>
-      <Styled.Title>계정</Styled.Title>
-      <Styled.Account>dragme.kr@gmail.com</Styled.Account>
-      <Styled.AccountDescribe>구글 계정으로 로그인 중이에요!</Styled.AccountDescribe>
+      <Styled.Title>{MYPAGE_LETTER.ACCOUNT}</Styled.Title>
+      <Styled.Account>{mypageInfo.email}</Styled.Account>
+      <Styled.AccountDescribe>{MYPAGE_LETTER.ACCOUNT_DESCRIBE}</Styled.AccountDescribe>
     </Styled.Root>
   );
 }
