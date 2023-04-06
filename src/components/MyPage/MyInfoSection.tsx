@@ -7,32 +7,28 @@ import { mypageInfo } from 'src/mock-data/mypage';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
 
-const INPUT_TYPE = {
-  NAME: true,
-  GOAL: false,
-};
-
 function MyInfoSection() {
   const [isDisabled, setIsDisabled] = useState(true);
-  const [goal, setGoal] = useState<string>(mypageInfo.goal);
-  const [name, setName] = useState<string>(mypageInfo.name);
   const toggle = () => setIsDisabled(!isDisabled);
-  const focusRef = useRef<HTMLSpanElement>(null);
+  const nameRef = useRef<HTMLSpanElement>(null);
+  const goalRef = useRef<HTMLInputElement>(null);
 
   const handleCheckClick = () => {
     toggle();
     //서버 전송
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLElement>, isName: boolean) => {
-    if (e.target instanceof HTMLInputElement) {
-      isName ? setName(e.target.value) : setGoal(e.target.value);
-    }
+    // console.log(nameRef.current?.innerText);
+    // console.log(goalRef.current?.value);
   };
 
   useEffect(() => {
-    if (focusRef.current !== null) {
-      focusRef.current.focus();
+    if (goalRef.current !== null) {
+      goalRef.current.value = mypageInfo.goal;
+    }
+  }, []);
+
+  useEffect(() => {
+    if (goalRef.current !== null) {
+      goalRef.current.focus();
     }
   }, [isDisabled]);
 
@@ -42,19 +38,10 @@ function MyInfoSection() {
         <Image src={TestImage} alt="프로필 이미지" />
       </Styled.ProfileImageWrapper>
       <Styled.ProfileInfoWrapper>
-        <Styled.NameWrapper nameLength={name.length}>
-          {/* <Styled.Input
-            onInput={handleChange}
-            contentEditable={!isDisabled}
-            suppressContentEditableWarning
-          >
-            {name}
-          </Styled.Input> */}
-          <input
-            value={name}
-            onChange={(e) => handleChange(e, INPUT_TYPE.NAME)}
-            disabled={isDisabled}
-          />
+        <Styled.NameWrapper>
+          <Styled.Input ref={nameRef} contentEditable={!isDisabled} suppressContentEditableWarning>
+            {mypageInfo.name}
+          </Styled.Input>
           {isDisabled ? (
             <Styled.PencilBtn onClick={toggle} />
           ) : (
@@ -63,11 +50,10 @@ function MyInfoSection() {
         </Styled.NameWrapper>
         <Styled.GoalWrapper>
           <input
+            ref={goalRef}
             placeholder={GOAL_PLACEHOLDER}
             maxLength={35}
             disabled={isDisabled}
-            value={goal}
-            onChange={(e) => handleChange(e, INPUT_TYPE.GOAL)}
           />
         </Styled.GoalWrapper>
       </Styled.ProfileInfoWrapper>
@@ -98,23 +84,11 @@ const Styled = {
     display: flex;
     flex-direction: column;
   `,
-  NameWrapper: styled.div<{ nameLength: number }>`
+  NameWrapper: styled.div`
     display: flex;
     align-items: center;
     gap: 1.3rem;
     margin-left: 1.3rem;
-
-    & > input {
-      width: ${({ nameLength }) => `${17.3 * nameLength}px`};
-      outline: 0;
-      border: 0;
-      padding: 0;
-      font-weight: 700;
-      font-size: 2rem;
-      line-height: 150%;
-      background-color: white;
-      color: black;
-    }
   `,
 
   Input: styled.span`
