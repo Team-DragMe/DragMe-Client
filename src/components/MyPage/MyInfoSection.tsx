@@ -122,5 +122,15 @@ const Styled = {
   PencilBtn: styled(PencilIcon)`
     cursor: pointer;
   `,
-  CheckBtn: styled.button``,
+  CheckBtn: styled.button`
+    border: 0;
+    outline: 0;
+    background-color: ${theme.colors.main_color};
+    width: 4.4rem;
+    height: 2rem;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #eeeeee;
+    border-radius: 2px;
+  `,
 };
