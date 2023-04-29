@@ -1,5 +1,7 @@
+import { useRouter } from 'next/router';
 import { useEffect, useRef } from 'react';
 import { useRecoilValue } from 'recoil';
+import useGetTodayTimeblockData from 'src/hooks/query/useGetPlanData';
 import { timeBlockSchedules } from 'src/mock-data/schedules';
 import { scrollY } from 'src/states';
 import styled from 'styled-components';
@@ -10,9 +12,11 @@ function TimeBlockSection() {
   //리코일에 있는 열려있는 리스트 값 받아오기
   const divRef = useRef<HTMLDivElement>(null);
   const scroll = useRecoilValue(scrollY);
-  // const date = useRecoilValue(dayInfo).slice(0, 10);
-  // const { data: scheduleList } = useGetTodaySchedules({ date });
+  const router = useRouter();
+  const planDate = router.query.date?.slice(0, 10) || '';
+  const { data } = useGetTodayTimeblockData({ type: 'daily', planDate });
 
+  console.log(data);
   useEffect(() => {
     if (divRef.current) {
       divRef.current.scrollTop = scroll;

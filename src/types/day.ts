@@ -23,6 +23,11 @@ export interface DateQueryType {
   date: string;
 }
 
+export interface PlanDataQueryType {
+  type: string;
+  planDate: string | string[];
+}
+
 export interface ScheduleId {
   scheduleId: string;
 }

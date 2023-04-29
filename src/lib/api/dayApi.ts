@@ -5,6 +5,7 @@ import {
   getEmojiQueryType,
   InformationRequestType,
   PatchOrderSchedules,
+  PlanDataQueryType,
   PostScheduleBlock,
   ScheduleAndDate,
   ScheduleAndIsCompleted,
@@ -28,9 +29,9 @@ export const getTodayNoteData = async ({ date }: DateQueryType) => {
   return { data };
 };
 
-export const getTodayScheduleData = async ({ date }: DateQueryType) => {
-  const { data } = await client.get(`/schedule/days?date=${date}`);
-  console.log('>>>getTodayScheduleData', data);
+export const getPlanData = async ({ type, planDate }: PlanDataQueryType) => {
+  const { data } = await client.get(`/plan?type=${type}&&planDate=${planDate}`);
+
   return { data };
 };
 
