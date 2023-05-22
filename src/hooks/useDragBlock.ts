@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 interface DragBlockHookArg {
-  handleSubmit: () => void;
+  handleSubmit: (start: number, end: number) => void;
 }
 
 const INITIAL_BLOCK = -1;
@@ -28,7 +28,7 @@ function useDragBlock({ handleSubmit }: DragBlockHookArg) {
   };
 
   const onMouseUp = () => {
-    handleSubmit();
+    handleSubmit(startBlock, endBlock);
     setIsDragging(false);
     setStartBlock(INITIAL_BLOCK);
     setEndBlock(INITIAL_BLOCK);

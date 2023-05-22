@@ -33,9 +33,10 @@ export interface ScheduleId {
 }
 
 export interface ScheduleTimePostType {
-  scheduleId: string;
-  isUsed: boolean;
-  timeBlockNumbers: number[];
+  planId: string;
+  isPlan: boolean;
+  start: number;
+  end: number;
 }
 
 export interface ScheduleTimeDeleteType {

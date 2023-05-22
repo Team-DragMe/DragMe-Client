@@ -58,8 +58,8 @@ export const postInformationData = async (data: InformationRequestType) => {
   return post;
 };
 
-export const postScheduleTime = async ({ scheduleId, ...data }: ScheduleTimePostType) => {
-  const post = await client.post(`/schedule/time?scheduleId=${scheduleId}`, { ...data });
+export const postTimeBlock = async ({ planId, ...data }: ScheduleTimePostType) => {
+  const post = await client.post(`/timeblock/${planId}`, { ...data });
 
   return post;
 };
