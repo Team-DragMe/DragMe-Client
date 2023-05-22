@@ -57,3 +57,14 @@ export interface UnWrappingData {
 
 export type Nullable<T> = T | null;
 export type ReactChild = string | number | ReactElement<any, string | JSXElementConstructor<any>>;
+
+export interface planDataType {
+  id: string;
+  planDate: string;
+  planName: string;
+  colorchip: string;
+  isCompleted: boolean;
+  planTime: number[];
+  fulfillTime: number[];
+  createdAt: string;
+}

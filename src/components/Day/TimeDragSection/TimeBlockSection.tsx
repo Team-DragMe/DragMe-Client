@@ -1,9 +1,10 @@
 import { useRouter } from 'next/router';
 import { useEffect, useRef } from 'react';
 import { useRecoilValue } from 'recoil';
-import useGetTodayTimeblockData from 'src/hooks/query/useGetPlanData';
-import { timeBlockSchedules } from 'src/mock-data/schedules';
+import useGetPlanData from 'src/hooks/query/useGetPlanData';
+// import { timeBlockSchedules } from 'src/mock-data/schedules';
 import { scrollY } from 'src/states';
+import { planDataType } from 'src/types';
 import styled from 'styled-components';
 
 import TimeBlocks from './TimeBlocks';
@@ -14,9 +15,10 @@ function TimeBlockSection() {
   const scroll = useRecoilValue(scrollY);
   const router = useRouter();
   const planDate = router.query.date?.slice(0, 10) || '';
-  const { data } = useGetTodayTimeblockData({ type: 'daily', planDate });
+  const { data } = useGetPlanData({ type: 'daily', planDate });
+  const timeBlockData: planDataType[] = data?.data || [];
 
-  console.log(data);
+  console.log(timeBlockData);
   useEffect(() => {
     if (divRef.current) {
       divRef.current.scrollTop = scroll;
@@ -25,8 +27,8 @@ function TimeBlockSection() {
 
   return (
     <Styled.Root ref={divRef}>
-      {timeBlockSchedules.map((el) => (
-        <TimeBlocks key={el._id} schedule={el} />
+      {timeBlockData.map((el) => (
+        <TimeBlocks key={el.id} schedule={el} />
       ))}
     </Styled.Root>
   );

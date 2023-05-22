@@ -12,6 +12,7 @@ const useGetPlanData = ({ type, planDate }: PlanDataQueryType) =>
         planDate,
       }),
     {
+      select: (data) => data.data,
       keepPreviousData: true,
       useErrorBoundary: true,
       retry: 3,

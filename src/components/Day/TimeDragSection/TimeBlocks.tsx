@@ -1,12 +1,12 @@
 import useDragBlock from 'src/hooks/useDragBlock';
-import { Schedule } from 'src/types';
+import { planDataType } from 'src/types';
 import { getTimeArray } from 'src/utils/dateUtil';
 import styled from 'styled-components';
 
 import TimeBlock from './TimeBlock';
 
 interface TimeBlocksProps {
-  schedule: Schedule;
+  schedule: planDataType;
 }
 
 function TimeBlocks({ schedule }: TimeBlocksProps) {
@@ -20,9 +20,9 @@ function TimeBlocks({ schedule }: TimeBlocksProps) {
 
   //서버에서 가져온 데이터 블럭 생성
   const isDraged = (id: number) => {
-    if (scheduleInfo?.usedTime.includes(id)) {
+    if (scheduleInfo?.fulfillTime.includes(id)) {
       return 'done';
-    } else if (scheduleInfo?.estimatedTime.includes(id)) {
+    } else if (scheduleInfo?.planTime.includes(id)) {
       return 'plan';
     }
     return '';
@@ -31,7 +31,7 @@ function TimeBlocks({ schedule }: TimeBlocksProps) {
   const { startBlock, endBlock, ...dragInfo } = useDragBlock({ handleSubmit });
 
   return (
-    <Styled.Root id={scheduleInfo?._id} {...dragInfo}>
+    <Styled.Root id={scheduleInfo?.id} {...dragInfo}>
       {timeArr.map((el: number) => (
         <TimeBlock
           id={el}
