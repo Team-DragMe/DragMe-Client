@@ -2,13 +2,12 @@ import { MYPAGE_LETTER } from 'src/constants/mypage';
 import { mypageInfo } from 'src/mock-data/mypage';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
-import { myInfo } from 'src/types/myPage';
 
-function AccountSection(myInfo: myInfo) {
+function AccountSection() {
   return (
     <Styled.Root>
       <Styled.Title>{MYPAGE_LETTER.ACCOUNT}</Styled.Title>
-      <Styled.Account>{myInfo.email}</Styled.Account>
+      <Styled.Account>{mypageInfo.email}</Styled.Account>
       <Styled.AccountDescribe>{MYPAGE_LETTER.ACCOUNT_DESCRIBE}</Styled.AccountDescribe>
     </Styled.Root>
   );
