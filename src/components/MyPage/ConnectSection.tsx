@@ -2,12 +2,13 @@ import { MYPAGE_LETTER } from 'src/constants/mypage';
 import { mypageInfo } from 'src/mock-data/mypage';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
+import { myInfo } from 'src/types/myPage';
 
-function ConnectSection() {
+function ConnectSection(myInfo: myInfo) {
   return (
     <Styled.Root>
       <Styled.Title>{MYPAGE_LETTER.CONNECTION}</Styled.Title>
-      <Styled.Account>{mypageInfo.email}</Styled.Account>
+      <Styled.Account>{myInfo.email}</Styled.Account>
     </Styled.Root>
   );
 }

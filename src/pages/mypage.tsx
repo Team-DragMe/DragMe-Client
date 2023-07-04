@@ -2,15 +2,19 @@ import AccountSection from 'src/components/MyPage/AccountSection';
 import ConnectSection from 'src/components/MyPage/ConnectSection';
 import InfoSection from 'src/components/MyPage/InfoSection';
 import MyInfoSection from 'src/components/MyPage/MyInfoSection';
+import useGetMyPageData from 'src/hooks/query/useGetMyPageData';
+import { myInfo } from 'src/types/myPage';
 import styled from 'styled-components';
 
 function MyPage() {
+  const { data } = useGetMyPageData();
+  const myInfo = data?.data;
   return (
     <Styled.Root>
       <Styled.Main>
-        <MyInfoSection />
-        <AccountSection />
-        <ConnectSection />
+        <MyInfoSection {...myInfo} />
+        <AccountSection {...myInfo} />
+        <ConnectSection {...myInfo} />
         <InfoSection />
       </Styled.Main>
       <Styled.Footer />

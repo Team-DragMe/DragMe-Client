@@ -3,28 +3,38 @@ import PencilIcon from 'public/assets/ic_pencil.svg';
 import TestImage from 'public/assets/Logo.png';
 import { useEffect, useRef, useState } from 'react';
 import { GOAL_PLACEHOLDER } from 'src/constants/mypage';
+import usePatchMyPageData from 'src/hooks/query/usePatchMyPageData';
 import { mypageInfo } from 'src/mock-data/mypage';
 import { theme } from 'src/styles/theme';
+import { editInfo, myInfo } from 'src/types/myPage';
 import styled from 'styled-components';
 
-function MyInfoSection() {
+function MyInfoSection(myInfo: myInfo) {
   const [isDisabled, setIsDisabled] = useState(true);
   const toggle = () => setIsDisabled(!isDisabled);
   const nameRef = useRef<HTMLSpanElement>(null);
   const goalRef = useRef<HTMLInputElement>(null);
+  const { mutate: patchMyInfo } = usePatchMyPageData();
 
   const handleCheckClick = () => {
     toggle();
-    //서버 전송
-    // console.log(nameRef.current?.innerText);
-    // console.log(goalRef.current?.value);
+    if (goalRef.current !== null && nameRef.current !== null) {
+      const editInfo: editInfo = {
+        name: nameRef.current?.innerText,
+        goal: goalRef.current?.value,
+      };
+      patchMyInfo(editInfo);
+    }
   };
 
   useEffect(() => {
     if (goalRef.current !== null) {
-      goalRef.current.value = mypageInfo.goal;
+      goalRef.current.value = myInfo.goal || '';
     }
-  }, []);
+    if (nameRef.current !== null) {
+      nameRef.current.innerText = myInfo.name || '';
+    }
+  }, [myInfo]);
 
   useEffect(() => {
     if (goalRef.current !== null) {
@@ -39,9 +49,11 @@ function MyInfoSection() {
       </Styled.ProfileImageWrapper>
       <Styled.ProfileInfoWrapper>
         <Styled.NameWrapper>
-          <Styled.Input ref={nameRef} contentEditable={!isDisabled} suppressContentEditableWarning>
-            {mypageInfo.name}
-          </Styled.Input>
+          <Styled.Input
+            ref={nameRef}
+            contentEditable={!isDisabled}
+            suppressContentEditableWarning
+          ></Styled.Input>
           {isDisabled ? (
             <Styled.PencilBtn onClick={toggle} />
           ) : (
