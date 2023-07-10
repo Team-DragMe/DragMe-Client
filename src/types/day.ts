@@ -22,17 +22,17 @@ export interface InformationRequestType {
 
 export interface EmojiRequestType {
   planDate: string;
-  emoji: string;
+  content: string;
 }
 
 export interface FeelRequestType {
   planDate: string;
-  feel: string;
+  content: string;
 }
 
 export interface MemoRequestType {
   planDate: string;
-  memo: string;
+  content: string;
 }
 
 export interface DateQueryType {

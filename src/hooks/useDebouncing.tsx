@@ -29,9 +29,9 @@ function useDebouncing(args: useDebouncingProps) {
       try {
         console.log(date, type, e.target.value);
         if (type == 'memo') {
-          postMemo({ planDate: date, memo: e.target.value });
+          postMemo({ planDate: date, content: e.target.value });
         } else if (type == 'feel') {
-          postFeel({ planDate: date, feel: e.target.value });
+          postFeel({ planDate: date, content: e.target.value });
         }
       } catch (e) {
         console.error('error', e);

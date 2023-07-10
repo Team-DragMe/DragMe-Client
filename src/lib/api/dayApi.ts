@@ -60,17 +60,17 @@ export const postInformationData = async (data: InformationRequestType) => {
 };
 
 export const postEmojiData = async (data: EmojiRequestType) => {
-  const post = await client.post('/dailynote', { ...data });
+  const post = await client.post('/dailynote?type=emoji', { ...data });
   return post;
 };
 
 export const postFeelData = async (data: FeelRequestType) => {
-  const post = await client.post('/dailynote', { ...data });
+  const post = await client.post('/dailynote?type=feel', { ...data });
   return post;
 };
 
 export const postMemoData = async (data: MemoRequestType) => {
-  const post = await client.post('/dailynote', { ...data });
+  const post = await client.post('/dailynote?type=memo', { ...data });
   return post;
 };
 

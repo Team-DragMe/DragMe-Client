@@ -28,7 +28,7 @@ function EmojiPicker(
     event: React.MouseEvent<Element, MouseEvent>,
     emojiObject: IEmojiData,
   ) => {
-    postEmoji({ planDate: date, emoji: emojiObject.emoji });
+    postEmoji({ planDate: date, content: emojiObject.emoji });
     setChosenEmoji(emojiObject);
     setClick(false);
   };
