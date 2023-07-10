@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { MutateType } from 'src/types/api';
-import { InformationRequestType } from 'src/types/day';
+import { FeelRequestType, MemoRequestType } from 'src/types/day';
+import usePostFeelData from './query/usePostFeelData';
+import usePostMemoData from './query/usePostMemoData';
 /* 
     사용방법: const { value, onChange } = useDebouncing();
     onChange에 onChange를 담아서 사용, value 사용
@@ -9,15 +11,14 @@ import { InformationRequestType } from 'src/types/day';
 interface useDebouncingProps {
   date: string;
   type: string;
-  // handlePost: MutateType<InformationRequestType>;
-  handlePost: () => void;
 }
 
 function useDebouncing(args: useDebouncingProps) {
-  const { date, type, handlePost } = args;
+  const { date, type } = args;
   const [value, setValue] = useState<string>('');
   const [timer, setTimer] = useState<NodeJS.Timeout | number>(0);
-
+  const { mutate: postMemo } = usePostMemoData();
+  const { mutate: postFeel } = usePostFeelData();
   const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setValue(e.target.value);
 
@@ -27,7 +28,11 @@ function useDebouncing(args: useDebouncingProps) {
     const newTimer = setTimeout(async () => {
       try {
         console.log(date, type, e.target.value);
-        // handlePost({ date, type, value: e.target.value });
+        if (type == 'memo') {
+          postMemo({ planDate: date, content: e.target.value });
+        } else if (type == 'feel') {
+          postFeel({ planDate: date, content: e.target.value });
+        }
       } catch (e) {
         console.error('error', e);
       }

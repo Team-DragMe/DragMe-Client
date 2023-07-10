@@ -8,9 +8,9 @@ import TodayPlanInput from './TodayPlanInput';
 
 interface TodayPlanProps {
   emoji: string;
-  dailyGoal: string;
+  feel: string;
 }
-function TodayPlan({ emoji, dailyGoal }: TodayPlanProps) {
+function TodayPlan({ emoji, feel }: TodayPlanProps) {
   const [click, setClick] = useState<boolean>(false);
   const useOutsideAlert = (ref: React.RefObject<HTMLDivElement>) => {
     useEffect(() => {
@@ -44,7 +44,7 @@ function TodayPlan({ emoji, dailyGoal }: TodayPlanProps) {
         emoji={emoji}
         date={todayDate}
       />
-      <TodayPlanInput dailyGoal={dailyGoal} />
+      <TodayPlanInput feel={feel} />
     </StyledTodayPlan.Root>
   );
 }

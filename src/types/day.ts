@@ -15,8 +15,24 @@ export interface getEmojiQueryType {
 
 export interface InformationRequestType {
   date: string;
-  type: string;
-  value: string;
+  emoji: string;
+  feel: string;
+  memo: string;
+}
+
+export interface EmojiRequestType {
+  planDate: string;
+  content: string;
+}
+
+export interface FeelRequestType {
+  planDate: string;
+  content: string;
+}
+
+export interface MemoRequestType {
+  planDate: string;
+  content: string;
 }
 
 export interface DateQueryType {
